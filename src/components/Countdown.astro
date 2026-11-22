@@ -1,0 +1,29 @@
+---
+import { wedding } from '../content/site';
+const target = `${wedding.dateISO}T${wedding.calendarStart ?? '00:00'}:00${wedding.utcOffset}`;
+const days = Math.max(0, Math.ceil((new Date(target).getTime() - Date.now()) / 86400000));
+---
+<div class="countdown" data-target={target} role="timer" aria-label="Time until the wedding">
+  <ul class="grid max-w-sm grid-cols-4 gap-2 sm:gap-6 md:max-w-none md:flex md:gap-9">
+    {[['days', String(days)], ['hours', '—'], ['minutes', '—'], ['seconds', '—']].map(([k, v]) => (
+      <li class="text-center">
+        <span class="display block text-[1.85rem] tabular-nums sm:text-[2rem] md:text-[2.5rem]" data-unit={k}>{v}</span>
+        <span class="eyebrow !text-[.6rem] !tracking-[.25em]">{k}</span>
+      </li>
+    ))}
+  </ul>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('.countdown').forEach((root) => {
+    const target = new Date(root.dataset.target!).getTime();
+    const set = (u: string, v: number) => { const el = root.querySelector(`[data-unit=${u}]`); if (el) el.textContent = String(v).padStart(u === 'days' ? 1 : 2, '0'); };
+    const tick = () => {
+      const ms = Math.max(0, target - Date.now());
+      set('days', Math.floor(ms / 864e5)); set('hours', Math.floor(ms / 36e5) % 24);
+      set('minutes', Math.floor(ms / 6e4) % 60); set('seconds', Math.floor(ms / 1e3) % 60);
+    };
+    tick();
+    // Update once a second, but not for people who prefer reduced motion (they get minute-level updates).
+    setInterval(tick, matchMedia('(prefers-reduced-motion: reduce)').matches ? 60000 : 1000);
+  });
+</script>

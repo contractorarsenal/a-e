@@ -1,0 +1,15 @@
+---
+import { u } from '../lib/url';
+import Base from '../layouts/Base.astro';
+import Monogram from '../components/Monogram.astro';
+---
+<Base title="Page not found">
+  <section class="section grid min-h-[60svh] place-items-center text-center">
+    <div class="wrap">
+      <Monogram class="text-6xl text-sand" />
+      <h1 class="display mt-8 text-5xl">We can’t find that page.</h1>
+      <p class="mt-4 text-taupe">It may have moved. Let’s get you back.</p>
+      <a href={u("/")} class="btn mt-8">Home</a>
+    </div>
+  </section>
+</Base>

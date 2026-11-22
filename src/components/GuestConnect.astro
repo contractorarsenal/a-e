@@ -1,0 +1,17 @@
+---
+import { u } from '../lib/url';
+import { groupUrl, groupGate } from '../lib/env';
+const url = groupUrl();
+const gate = groupGate();
+---
+<div class="border border-charcoal/15 bg-paper p-6 sm:p-8 md:p-12">
+  <p class="eyebrow">Travel together</p>
+  <h3 class="display mt-3 text-[clamp(2rem,4vw,3rem)]">Connect with other guests</h3>
+  <p class="mt-4 max-w-xl text-lg">Traveling to celebrate with us? Connect with other guests to coordinate stays, rides, and plans.</p>
+  <p class="mt-3 max-w-xl text-sm text-taupe">Joining is optional and always your choice. Nobody is added automatically, and no one’s contact details are shown on this website.</p>
+  <div class="mt-6">
+    {url && gate === 'public' && <a class="btn btn-solid" href={url} target="_blank" rel="noopener noreferrer">Join the guest group ↗</a>}
+    {url && gate === 'rsvp' && <><a class="btn btn-solid" href={u('/rsvp')}>RSVP to get the link</a><p class="mt-3 text-sm text-taupe">The group link is shown to guests once they confirm they are attending.</p></>}
+    {!url && <p class="inline-flex items-center gap-3 italic text-taupe"><span class="h-px w-6 bg-sand" aria-hidden="true"></span>Group link coming soon</p>}
+  </div>
+</div>

@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import Picture from '../components/Picture.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Gallery from '../components/Gallery.astro';
+import { story, couple } from '../content/site';
+import { photos } from '../lib/photos';
+---
+<Base title="Our Story" description={`The story of ${couple.display}, told in the photographs from the day they got engaged.`}>
+  <section class="section pb-10">
+    <div class="wrap grid items-end gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-6">
+        <SectionHead as="h1" eyebrow={story.eyebrow} title={story.headline} />
+        <p class="prose-soft reveal mt-8">{story.intro}</p>
+      </div>
+      <div class="reveal lg:col-span-5 lg:col-start-8">
+        <div class="aspect-[4/5] overflow-hidden"><Picture slug="proposal-moment" alt={photos['proposal-moment'].alt} loading="eager" sizes="(min-width:1024px) 40vw, 90vw" position="50% 42%" /></div>
+      </div>
+    </div>
+  </section>
+
+  {story.chapters.length > 0 && (
+    <section class="section"><div class="wrap max-w-3xl space-y-16">
+      {story.chapters.map((c) => <div class="reveal"><h2 class="display text-4xl">{c.title}</h2><p class="prose-soft mt-5">{c.body}</p></div>)}
+    </div></section>
+  )}
+
+  <section class="section pt-10" aria-labelledby="gal">
+    <div class="wrap">
+      <div class="mb-12 flex flex-wrap items-end justify-between gap-6">
+        <SectionHead eyebrow="Gallery" title="The day we got engaged" />
+        <p class="text-sm text-taupe">Tap a photo to view full screen. Use the arrow keys or swipe to move between them.</p>
+      </div>
+      <Gallery />
+    </div>
+  </section>
+</Base>

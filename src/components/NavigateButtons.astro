@@ -1,0 +1,18 @@
+---
+import { mapLinks, fullAddress } from '../content/site';
+---
+<div class="flex flex-wrap gap-3" data-nav-buttons>
+  <a class="btn btn-solid" href={mapLinks.appleDirections} target="_blank" rel="noopener noreferrer">Apple Maps ↗</a>
+  <a class="btn btn-solid" href={mapLinks.googleDirections} target="_blank" rel="noopener noreferrer">Google Maps ↗</a>
+  <button type="button" class="btn" data-copy={fullAddress} aria-live="polite">Copy address</button>
+</div>
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => {
+    const label = b.textContent;
+    b.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(b.dataset.copy!); b.textContent = 'Copied ✓'; }
+      catch { b.textContent = 'Select and copy manually'; }
+      setTimeout(() => (b.textContent = label), 2200);
+    });
+  });
+</script>

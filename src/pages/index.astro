@@ -1,0 +1,108 @@
+---
+import { u } from '../lib/url';
+import Base from '../layouts/Base.astro';
+import Picture from '../components/Picture.astro';
+import Monogram from '../components/Monogram.astro';
+import Countdown from '../components/Countdown.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Optional from '../components/Optional.astro';
+import { couple, wedding, venue, rsvp, fullAddress } from '../content/site';
+import { photos } from '../lib/photos';
+---
+<Base>
+  <!-- HERO -->
+  <section class="grid min-h-[calc(100svh-4.25rem)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]" aria-labelledby="hero-title">
+    <div class="relative order-2 flex flex-col justify-center px-6 pb-14 pt-10 md:px-14 lg:order-1 lg:px-20 lg:py-16 xl:px-28">
+      <p class="eyebrow animate-[rise_1.2s_var(--ease-soft)_both]">We’re getting married</p>
+      <h1 id="hero-title" class="display mt-6 text-[clamp(3.4rem,8vw,7rem)] leading-[.92] animate-[rise_1.4s_.15s_var(--ease-soft)_both]">
+        Adrian<br /><span class="ml-[.6em] italic text-taupe">&amp;</span> Emma
+      </h1>
+      <p class="mt-8 max-w-sm font-display text-[1.7rem] italic leading-tight text-charcoal/85 animate-[rise_1.4s_.35s_var(--ease-soft)_both]">{couple.tagline}</p>
+      <hr class="hairline my-9 w-24" />
+      <p class="text-[.78rem] font-medium uppercase tracking-[.28em] animate-[rise_1.4s_.5s_var(--ease-soft)_both]">{wedding.dateLong}</p>
+      <p class="mt-2 text-taupe animate-[rise_1.4s_.55s_var(--ease-soft)_both]">{venue.name} · {wedding.cityLine}</p>
+      <div class="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4 animate-[rise_1.4s_.65s_var(--ease-soft)_both]">
+        <a href={u("/rsvp")} class="btn btn-solid">RSVP</a>
+        <a href={u("/travel")} class="link inline-flex min-h-11 items-center text-sm">Plan your trip</a>
+      </div>
+      <div class="mt-12 animate-[rise_1.4s_.8s_var(--ease-soft)_both]"><Countdown /></div>
+      <a href="#welcome" class="mt-12 hidden items-center gap-3 text-[.68rem] uppercase tracking-[.3em] text-taupe lg:inline-flex" aria-label="Scroll to the story">
+        <span class="relative block h-12 w-px overflow-hidden bg-charcoal/15" aria-hidden="true"><span class="absolute inset-x-0 top-0 h-5 bg-charcoal animate-[scrolldot_2.2s_ease-in-out_infinite]"></span></span>Scroll
+      </a>
+    </div>
+    <div class="relative order-1 h-[68svh] min-h-[26rem] overflow-hidden lg:order-2 lg:h-auto">
+      <Picture slug="proposal-hands" alt={photos['proposal-hands'].alt} loading="eager" sizes="(min-width:1024px) 50vw, 100vw" position="50% 46%" class="absolute inset-0 block h-full w-full" imgClass="animate-[settle_2.4s_var(--ease-soft)_both]" />
+      <div class="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ivory/60 to-transparent lg:hidden" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- WELCOME -->
+  <section id="welcome" class="section">
+    <div class="wrap grid items-center gap-14 lg:grid-cols-12">
+      <div class="reveal lg:col-span-5 lg:col-start-2">
+        <p class="eyebrow">Welcome</p>
+        <h2 class="display mt-5 text-[clamp(2.5rem,5.5vw,4.5rem)]">Come celebrate with us.</h2>
+        <p class="prose-soft mt-7">We are so glad you are part of this. Everything you need for the weekend is here: where to be, how to get there, and where to stay. We’ll keep it up to date as plans come together.</p>
+        <div class="mt-9 flex flex-wrap gap-4">
+          <a href={u("/details")} class="btn">Wedding details</a>
+          <a href={u("/story")} class="link inline-flex min-h-11 items-center self-center text-sm">Our story</a>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3 md:gap-5 lg:col-span-5 lg:col-start-8">
+        <div class="reveal aspect-[3/4] overflow-hidden"><Picture slug="proposal-laughing" alt={photos['proposal-laughing'].alt} sizes="(min-width:1024px) 20vw, 45vw" position="55% 40%" /></div>
+        <div class="reveal mt-12 aspect-[3/4] overflow-hidden"><Picture slug="proposal-kiss" alt={photos['proposal-kiss'].alt} sizes="(min-width:1024px) 20vw, 45vw" position="45% 42%" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AT A GLANCE -->
+  <section class="border-y border-charcoal/12 bg-paper">
+    <div class="wrap grid divide-y divide-charcoal/12 md:grid-cols-3 md:divide-x md:divide-y-0">
+      <div class="reveal py-10 md:px-8 md:first:pl-0">
+        <p class="eyebrow">When</p>
+        <p class="display mt-3 text-3xl">{wedding.dateLong}</p>
+        <p class="mt-2 text-taupe">Times to be confirmed</p>
+      </div>
+      <div class="reveal py-10 md:px-8">
+        <p class="eyebrow">Where</p>
+        <p class="display mt-3 text-3xl">{venue.name}</p>
+        <p class="mt-2 text-taupe">{fullAddress}</p>
+      </div>
+      <div class="reveal py-10 md:px-8 md:last:pr-0">
+        <p class="eyebrow">Reply</p>
+        <p class="display mt-3 text-3xl">{rsvp.deadline ? `By ${rsvp.deadline}` : 'RSVP'}</p>
+        <p class="mt-2"><a class="link" href={u("/rsvp")}>{rsvp.deadline ? 'Send your reply' : 'Deadline to be announced'}</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTO BAND -->
+  <section class="relative isolate grid min-h-[34rem] place-items-center overflow-hidden text-ivory" aria-labelledby="band">
+    <Picture slug="proposal-kiss" alt="" sizes="100vw" position="50% 32%" class="absolute inset-0 -z-10 block h-full w-full" />
+    <div class="absolute inset-0 -z-10 bg-charcoal/45" aria-hidden="true"></div>
+    <div class="wrap reveal py-24 text-center">
+      <p class="eyebrow !text-ivory/80">Travel</p>
+      <h2 id="band" class="display mx-auto mt-5 max-w-3xl text-[clamp(2.6rem,6vw,5rem)]">Everything you need to get here.</h2>
+      <p class="mx-auto mt-6 max-w-lg text-ivory/90">Airports, hotels, rental cars and a map of it all. Plan your whole trip in a few minutes, or just grab the directions.</p>
+      <div class="mt-9 flex flex-wrap justify-center gap-4"><a href={u("/travel")} class="btn btn-light">Plan your trip</a><a href={u("/details#directions")} class="btn btn-light">Directions</a></div>
+    </div>
+  </section>
+
+  <Optional />
+
+  <!-- RSVP -->
+  <section class="section">
+    <div class="wrap reveal text-center">
+      <Monogram class="text-6xl text-sand" />
+      <h2 class="display mx-auto mt-8 max-w-2xl text-[clamp(2.4rem,5vw,4rem)]">We hope you’ll be there.</h2>
+      <p class="mx-auto mt-5 max-w-md text-taupe">Have your invitation handy and let us know.</p>
+      <a href={u("/rsvp")} class="btn btn-solid mt-9">RSVP</a>
+    </div>
+  </section>
+</Base>
+
+<style is:global>
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  @keyframes settle { from { transform: scale(1.06); } to { transform: scale(1); } }
+  @keyframes scrolldot { 0% { transform: translateY(-120%); } 100% { transform: translateY(260%); } }
+</style>

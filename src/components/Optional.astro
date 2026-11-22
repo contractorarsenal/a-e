@@ -1,0 +1,35 @@
+---
+import { optional } from '../content/site';
+import SectionHead from './SectionHead.astro';
+const o = optional;
+---
+{o.weekend.enabled && o.weekend.events.length > 0 && (
+  <section class="section border-t border-charcoal/12"><div class="wrap">
+    <SectionHead eyebrow="Weekend" title="The wedding weekend" /><p class="prose-soft mt-5">{o.weekend.intro}</p>
+    <ul class="mt-10 divide-y divide-charcoal/12 border-y border-charcoal/12">{o.weekend.events.map((e) => <li class="grid gap-1 py-5 md:grid-cols-[12rem_1fr]"><span class="label">{e.when}</span><span>{e.title}{e.note && <span class="text-taupe"> · {e.note}</span>}</span></li>)}</ul>
+  </div></section>
+)}
+{o.nearby.enabled && o.nearby.places.length > 0 && (
+  <section class="section border-t border-charcoal/12"><div class="wrap">
+    <SectionHead eyebrow="Nearby" title="Eat &amp; explore" /><p class="prose-soft mt-5">{o.nearby.intro}</p>
+    <ul class="mt-10 grid gap-6 md:grid-cols-2">{o.nearby.places.map((p) => <li class="border-t border-charcoal/12 pt-5"><p class="label">{p.kind}</p><p class="display mt-1 text-2xl">{p.href ? <a class="link" href={p.href} target="_blank" rel="noopener noreferrer">{p.name} ↗</a> : p.name}</p>{p.note && <p class="text-taupe">{p.note}</p>}</li>)}</ul>
+  </div></section>
+)}
+{o.weddingParty.enabled && o.weddingParty.members.length > 0 && (
+  <section class="section border-t border-charcoal/12"><div class="wrap">
+    <SectionHead eyebrow="Wedding party" title="Our people" />
+    <ul class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">{o.weddingParty.members.map((m) => <li><p class="display text-2xl">{m.name}</p><p class="label mt-1">{m.role}</p>{m.note && <p class="mt-2 text-taupe">{m.note}</p>}</li>)}</ul>
+  </div></section>
+)}
+{o.registry.enabled && o.registry.links.length > 0 && (
+  <section class="section border-t border-charcoal/12"><div class="wrap">
+    <SectionHead eyebrow="Registry" title="Registry" /><p class="prose-soft mt-5">{o.registry.intro}</p>
+    <p class="mt-8 flex flex-wrap gap-4">{o.registry.links.map((l) => <a class="btn" href={l.href} target="_blank" rel="noopener noreferrer">{l.label} ↗</a>)}</p>
+  </div></section>
+)}
+{o.photoSharing.enabled && o.photoSharing.href && (
+  <section class="section border-t border-charcoal/12"><div class="wrap">
+    <SectionHead eyebrow="Photos" title="Share your photos" /><p class="prose-soft mt-5">{o.photoSharing.intro}</p>
+    <a class="btn mt-8" href={o.photoSharing.href} target="_blank" rel="noopener noreferrer">Open the album ↗</a>
+  </div></section>
+)}

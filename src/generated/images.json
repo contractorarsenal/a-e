@@ -1,0 +1,46 @@
+{
+  "proposal-hands": {
+    "width": 3024,
+    "height": 4032,
+    "color": "rgb(232,200,152)",
+    "widths": [
+      480,
+      768,
+      1080,
+      1600
+    ]
+  },
+  "proposal-moment": {
+    "width": 3024,
+    "height": 4032,
+    "color": "rgb(72,56,40)",
+    "widths": [
+      480,
+      768,
+      1080,
+      1600
+    ]
+  },
+  "proposal-laughing": {
+    "width": 3024,
+    "height": 4032,
+    "color": "rgb(248,216,152)",
+    "widths": [
+      480,
+      768,
+      1080,
+      1600
+    ]
+  },
+  "proposal-kiss": {
+    "width": 3024,
+    "height": 4032,
+    "color": "rgb(104,184,248)",
+    "widths": [
+      480,
+      768,
+      1080,
+      1600
+    ]
+  }
+}

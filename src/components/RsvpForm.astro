@@ -1,0 +1,142 @@
+---
+import { u } from '../lib/url';
+const { endpoint, groupUrl, deadlineISO, maxAdditional } = Astro.props as { endpoint: string; groupUrl: string; deadlineISO: string; maxAdditional: number };
+---
+<div id="rsvp-app" data-endpoint={endpoint} data-group={groupUrl} data-deadline={deadlineISO} data-max={maxAdditional}
+  data-travel={u('/travel')} data-details={u('/details')} data-home={u('/')}>
+  <form data-form novalidate class="mx-auto max-w-xl">
+    <div class="grid gap-6 sm:grid-cols-2">
+      <label class="block"><span class="label">First name</span><input class="field" name="firstName" required autocomplete="given-name" maxlength="60" /></label>
+      <label class="block"><span class="label">Last name</span><input class="field" name="lastName" required autocomplete="family-name" maxlength="60" /></label>
+    </div>
+    <div class="mt-7 space-y-7">
+      <label class="block"><span class="label">Email address</span><input class="field" type="email" name="email" required autocomplete="email" maxlength="200" inputmode="email" /></label>
+      <label class="block"><span class="label">Phone <span class="normal-case tracking-normal">(optional)</span></span><input class="field" type="tel" name="phone" autocomplete="tel" maxlength="40" inputmode="tel" /></label>
+      <label class="block"><span class="label">Invitation code <span class="normal-case tracking-normal">(optional, if printed on your invitation)</span></span><input class="field uppercase" name="inviteCode" autocomplete="off" maxlength="20" /></label>
+    </div>
+
+    <fieldset class="mt-10">
+      <legend class="label">Will you be attending?</legend>
+      <div class="mt-3 grid gap-3 sm:grid-cols-2">
+        <label class="flex min-h-[3.5rem] cursor-pointer items-center gap-3 border border-charcoal/20 px-4 has-[:checked]:border-charcoal has-[:checked]:bg-paper has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-sage"><input class="h-4 w-4 accent-[#2b2724]" type="radio" name="attending" value="Joyfully accepts" required /> Joyfully accepts</label>
+        <label class="flex min-h-[3.5rem] cursor-pointer items-center gap-3 border border-charcoal/20 px-4 has-[:checked]:border-charcoal has-[:checked]:bg-paper has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-sage"><input class="h-4 w-4 accent-[#2b2724]" type="radio" name="attending" value="Regretfully declines" /> Regretfully declines</label>
+      </div>
+    </fieldset>
+
+    <div data-attending-only hidden class="mt-10 space-y-7">
+      <fieldset class="min-w-0">
+        <legend class="label">Additional guests named on your invitation <span class="normal-case tracking-normal">(optional)</span></legend>
+        <p class="mt-2 text-sm text-taupe">Please list only the people your invitation includes. Up to {maxAdditional}.</p>
+        <div class="mt-3 space-y-4" data-guests></div>
+        <button type="button" class="btn mt-4 !min-h-11" data-add-guest>+ Add a guest</button>
+      </fieldset>
+      <label class="block"><span class="label">Dietary restrictions <span class="normal-case tracking-normal">(optional)</span></span><textarea class="field" name="dietary" maxlength="500" placeholder="Include the guest's name if it is for someone else"></textarea></label>
+      <label class="block"><span class="label">Accessibility or transportation needs <span class="normal-case tracking-normal">(optional)</span></span><textarea class="field" name="accessibility" maxlength="1000"></textarea></label>
+    </div>
+
+    <label class="mt-7 block"><span class="label">A note to the couple <span class="normal-case tracking-normal">(optional)</span></span><textarea class="field" name="note" maxlength="1500"></textarea></label>
+
+    <!-- honeypot: real people never see or fill this -->
+    <div style="position:absolute;left:-9999px;height:0;overflow:hidden" aria-hidden="true"><label>Leave this empty<input name="_gotcha" tabindex="-1" autocomplete="off" /></label></div>
+
+    <p data-error role="alert" class="mt-6 min-h-[1.5rem] text-sm text-[#9b3d2e]"></p>
+    <button class="btn btn-solid mt-2 w-full" type="submit">Send my reply</button>
+  </form>
+
+  <div data-done hidden class="text-center" aria-live="polite"></div>
+</div>
+
+<script>
+  const root = document.getElementById('rsvp-app')!;
+  const form = root.querySelector<HTMLFormElement>('[data-form]')!;
+  const done = root.querySelector<HTMLElement>('[data-done]')!;
+  const errEl = root.querySelector<HTMLElement>('[data-error]')!;
+  const only = root.querySelector<HTMLElement>('[data-attending-only]')!;
+  const list = root.querySelector<HTMLElement>('[data-guests]')!;
+  const addBtn = root.querySelector<HTMLButtonElement>('[data-add-guest]')!;
+  const max = Number(root.dataset.max ?? 3);
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  const startedAt = Date.now();
+
+  // Close the form after the deadline (client-side courtesy; the form service itself keeps accepting).
+  const dl = root.dataset.deadline;
+  if (dl && Date.now() > new Date(`${dl}T23:59:59-07:00`).getTime()) {
+    form.hidden = true;
+    done.hidden = false;
+    done.innerHTML = '<p class="display text-3xl">The RSVP deadline has passed.</p><p class="mt-3 text-taupe">Please contact the couple directly.</p>';
+  }
+
+  form.addEventListener('change', () => {
+    const v = form.querySelector<HTMLInputElement>('input[name=attending]:checked')?.value;
+    only.hidden = v !== 'Joyfully accepts';
+  });
+
+  const addGuest = () => {
+    if (list.children.length >= max) return;
+    const n = list.children.length + 1;
+    const row = document.createElement('div');
+    row.className = 'flex items-end gap-3';
+    row.innerHTML = `<label class="block flex-1"><span class="label">Guest ${n} full name</span><input class="field" name="guest" maxlength="80" autocomplete="off" /></label><button type="button" class="btn !min-h-12 !px-4" aria-label="Remove guest ${n}">×</button>`;
+    row.querySelector('button')!.addEventListener('click', () => { row.remove(); addBtn.hidden = false; [...list.children].forEach((r, i) => (r.querySelector('.label')!.textContent = `Guest ${i + 1} full name`)); });
+    list.append(row);
+    row.querySelector('input')!.focus();
+    addBtn.hidden = list.children.length >= max;
+  };
+  addBtn.addEventListener('click', addGuest);
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errEl.textContent = '';
+    form.querySelectorAll('[aria-invalid]').forEach((n) => n.removeAttribute('aria-invalid'));
+    const f = new FormData(form);
+    const val = (k: string) => String(f.get(k) ?? '').trim();
+    const bad = (name: string, msg: string) => { errEl.textContent = msg; const el = form.querySelector<HTMLElement>(`[name=${name}]`); el?.setAttribute('aria-invalid', 'true'); el?.focus(); };
+
+    if (!val('firstName')) return bad('firstName', 'Please enter your first name.');
+    if (!val('lastName')) return bad('lastName', 'Please enter your last name.');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val('email'))) return bad('email', 'Please enter a valid email address.');
+    if (!val('attending')) return bad('attending', 'Please let us know if you can attend.');
+    const attending = val('attending') === 'Joyfully accepts';
+    const guests = attending ? f.getAll('guest').map((g) => String(g).trim()).filter(Boolean).slice(0, max) : [];
+    if (val('_gotcha')) return; // bot: silently drop
+
+    const payload: Record<string, string> = {
+      _subject: `RSVP: ${val('firstName')} ${val('lastName')} — ${val('attending')}`,
+      firstName: val('firstName'), lastName: val('lastName'), email: val('email'), phone: val('phone'),
+      inviteCode: val('inviteCode').toUpperCase(), attending: val('attending'),
+      additionalGuests: guests.join('; '), partySize: String(1 + guests.length),
+      dietary: attending ? val('dietary') : '', accessibility: attending ? val('accessibility') : '', note: val('note'),
+      _gotcha: '', secondsOnForm: String(Math.round((Date.now() - startedAt) / 1000)),
+    };
+
+    const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+    const label = btn.textContent; btn.disabled = true; btn.textContent = 'Sending…';
+    try {
+      const res = await fetch(root.dataset.endpoint!, { method: 'POST', headers: { 'content-type': 'application/json', accept: 'application/json' }, body: JSON.stringify(payload) });
+      if (!res.ok) {
+        let msg = 'We could not send your reply. Please try again in a moment.';
+        try { const j = await res.json(); if (j?.errors?.[0]?.message) msg = 'The form service said: ' + j.errors[0].message; } catch {}
+        errEl.textContent = msg; return;
+      }
+      showDone(attending, val('email'));
+    } catch {
+      errEl.textContent = 'We couldn’t reach the server, so your reply was NOT sent. Please check your connection and try again.';
+    } finally { btn.disabled = false; btn.textContent = label; }
+  });
+
+  // Confirmation is only ever shown after the service answered with a success status.
+  function showDone(attending: boolean, email: string) {
+    form.hidden = true; done.hidden = false;
+    const g = root.dataset.group;
+    done.innerHTML = `
+      <h2 tabindex="-1" id="done-h" class="display text-4xl md:text-5xl">${attending ? 'We can’t wait to celebrate with you.' : 'We’ll miss you.'}</h2>
+      <p class="mx-auto mt-5 max-w-md text-taupe">Your reply has been sent. ${attending ? 'If anything changes, just submit the form again.' : 'Thank you for letting us know.'}</p>
+      <p class="mx-auto mt-2 max-w-md text-sm text-taupe">We have your email as ${esc(email)}.</p>
+      <div class="mt-9 flex flex-wrap justify-center gap-4">
+        ${attending ? `<a class="btn btn-solid" href="${root.dataset.travel}">Plan your trip</a><a class="btn" href="${root.dataset.details}">Wedding details</a>` : `<a class="btn" href="${root.dataset.home}">Back to the site</a>`}
+      </div>
+      ${attending && g ? `<div class="mx-auto mt-12 max-w-md border border-charcoal/15 p-6"><p class="eyebrow">Traveling to celebrate with us?</p><p class="mt-3">Connect with other guests to coordinate stays, rides, and plans.</p><a class="btn mt-5" href="${esc(g)}" target="_blank" rel="noopener noreferrer">Join the guest group ↗</a><p class="mt-3 text-xs text-taupe">Optional. Nobody is added automatically.</p></div>` : ''}`;
+    done.querySelector<HTMLElement>('#done-h')?.focus();
+    window.scrollTo({ top: root.getBoundingClientRect().top + scrollY - 100 });
+  }
+</script>

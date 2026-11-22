@@ -1,0 +1,27 @@
+---
+import { u } from '../lib/url';
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { faq } from '../content/site';
+---
+<Base title="FAQ" description="Answers to common questions about the wedding.">
+  <section class="section">
+    <div class="wrap max-w-3xl">
+      <SectionHead as="h1" eyebrow="Questions" title="Frequently asked" />
+      <div class="reveal mt-12 divide-y divide-charcoal/15 border-y border-charcoal/15">
+        {faq.map((f) => (
+          <details class="group py-1">
+            <summary class="flex min-h-[3.75rem] cursor-pointer list-none items-center justify-between gap-6 py-3 marker:hidden [&::-webkit-details-marker]:hidden">
+              <span class="display text-[1.55rem] leading-snug">{f.q}</span>
+              <span aria-hidden="true" class="text-2xl transition-transform duration-300 group-open:rotate-45">+</span>
+            </summary>
+            <div class="pb-7 pr-10">
+              {f.a ? <p class="prose-soft">{f.a}</p> : <p class="italic text-taupe">Details coming soon.</p>}
+              {f.link && f.a && <p class="mt-3"><a class="link text-sm" href={u(f.link.href)}>{f.link.label} →</a></p>}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

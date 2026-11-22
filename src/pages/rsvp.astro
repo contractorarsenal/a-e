@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import RsvpForm from '../components/RsvpForm.astro';
+import { rsvpEndpoint, groupUrl } from '../lib/env';
+import { rsvp, couple, contact } from '../content/site';
+const endpoint = rsvpEndpoint();
+---
+<Base title="RSVP" description={`Reply to ${couple.display}'s wedding invitation.`}>
+  <section class="section">
+    <div class="wrap max-w-3xl">
+      <SectionHead as="h1" eyebrow="RSVP" title="Will you join us?" align="center" />
+      {rsvp.deadline && <p class="reveal mt-5 text-center text-taupe">Kindly reply by {rsvp.deadline}.</p>}
+      <div class="mt-12 md:mt-14">
+        {endpoint ? <RsvpForm endpoint={endpoint} groupUrl={groupUrl() ?? ''} deadlineISO={rsvp.deadlineISO ?? ''} maxAdditional={rsvp.maxAdditionalGuests} /> : (
+          <div class="border border-charcoal/15 bg-paper p-8 text-center md:p-12">
+            <p class="display text-3xl">RSVP opens soon.</p>
+            <p class="mx-auto mt-4 max-w-md text-taupe">The reply form will appear here once invitations go out. Please check back then.</p>
+          </div>
+        )}
+        <p class="mt-10 text-center text-sm text-taupe">{contact.email ? <>Questions? <a class="link" href={`mailto:${contact.email}`}>{contact.email}</a></> : rsvp.contactNote}</p>
+      </div>
+    </div>
+  </section>
+</Base>

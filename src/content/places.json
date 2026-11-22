@@ -1,0 +1,16 @@
+{
+  "venue": { "id": "venue", "name": "Ethereal Gardens", "address": "8561 W Lilac Rd, Escondido, CA 92026", "lat": 33.2983987, "lon": -117.1461074, "source": "Apple Maps place link supplied by the couple (maps.apple/p/pVYvAG1Jc2gwNb)" },
+  "hotels": [
+    { "id": "best-western", "query": "1700 Seven Oakes Rd, Escondido, CA" },
+    { "id": "springhill", "query": "200 La Terraza Blvd, Escondido, CA" },
+    { "id": "residence-inn", "query": "1245 Los Vallecitos Blvd, San Marcos, CA" },
+    { "id": "welk", "query": "8860 Lawrence Welk Dr, Escondido, CA" }
+  ],
+  "airports": [
+    { "id": "SAN", "name": "San Diego International Airport", "query": "San Diego International Airport, San Diego, CA" },
+    { "id": "CRQ", "name": "McClellan-Palomar Airport", "query": "McClellan-Palomar Airport, Carlsbad, CA" },
+    { "id": "ONT", "name": "Ontario International Airport", "query": "Ontario International Airport, Ontario, CA" },
+    { "id": "SNA", "name": "John Wayne Airport", "query": "John Wayne Airport, Santa Ana, CA" },
+    { "id": "LAX", "name": "Los Angeles International Airport", "query": "Los Angeles International Airport, Los Angeles, CA" }
+  ]
+}
