@@ -12,9 +12,9 @@
 - [ ] Decide on privacy: keep `SITE_VISIBILITY` unset (noindex) for link-only sharing, or set `public` for search engines. GitHub Pages cannot password-protect; for that use Cloudflare Access/Netlify.
 - [ ] Review the OpenStreetMap tile usage / attribution, or switch map provider.
 
-## Publishing to GitHub Pages (needs your approval)
-1. Repo **Settings → Pages → Source: GitHub Actions**.
-2. **Settings → Secrets and variables → Actions → Variables**: add `ENABLE_DEPLOY=true` and the variables from `.env.example` you want.
-3. **Actions → "Build & (gated) deploy" → Run workflow**, tick **deploy**.
-4. Open https://contractorarsenal.github.io/a-e/ and re-test on a phone: nav, RSVP, gallery, map, booking links, calendar download.
-5. Note: `robots.txt` on a project site lives under `/a-e/`, which crawlers ignore. The `<meta name="robots" content="noindex">` tag is what keeps the site out of search results until `SITE_VISIBILITY=public`.
+## Hosting (Cloudflare Pages, already connected)
+- Pushes to `main` deploy automatically to https://a-e.pages.dev/. Confirm Settings → Build shows build command `npm run build` and output `dist` (see README).
+- Set `PUBLIC_RSVP_ENDPOINT` etc. under Settings → Variables and secrets (Production), then retry the latest deployment.
+- Search visibility: the site is `noindex` until `SITE_VISIBILITY=public`. Cloudflare Pages can also be protected with Cloudflare Access if you want a gate.
+- A leftover GitHub Pages ("pages-build-deployment") setting may fail with a Jekyll error; it is unused and can be disabled in the repo's Settings → Pages.
+- After any deploy: open the live site on a phone and re-test nav, RSVP, gallery, map, booking links, calendar download.

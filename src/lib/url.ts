@@ -1,4 +1,4 @@
-/** Prefix an internal path with Astro's base (e.g. "/a-e") so links work on GitHub Pages. External URLs pass through. */
+/** Prefix an internal path with Astro's base (e.g. "/a-e") so links keep working if the site is ever served from a sub-path (on Cloudflare Pages the base is "/"). External URLs pass through. */
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 export function u(path: string): string {
   if (/^(https?:|mailto:|tel:|#)/.test(path)) return path;

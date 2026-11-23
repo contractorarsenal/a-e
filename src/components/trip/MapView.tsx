@@ -53,7 +53,7 @@ export default function MapView({ data, selectedId, airport, showAirportRoute, o
     const h = data.hotels.find((x) => x.id === selectedId);
     if (h) {
       const path = h.toVenue.path;
-      const line = L.polyline(path, { color: '#5c6a55', weight: 4, opacity: 0.9, lineCap: 'round', className: 'ae-route' }).addTo(map);
+      const line = L.polyline(path, { color: '#9a4a31', weight: 4, opacity: 0.9, lineCap: 'round', className: 'ae-route' }).addTo(map);
       s.layers.push(line); pts.push(...path);
     }
     const a = data.airports.find((x) => x.code === airport);

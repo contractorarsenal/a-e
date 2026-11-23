@@ -13,7 +13,7 @@ const TOGETHER = [
 
 function Choice({ checked, onChange, title, sub, type = 'radio', name }: { checked: boolean; onChange: () => void; title: string; sub?: string; type?: 'radio' | 'checkbox'; name: string }) {
   return (
-    <label className={`flex min-h-[3.5rem] cursor-pointer items-start gap-4 border p-4 transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-sage ${checked ? 'border-charcoal bg-paper' : 'border-charcoal/20 hover:border-charcoal/50'}`}>
+    <label className={`flex min-h-[3.5rem] cursor-pointer items-start gap-4 border p-4 transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-clay ${checked ? 'border-charcoal bg-paper' : 'border-charcoal/20 hover:border-charcoal/50'}`}>
       <input type={type} name={name} checked={checked} onChange={onChange} className="mt-1.5 h-4 w-4 accent-[#2b2724]" />
       <span><span className="block">{title}</span>{sub && <span className="block text-sm text-taupe">{sub}</span>}</span>
     </label>

@@ -47,7 +47,7 @@ export default function HotelExplorer({ data, trip, update, goPlan }: Props) {
           ))}
         </div>
         <label className="flex min-h-11 items-center gap-2 text-sm text-taupe">
-          <input type="checkbox" checked={airRoute} onChange={(e) => setAirRoute(e.target.checked)} className="h-4 w-4 accent-[#5c6a55]" />
+          <input type="checkbox" checked={airRoute} onChange={(e) => setAirRoute(e.target.checked)} className="h-4 w-4 accent-[#9a4a31]" />
           Show {airport.code} route on map
         </label>
       </div>
@@ -70,7 +70,7 @@ export default function HotelExplorer({ data, trip, update, goPlan }: Props) {
             return (
               <li key={h.id} id={`hotel-${h.id}`} className={`border bg-paper transition-colors ${isSel ? 'border-charcoal' : 'border-charcoal/15'}`}>
                 <button type="button" onClick={() => select(h.id)} aria-expanded={isSel} className="flex w-full items-start gap-4 p-4 text-left md:p-5">
-                  <span aria-hidden className={`mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-full text-sm ${isSel ? 'bg-sage text-ivory' : 'bg-charcoal text-ivory'}`}>{i + 1}</span>
+                  <span aria-hidden className={`mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-full text-sm ${isSel ? 'bg-clay text-ivory' : 'bg-charcoal text-ivory'}`}>{i + 1}</span>
                   <span className="min-w-0 flex-1">
                     <span className="eyebrow block !text-[.62rem]">{h.tier} · {h.area}</span>
                     <span className="display mt-1 block text-[1.45rem] leading-tight">{h.name}</span>

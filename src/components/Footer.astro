@@ -1,29 +1,22 @@
 ---
-import { u } from '../lib/url';
 import { wedding, venue, nav, contact } from '../content/site';
+import { u } from '../lib/url';
 import Monogram from './Monogram.astro';
 ---
-<footer class="bg-charcoal text-ivory">
-  <div class="wrap grid gap-12 py-16 md:grid-cols-[1.2fr_1fr_1fr] md:py-20">
-    <div>
-      <Monogram class="text-5xl" />
-      <p class="mt-6 max-w-xs text-ivory/70">{wedding.dateLong}<br />{venue.name}, {wedding.cityLine}</p>
+<footer class="on-ink">
+  <div class="wrap py-20 md:py-28">
+    <div class="text-center">
+      <Monogram class="text-[4.5rem] text-sand md:text-[6rem]" />
+      <p class="display mt-8 text-[clamp(2rem,5vw,3.4rem)]">Adrian <span class="italic-display text-sand">&amp;</span> Emma</p>
+      <p class="eyebrow mt-5">{wedding.dateLong}</p>
+      <p class="mt-2 text-ivory/70">{venue.name} · {wedding.cityLine}</p>
     </div>
-    <nav aria-label="Footer">
-      <p class="eyebrow !text-sand">Explore</p>
-      <ul class="mt-5 space-y-2">
-        {[...nav, { href: '/rsvp', label: 'RSVP' }].map((n) => <li><a href={u(n.href)} class="link text-ivory/90">{n.label}</a></li>)}
-      </ul>
+    <nav aria-label="Footer" class="mt-14 flex flex-wrap justify-center gap-x-8 gap-y-1">
+      {[...nav, { href: '/rsvp', label: 'RSVP' }].map((n) => <a href={u(n.href)} class="tap text-[.72rem] uppercase tracking-[.26em] text-ivory/80 hover:text-ivory">{n.label}</a>)}
     </nav>
-    <div>
-      <p class="eyebrow !text-sand">Questions</p>
-      <p class="mt-5 text-ivory/80">
-        {contact.email ? <a class="link" href={`mailto:${contact.email}`}>{contact.email}</a> : 'A contact for guest questions is coming soon.'}
-      </p>
-      <p class="mt-6"><a class="link text-ivory/70" href={venue.website} rel="noopener" target="_blank">Venue website ↗</a></p>
-    </div>
-  </div>
-  <div class="border-t border-ivory/10 py-6 text-center text-[.7rem] uppercase tracking-[.3em] text-ivory/50">
-    Together · {wedding.dateShort}
+    <p class="mt-10 text-center text-sm text-ivory/60">
+      {contact.email ? <>Questions? <a class="link" href={`mailto:${contact.email}`}>{contact.email}</a></> : 'A contact for guest questions is coming soon.'}
+      <span aria-hidden="true"> · </span><a class="link" href={venue.website} rel="noopener" target="_blank">Venue website ↗</a>
+    </p>
   </div>
 </footer>

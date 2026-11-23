@@ -9,9 +9,10 @@ interface Props {
   class?: string;
   imgClass?: string;
   position?: string; // object-position, e.g. "50% 40%"
+  positionMd?: string; // optional override from md (768px) up
   fit?: 'cover' | 'contain';
 }
-const { slug, alt, sizes = '100vw', loading = 'lazy', class: cls = '', imgClass = '', position = '50% 50%', fit = 'cover' } = Astro.props;
+const { slug, alt, sizes = '100vw', loading = 'lazy', class: cls = '', imgClass = '', position = '50% 50%', positionMd, fit = 'cover' } = Astro.props;
 const m = manifest[slug];
 const set = (ext: string) => m.widths.map((w: number) => `${u('/img/' + slug + '-' + w + '.' + ext)} ${w}w`).join(', ');
 const fallbackW = m.widths.includes(1080) ? 1080 : m.widths[m.widths.length - 1];
@@ -28,7 +29,7 @@ const fallbackW = m.widths.includes(1080) ? 1080 : m.widths[m.widths.length - 1]
     loading={loading}
     decoding="async"
     fetchpriority={loading === 'eager' ? 'high' : 'auto'}
-    class={`block h-full w-full ${fit === 'cover' ? 'object-cover' : 'object-contain'} ${imgClass}`}
-    style={`object-position:${position}`}
+    class={`pic block h-full w-full ${fit === 'cover' ? 'object-cover' : 'object-contain'} ${imgClass}`}
+    style={`--pos:${position};${positionMd ? `--pos-md:${positionMd}` : ''}`}
   />
 </picture>

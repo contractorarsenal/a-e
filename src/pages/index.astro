@@ -1,108 +1,141 @@
 ---
-import { u } from '../lib/url';
 import Base from '../layouts/Base.astro';
 import Picture from '../components/Picture.astro';
 import Monogram from '../components/Monogram.astro';
 import Countdown from '../components/Countdown.astro';
-import SectionHead from '../components/SectionHead.astro';
 import Optional from '../components/Optional.astro';
 import { couple, wedding, venue, rsvp, fullAddress } from '../content/site';
 import { photos } from '../lib/photos';
+import { u } from '../lib/url';
 ---
-<Base>
-  <!-- HERO -->
-  <section class="grid min-h-[calc(100svh-4.25rem)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]" aria-labelledby="hero-title">
-    <div class="relative order-2 flex flex-col justify-center px-6 pb-14 pt-10 md:px-14 lg:order-1 lg:px-20 lg:py-16 xl:px-28">
-      <p class="eyebrow animate-[rise_1.2s_var(--ease-soft)_both]">We’re getting married</p>
-      <h1 id="hero-title" class="display mt-6 text-[clamp(3.4rem,8vw,7rem)] leading-[.92] animate-[rise_1.4s_.15s_var(--ease-soft)_both]">
-        Adrian<br /><span class="ml-[.6em] italic text-taupe">&amp;</span> Emma
-      </h1>
-      <p class="mt-8 max-w-sm font-display text-[1.7rem] italic leading-tight text-charcoal/85 animate-[rise_1.4s_.35s_var(--ease-soft)_both]">{couple.tagline}</p>
-      <hr class="hairline my-9 w-24" />
-      <p class="text-[.78rem] font-medium uppercase tracking-[.28em] animate-[rise_1.4s_.5s_var(--ease-soft)_both]">{wedding.dateLong}</p>
-      <p class="mt-2 text-taupe animate-[rise_1.4s_.55s_var(--ease-soft)_both]">{venue.name} · {wedding.cityLine}</p>
-      <div class="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4 animate-[rise_1.4s_.65s_var(--ease-soft)_both]">
-        <a href={u("/rsvp")} class="btn btn-solid">RSVP</a>
-        <a href={u("/travel")} class="link inline-flex min-h-11 items-center text-sm">Plan your trip</a>
-      </div>
-      <div class="mt-12 animate-[rise_1.4s_.8s_var(--ease-soft)_both]"><Countdown /></div>
-      <a href="#welcome" class="mt-12 hidden items-center gap-3 text-[.68rem] uppercase tracking-[.3em] text-taupe lg:inline-flex" aria-label="Scroll to the story">
-        <span class="relative block h-12 w-px overflow-hidden bg-charcoal/15" aria-hidden="true"><span class="absolute inset-x-0 top-0 h-5 bg-charcoal animate-[scrolldot_2.2s_ease-in-out_infinite]"></span></span>Scroll
-      </a>
-    </div>
-    <div class="relative order-1 h-[68svh] min-h-[26rem] overflow-hidden lg:order-2 lg:h-auto">
-      <Picture slug="proposal-hands" alt={photos['proposal-hands'].alt} loading="eager" sizes="(min-width:1024px) 50vw, 100vw" position="50% 46%" class="absolute inset-0 block h-full w-full" imgClass="animate-[settle_2.4s_var(--ease-soft)_both]" />
-      <div class="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ivory/60 to-transparent lg:hidden" aria-hidden="true"></div>
-    </div>
-  </section>
+<Base dark>
+  <!-- ───────── HERO: the photograph is the invitation ───────── -->
+  <section class="on-ink relative isolate min-h-[100svh] overflow-hidden" aria-labelledby="hero-title">
+    <!-- desktop: soft ambient glow pulled from the photo itself -->
+    <div class="absolute inset-0 -z-20 hidden scale-125 bg-cover bg-center opacity-40 blur-3xl lg:block" style={`background-image:url(${u('/img/proposal-hands-480.webp')})`} aria-hidden="true"></div>
+    <div class="absolute inset-0 -z-10 hidden bg-gradient-to-b from-ink/50 via-transparent to-ink/90 lg:block" aria-hidden="true"></div>
 
-  <!-- WELCOME -->
-  <section id="welcome" class="section">
-    <div class="wrap grid items-center gap-14 lg:grid-cols-12">
-      <div class="reveal lg:col-span-5 lg:col-start-2">
-        <p class="eyebrow">Welcome</p>
-        <h2 class="display mt-5 text-[clamp(2.5rem,5.5vw,4.5rem)]">Come celebrate with us.</h2>
-        <p class="prose-soft mt-7">We are so glad you are part of this. Everything you need for the weekend is here: where to be, how to get there, and where to stay. We’ll keep it up to date as plans come together.</p>
-        <div class="mt-9 flex flex-wrap gap-4">
-          <a href={u("/details")} class="btn">Wedding details</a>
-          <a href={u("/story")} class="link inline-flex min-h-11 items-center self-center text-sm">Our story</a>
+    <!-- the photograph: full-bleed on phones, an arch on large screens -->
+    <div class="absolute inset-x-0 top-0 -z-10 h-[82svh] [mask-image:linear-gradient(to_bottom,#000_58%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,#000_58%,transparent_100%)] lg:h-auto lg:[mask-image:none] lg:[-webkit-mask-image:none] lg:inset-x-auto lg:bottom-[12rem] lg:left-1/2 lg:top-[7.4rem] lg:aspect-[3/4] lg:-translate-x-1/2 lg:overflow-hidden lg:rounded-t-full">
+      <Picture slug="proposal-hands" alt={photos['proposal-hands'].alt} loading="eager" sizes="(min-width:1024px) 40vw, 100vw" position="42% 35%" class="block h-full w-full" imgClass="hero-settle" />
+    </div>
+    <div class="absolute inset-x-0 top-0 -z-10 h-36 bg-gradient-to-b from-ink/65 to-transparent lg:hidden" aria-hidden="true"></div>
+    <div class="absolute inset-x-0 bottom-0 -z-10 h-[58%] bg-gradient-to-t from-ink via-ink/80 to-transparent lg:hidden" aria-hidden="true"></div>
+
+    <div class="relative flex min-h-[100svh] flex-col justify-end px-6 pb-9 pt-28 md:px-12 lg:block lg:px-0 lg:pb-0 lg:pt-0">
+      <p class="eyebrow hero-in lg:absolute lg:left-1/2 lg:top-[5.2rem] lg:-translate-x-1/2 text-ivory/90 lg:!text-sand" style="--i:0">We’re getting married</p>
+
+      <h1 id="hero-title" class="display mt-3 flex flex-wrap items-baseline gap-x-[.25em] text-[clamp(3.6rem,19vw,6.4rem)] leading-[.9] text-ivory lg:pointer-events-none lg:absolute lg:inset-x-0 lg:top-1/2 lg:-translate-y-[62%] lg:justify-between lg:gap-0 lg:px-[4.5vw] lg:text-[min(8vw,16svh)]">
+        <span class="hero-in block w-full lg:w-auto" style="--i:1">Adrian</span>
+        <span class="hero-in block lg:w-auto" style="--i:2"><span class="italic-display text-sand">&amp;</span> Emma</span>
+      </h1>
+
+      <div class="mt-7 lg:absolute lg:inset-x-0 lg:bottom-9 lg:mt-0 lg:text-center">
+        <p class="hero-in text-[.78rem] font-medium uppercase tracking-[.3em] lg:mt-0" style="--i:3">{wedding.dateLong}</p>
+        <p class="hero-in mt-1.5 text-ivory/75" style="--i:4">{venue.name} · {wedding.cityLine}</p>
+        <div class="hero-in mt-6 flex flex-wrap items-center gap-x-7 gap-y-3 lg:justify-center" style="--i:5">
+          <a href={u('/rsvp')} class="btn btn-ivory">RSVP</a>
+          <a href={u('/travel')} class="link tap text-sm text-ivory">Plan your trip</a>
         </div>
       </div>
-      <div class="grid grid-cols-2 gap-3 md:gap-5 lg:col-span-5 lg:col-start-8">
-        <div class="reveal aspect-[3/4] overflow-hidden"><Picture slug="proposal-laughing" alt={photos['proposal-laughing'].alt} sizes="(min-width:1024px) 20vw, 45vw" position="55% 40%" /></div>
-        <div class="reveal mt-12 aspect-[3/4] overflow-hidden"><Picture slug="proposal-kiss" alt={photos['proposal-kiss'].alt} sizes="(min-width:1024px) 20vw, 45vw" position="45% 42%" /></div>
+
+      <a href="#welcome" class="hero-in absolute bottom-9 right-6 hidden h-14 w-6 items-end justify-center lg:flex xl:right-14" style="--i:6" aria-label="Scroll down">
+        <span class="relative block h-14 w-px overflow-hidden bg-ivory/25" aria-hidden="true"><span class="scroll-dot absolute inset-x-0 top-0 h-5 bg-ivory"></span></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ───────── INVITATION ───────── -->
+  <section id="welcome" class="section overflow-hidden text-center">
+    <div class="wrap">
+      <p class="reveal italic-display text-[1.6rem] text-taupe md:text-[2rem]">Please join us</p>
+      <div class="reveal mx-auto mt-8 grid max-w-4xl grid-cols-[1fr_auto_1fr] items-center gap-x-2 sm:gap-x-8 md:gap-x-14">
+        <div class="text-right"><p class="eyebrow !text-[.62rem] !tracking-[.2em] sm:!text-[.72rem] sm:!tracking-[.34em]">Saturday</p><hr class="hairline ml-auto mt-4 w-full max-w-[7rem]" /></div>
+        <p class="numeral text-[clamp(7rem,34vw,17rem)] text-charcoal" aria-label="28">28</p>
+        <div class="text-left"><p class="eyebrow !text-[.62rem] !tracking-[.2em] sm:!text-[.72rem] sm:!tracking-[.34em]">August</p><hr class="hairline mt-4 w-full max-w-[7rem]" /></div>
+      </div>
+      <p class="reveal eyebrow mt-4 !tracking-[.5em]">2027</p>
+
+      <div class="reveal mx-auto mt-16 max-w-xl">
+        <p class="display text-[clamp(2.2rem,6vw,3.6rem)] italic">{venue.name}</p>
+        <p class="mt-3 text-taupe">{fullAddress}</p>
+        <p class="mt-1 text-sm text-taupe">Ceremony and reception times to follow</p>
+        <p class="mt-9 flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
+          <a href={u('/details')} class="btn">Wedding details</a>
+          <a href={u('/details#directions')} class="link tap text-sm">Directions</a>
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- AT A GLANCE -->
-  <section class="border-y border-charcoal/12 bg-paper">
-    <div class="wrap grid divide-y divide-charcoal/12 md:grid-cols-3 md:divide-x md:divide-y-0">
-      <div class="reveal py-10 md:px-8 md:first:pl-0">
-        <p class="eyebrow">When</p>
-        <p class="display mt-3 text-3xl">{wedding.dateLong}</p>
-        <p class="mt-2 text-taupe">Times to be confirmed</p>
+  <!-- ───────── THE QUESTION & THE ANSWER ───────── -->
+  <section class="bg-paper py-20 md:py-32" aria-labelledby="chap">
+    <div class="wrap">
+      <h2 id="chap" class="reveal display mx-auto max-w-3xl text-center text-[clamp(2.4rem,6vw,4.6rem)]">A question, and an <span class="italic-display">answer.</span></h2>
+      <div class="mt-16 grid gap-y-14 md:mt-24 md:grid-cols-12 md:gap-y-0">
+        <figure class="md:col-span-5 md:col-start-2">
+          <div class="unveil aspect-[3/4] w-[84%] overflow-hidden md:w-full"><Picture slug="proposal-moment" alt={photos['proposal-moment'].alt} sizes="(min-width:768px) 40vw, 84vw" position="50% 46%" /></div>
+          <figcaption class="reveal mt-4 flex items-baseline gap-4"><span class="numeral text-4xl text-clay">I</span><span class="italic-display text-xl text-taupe">{photos['proposal-moment'].caption}</span></figcaption>
+        </figure>
+        <figure class="md:col-span-4 md:col-start-8 md:mt-44">
+          <div class="unveil ml-auto aspect-[3/4] w-[78%] overflow-hidden md:w-full"><Picture slug="proposal-laughing" alt={photos['proposal-laughing'].alt} sizes="(min-width:768px) 34vw, 78vw" position="55% 42%" /></div>
+          <figcaption class="reveal mt-4 flex items-baseline justify-end gap-4 md:justify-start"><span class="numeral text-4xl text-clay">II</span><span class="italic-display text-xl text-taupe">{photos['proposal-laughing'].caption}</span></figcaption>
+        </figure>
       </div>
-      <div class="reveal py-10 md:px-8">
-        <p class="eyebrow">Where</p>
-        <p class="display mt-3 text-3xl">{venue.name}</p>
-        <p class="mt-2 text-taupe">{fullAddress}</p>
-      </div>
-      <div class="reveal py-10 md:px-8 md:last:pr-0">
-        <p class="eyebrow">Reply</p>
-        <p class="display mt-3 text-3xl">{rsvp.deadline ? `By ${rsvp.deadline}` : 'RSVP'}</p>
-        <p class="mt-2"><a class="link" href={u("/rsvp")}>{rsvp.deadline ? 'Send your reply' : 'Deadline to be announced'}</a></p>
-      </div>
+      <p class="reveal mt-20 text-center"><a href={u('/story')} class="link tap text-[.78rem] uppercase tracking-[.26em]">See the whole story →</a></p>
     </div>
   </section>
 
-  <!-- PHOTO BAND -->
-  <section class="relative isolate grid min-h-[34rem] place-items-center overflow-hidden text-ivory" aria-labelledby="band">
-    <Picture slug="proposal-kiss" alt="" sizes="100vw" position="50% 32%" class="absolute inset-0 -z-10 block h-full w-full" />
-    <div class="absolute inset-0 -z-10 bg-charcoal/45" aria-hidden="true"></div>
-    <div class="wrap reveal py-24 text-center">
-      <p class="eyebrow !text-ivory/80">Travel</p>
-      <h2 id="band" class="display mx-auto mt-5 max-w-3xl text-[clamp(2.6rem,6vw,5rem)]">Everything you need to get here.</h2>
-      <p class="mx-auto mt-6 max-w-lg text-ivory/90">Airports, hotels, rental cars and a map of it all. Plan your whole trip in a few minutes, or just grab the directions.</p>
-      <div class="mt-9 flex flex-wrap justify-center gap-4"><a href={u("/travel")} class="btn btn-light">Plan your trip</a><a href={u("/details#directions")} class="btn btn-light">Directions</a></div>
+  <!-- ───────── COUNTDOWN over the kiss ───────── -->
+  <section class="on-ink relative isolate flex min-h-[38rem] items-end overflow-hidden md:min-h-[44rem]" aria-labelledby="count-h">
+    <Picture slug="proposal-kiss" alt="" sizes="100vw" position="50% 22%" class="absolute inset-0 -z-10 block h-full w-full" />
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/55 to-ink/5" aria-hidden="true"></div>
+    <div class="wrap reveal w-full pb-14 pt-48 text-center md:pb-20">
+      <p id="count-h" class="eyebrow">Counting down to {wedding.dateShort}</p>
+      <div class="mt-8"><Countdown /></div>
+    </div>
+  </section>
+
+  <!-- ───────── GETTING HERE ───────── -->
+  <section class="section">
+    <div class="wrap">
+      <p class="reveal eyebrow">Getting here</p>
+      <ul class="mt-8 border-t border-charcoal/20">
+        {[
+          ['Fly into San Diego', 'Airports, rental cars and rides', '/travel#airports'],
+          ['Stay in Escondido', 'Hotels on a map, with drive times', '/travel#concierge'],
+          ['Plan the whole weekend', 'A trip planner and budget', '/travel#concierge'],
+        ].map(([t, d, href]) => (
+          <li class="reveal border-b border-charcoal/20">
+            <a href={u(href)} class="group flex min-h-20 flex-wrap items-baseline justify-between gap-x-8 gap-y-1 py-6 no-underline md:py-8">
+              <span class="display text-[clamp(2rem,5.5vw,3.8rem)] transition-transform duration-500 group-hover:translate-x-2">{t}</span>
+              <span class="flex items-baseline gap-4 text-taupe"><span class="text-sm md:text-base">{d}</span><span aria-hidden="true" class="text-2xl transition-transform duration-500 group-hover:translate-x-1">→</span></span>
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 
   <Optional />
 
-  <!-- RSVP -->
-  <section class="section">
-    <div class="wrap reveal text-center">
-      <Monogram class="text-6xl text-sand" />
-      <h2 class="display mx-auto mt-8 max-w-2xl text-[clamp(2.4rem,5vw,4rem)]">We hope you’ll be there.</h2>
-      <p class="mx-auto mt-5 max-w-md text-taupe">Have your invitation handy and let us know.</p>
-      <a href={u("/rsvp")} class="btn btn-solid mt-9">RSVP</a>
+  <!-- ───────── RSVP ───────── -->
+  <section class="on-ink py-24 text-center md:py-36">
+    <div class="wrap reveal">
+      <Monogram class="text-[4.5rem] text-sand md:text-[6rem]" />
+      <p class="italic-display mx-auto mt-8 text-[1.5rem] text-sand">{couple.tagline}</p>
+      <h2 class="display mx-auto mt-4 max-w-2xl text-[clamp(2.4rem,6vw,4.4rem)]">We hope you’ll be there.</h2>
+      <p class="mx-auto mt-5 max-w-md text-ivory/70">{rsvp.deadline ? `Kindly reply by ${rsvp.deadline}.` : 'Have your invitation handy and let us know.'}</p>
+      <a href={u('/rsvp')} class="btn btn-ivory mt-10">RSVP</a>
     </div>
   </section>
 </Base>
 
 <style is:global>
-  @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-  @keyframes settle { from { transform: scale(1.06); } to { transform: scale(1); } }
-  @keyframes scrolldot { 0% { transform: translateY(-120%); } 100% { transform: translateY(260%); } }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes settle { from { transform: scale(1.08); } to { transform: scale(1); } }
+  @keyframes scrolldot { 0% { transform: translateY(-120%); } 100% { transform: translateY(300%); } }
+  .hero-in { animation: rise 1.4s var(--ease-soft) both; animation-delay: calc(var(--i, 0) * 120ms + 200ms); }
+  .hero-settle { animation: settle 3.2s var(--ease-soft) both; }
+  .scroll-dot { animation: scrolldot 2.4s ease-in-out infinite; }
 </style>

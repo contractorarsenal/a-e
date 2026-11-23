@@ -4,11 +4,11 @@ import { googleCalendarUrl, isTimed } from '../lib/calendar';
 const g = googleCalendarUrl(new URL(u('/'), Astro.site).href);
 ---
 <div>
-  <div class="flex flex-wrap gap-3">
+  <div class="flex flex-wrap justify-center gap-3">
     <a class="btn btn-solid" href={u("/calendar.ics")} download>Add to Calendar (.ics)</a>
     <a class="btn" href={g} target="_blank" rel="noopener noreferrer">Google Calendar ↗</a>
   </div>
-  <p class="mt-4 max-w-md text-sm text-taupe">
+  <p class="mx-auto mt-4 max-w-md text-sm text-taupe">
     {isTimed() ? 'Adds the wedding with its confirmed start time.' : 'This saves the date as an all-day reminder. We will update the times here once they are confirmed.'}
   </p>
 </div>

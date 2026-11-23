@@ -1,35 +1,39 @@
 ---
 import Base from '../layouts/Base.astro';
 import Picture from '../components/Picture.astro';
-import SectionHead from '../components/SectionHead.astro';
 import Gallery from '../components/Gallery.astro';
 import { story, couple } from '../content/site';
 import { photos } from '../lib/photos';
 ---
-<Base title="Our Story" description={`The story of ${couple.display}, told in the photographs from the day they got engaged.`}>
-  <section class="section pb-10">
-    <div class="wrap grid items-end gap-12 lg:grid-cols-12">
-      <div class="lg:col-span-6">
-        <SectionHead as="h1" eyebrow={story.eyebrow} title={story.headline} />
-        <p class="prose-soft reveal mt-8">{story.intro}</p>
-      </div>
-      <div class="reveal lg:col-span-5 lg:col-start-8">
-        <div class="aspect-[4/5] overflow-hidden"><Picture slug="proposal-moment" alt={photos['proposal-moment'].alt} loading="eager" sizes="(min-width:1024px) 40vw, 90vw" position="50% 42%" /></div>
-      </div>
+<Base dark title="Our Story" description={`The story of ${couple.display}, told in the photographs from the day they got engaged.`}>
+  <!-- cinematic header: a wide slice of the moment, faces, ring and hands intact -->
+  <header class="on-ink relative isolate flex min-h-[88svh] items-end overflow-hidden md:min-h-[82vh] md:items-start">
+    <Picture slug="proposal-moment" alt={photos['proposal-moment'].alt} loading="eager" sizes="100vw" position="50% 46%" positionMd="50% 30%" class="absolute inset-0 -z-10 block h-full w-full" imgClass="hero-settle" />
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/30 to-ink/40" aria-hidden="true"></div>
+    <div class="wrap w-full pb-12 pt-40 md:pb-0 md:pt-40">
+      <p class="eyebrow hero-in" style="--i:0">{story.eyebrow}</p>
+      <h1 class="display hero-in mt-4 text-[clamp(3.4rem,13vw,4.5rem)] leading-[.92] md:whitespace-nowrap md:text-[clamp(3.4rem,7.2vw,7rem)]" style="--i:1">{story.headline.replace(/\.$/, '')}<span class="italic-display text-sand">.</span></h1>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="wrap grid gap-10 lg:grid-cols-12">
+      <p class="reveal eyebrow lg:col-span-3">The day we got engaged</p>
+      <p class="reveal display text-[clamp(1.7rem,3.6vw,2.7rem)] leading-snug lg:col-span-8 lg:col-start-5">{story.intro}</p>
     </div>
   </section>
 
   {story.chapters.length > 0 && (
-    <section class="section"><div class="wrap max-w-3xl space-y-16">
+    <section class="pb-24"><div class="wrap max-w-3xl space-y-16">
       {story.chapters.map((c) => <div class="reveal"><h2 class="display text-4xl">{c.title}</h2><p class="prose-soft mt-5">{c.body}</p></div>)}
     </div></section>
   )}
 
-  <section class="section pt-10" aria-labelledby="gal">
+  <section class="bg-paper pb-28 pt-4 md:pb-40" aria-labelledby="gal">
     <div class="wrap">
-      <div class="mb-12 flex flex-wrap items-end justify-between gap-6">
-        <SectionHead eyebrow="Gallery" title="The day we got engaged" />
-        <p class="text-sm text-taupe">Tap a photo to view full screen. Use the arrow keys or swipe to move between them.</p>
+      <div class="mb-12 flex flex-wrap items-end justify-between gap-4 md:mb-20">
+        <h2 id="gal" class="reveal display text-[clamp(2.2rem,5vw,3.6rem)]">Gallery</h2>
+        <p class="text-sm text-taupe">Tap a photo to view it full screen. Arrow keys or a swipe move between them.</p>
       </div>
       <Gallery />
     </div>

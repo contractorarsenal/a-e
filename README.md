@@ -2,15 +2,13 @@
 
 Saturday, August 28, 2027 · Ethereal Gardens, Escondido, California
 
-A static, mobile-first wedding site built with **Astro 6, TypeScript and Tailwind CSS 4**, with one React island (the trip planner and map). It is designed to be hosted free on **GitHub Pages** at `https://contractorarsenal.github.io/a-e/`.
-
-> **Not published yet.** GitHub Pages is intentionally *not* enabled and the deploy job is gated. See [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md).
+A static, mobile-first wedding site built with **Astro 6, TypeScript and Tailwind CSS 4**, with one React island (the trip planner and map). It is hosted free on **Cloudflare Pages** at https://a-e.pages.dev/ and deploys automatically on every push to `main`.
 
 ## Quick start
 
 ```bash
 npm install
-npm run dev          # http://localhost:4321/a-e/   (note the /a-e/ base path)
+npm run dev          # http://localhost:4321/
 npm run verify       # type-check + production build + internal link/base-path check
 npm run preview      # serve the production build
 ```
@@ -73,9 +71,26 @@ Trade-off: a static site cannot hold a private guest list or enforce invitation 
 
 Originals live in `Photos/` and are **never modified or committed** (the repository is public). `npm run images` writes optimized AVIF/WebP/JPEG copies to `public/img/` and `src/generated/images.json`. Add a photo by adding it to the `PHOTOS` map in `scripts/optimize-images.mjs`, then to `src/lib/photos.ts`.
 
-## Deployment (GitHub Pages) — gated
+## Deployment: Cloudflare Pages (native Git integration)
 
-`.github/workflows/site.yml` builds, type-checks and link-checks on every push/PR. The `deploy` job runs only when **all** of these are true: Pages source is set to "GitHub Actions", repo variable `ENABLE_DEPLOY=true`, and the workflow is run manually with "deploy" ticked. Details in [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md).
+`git push` to `main` → Cloudflare Pages builds and publishes https://a-e.pages.dev/. There is no GitHub Actions deploy and no Wrangler.
+
+Required settings in the Cloudflare dashboard (Workers & Pages → a-e → Settings → Build):
+
+| Setting | Value |
+|---|---|
+| Production branch | `main` |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Node.js | 22 (pinned by `.node-version`; or set env var `NODE_VERSION=22`) |
+| Framework preset | None is fine |
+
+> **If these are blank, Cloudflare logs "No build command specified. Skipping build step", uploads the raw repository, and every URL returns 404.** That was the original outage.
+
+Environment variables (Settings → Variables and secrets → *Production*; all optional, all public once built):
+`SITE_URL` (default `https://a-e.pages.dev`), `BASE_PATH` (default `/`), `SITE_VISIBILITY`, `PUBLIC_RSVP_ENDPOINT`, `PUBLIC_GUEST_GROUP_URL`, `PUBLIC_GUEST_GROUP_GATE`, `PUBLIC_PLAUSIBLE_DOMAIN`. See `.env.example`. Changing a variable needs a new deployment (Deployments → Retry, or push a commit).
+
+`.github/workflows/ci.yml` only runs checks (`npm run verify`: type-check, build, internal link check). `public/_headers` sets security and long-cache headers.
 
 ## Project structure
 

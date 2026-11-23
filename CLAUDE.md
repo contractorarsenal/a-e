@@ -8,11 +8,11 @@
 - Do not modify other projects in AI-WORKSPACE. Do not touch `Photos/`.
 
 ## Stack & constraints
-Astro 6 (static) + Tailwind 4 + TypeScript; one React island (`src/components/trip/`) with Leaflet. Hosted on GitHub Pages under `/a-e/`. **Every internal link and asset must go through `u()` from `src/lib/url.ts`** (or `import.meta.env.BASE_URL` in React). `npm run verify` fails if any link escapes the base path.
+Astro 6 (static) + Tailwind 4 + TypeScript; one React island (`src/components/trip/`) with Leaflet. Hosted on **Cloudflare Pages** (native Git integration; push to `main` deploys; build `npm run build`, output `dist`, Node 22). Base path is `/` (SITE_URL `https://a-e.pages.dev`). Keep using `u()` from `src/lib/url.ts` for internal links so a sub-path would still work; `npm run verify` checks every internal reference resolves. Never add a GitHub Pages/Actions deploy or Wrangler.
 `vite` is pinned via `overrides` (7.3.8) so Astro 6 and `@tailwindcss/vite` share one Vite. Don't upgrade Astro/Vite without testing the build.
 
 ## Design rules
-Warm ivory/champagne/taupe/charcoal + muted sage. Cormorant Garamond (display) + Jost (text), self-hosted via fontsource. Hairlines and whitespace over cards; restrained rectangular buttons; no gold gradients, clip-art or decorative animation. Mobile-first: test 320 → 1440, no horizontal overflow, tap targets ≥ 44px, respect `prefers-reduced-motion`. Faces/hands/rings must never be cropped (tune `position` on `<Picture>`).
+Photo-derived palette: cream (`ivory`/`paper`), `ink`/`sea` (deep ocean night), sand, and terracotta `clay` (the dress) as a sparing accent. Cormorant Garamond (display) + Jost (text), self-hosted via fontsource. Dramatic photography first (full-bleed on phones, arch frame on desktop), oversized serif type, hairlines and whitespace over cards, ink sections for rhythm; restrained rectangular buttons; no gold gradients, clip-art or decorative animation. Mobile-first: test 320 → 1440, no horizontal overflow, tap targets ≥ 44px, respect `prefers-reduced-motion`. Faces/hands/rings must never be cropped (tune `position` on `<Picture>`).
 
 ## Where things live
 - Content: `src/content/site.ts`, `src/content/travel.ts`, `src/lib/photos.ts`.
