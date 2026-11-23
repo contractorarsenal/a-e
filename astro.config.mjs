@@ -2,10 +2,10 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
 
-// GitHub Pages project site: https://contractorarsenal.github.io/a-e/
-// Override SITE_URL / BASE_PATH at build time for a custom domain (BASE_PATH="" for a domain root).
-const site = process.env.SITE_URL || 'https://contractorarsenal.github.io';
-const base = process.env.BASE_PATH ?? '/a-e';
+// Hosted on Cloudflare Pages at the domain root: https://a-e.pages.dev/
+// Override SITE_URL (and BASE_PATH only if you ever serve from a sub-path) at build time.
+const site = process.env.SITE_URL || 'https://a-e.pages.dev';
+const base = process.env.BASE_PATH || '/';
 
 export default defineConfig({
   site,
