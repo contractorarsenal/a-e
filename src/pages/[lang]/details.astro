@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
 import Schedule from '../../components/Schedule.astro';
 import AddToCalendar from '../../components/AddToCalendar.astro';
 import VenueMap from '../../components/VenueMap.astro';
@@ -13,15 +14,15 @@ const { lang, t, l } = useLang(Astro);
 const link = `<a class="link" href="${l('/travel')}">${t.nav.travel.replace('&', '&amp;')}</a>`;
 ---
 <Base title={t.nav.wedding} description={fmt(t.meta.detailsDesc, { couple: couple.display, date: dateLong(wedding.dateISO, lang), venue: venue.name, city: wedding.cityLine })}>
-  <div class="wrap pb-6 pt-10 md:pt-16">
-    <h1 class="display text-[clamp(2.6rem,8vw,5rem)]">{t.nav.wedding}</h1>
+  <PageHead title={t.nav.wedding} />
+  <div class="wrap pb-6">
 
-    <dl class="mt-10 border-t border-charcoal/25 md:mt-14">
+    <dl class="mt-8 border-t border-charcoal/25">
       <!-- WHEN -->
       <div class="grid gap-3 border-b border-charcoal/25 py-8 md:grid-cols-[11rem_1fr] md:gap-10 md:py-10" id="when">
-        <dt class="label pt-1.5 text-taupe">{t.details.when}</dt>
+        <dt class="h3 pt-1">{t.details.when}</dt>
         <dd>
-          <p class="display text-[clamp(1.7rem,4vw,2.4rem)]">{dateLong(wedding.dateISO, lang)}</p>
+          <p class="h2">{dateLong(wedding.dateISO, lang)}</p>
           <div class="mt-6"><Schedule /></div>
           <div class="mt-7"><AddToCalendar /></div>
         </dd>
@@ -29,10 +30,10 @@ const link = `<a class="link" href="${l('/travel')}">${t.nav.travel.replace('&',
 
       <!-- WHERE -->
       <div class="grid gap-3 border-b border-charcoal/25 py-8 md:grid-cols-[11rem_1fr] md:gap-10 md:py-10" id="directions">
-        <dt class="label pt-1.5 text-taupe">{t.details.where}</dt>
+        <dt class="h3 pt-1">{t.details.where}</dt>
         <dd>
-          <p class="display text-[clamp(1.7rem,4vw,2.4rem)]">{venue.name}</p>
-          <address class="mt-2 text-lg not-italic text-taupe">{addressLines.slice(0, 2).map((line) => <span class="block">{line}</span>)}</address>
+          <p class="h2">{venue.name}</p>
+          <address class="mt-2 text-lg not-italic">{addressLines.slice(0, 2).map((line) => <span class="block">{line}</span>)}</address>
           <p class="mt-5 max-w-lg">{t.details.venueBlurb}</p>
           <div class="mt-7"><NavigateButtons /></div>
           <div class="mt-8"><VenueMap /></div>
@@ -45,13 +46,13 @@ const link = `<a class="link" href="${l('/travel')}">${t.nav.travel.replace('&',
 
       <!-- GETTING HERE -->
       <div class="grid gap-3 border-b border-charcoal/25 py-8 md:grid-cols-[11rem_1fr] md:gap-10 md:py-10" id="getting-here">
-        <dt class="label pt-1.5 text-taupe">{t.details.getting}</dt>
+        <dt class="h3 pt-1">{t.details.getting}</dt>
         <dd class="max-w-lg">
           <p set:html={fmt(t.details.gettingBody, { venue: venue.name, link })} />
         </dd>
       </div>
     </dl>
 
-    <p class="mt-10 flex flex-wrap gap-x-8"><a class="link tap" href={l('/story')}>{t.nav.story}</a><a class="link tap" href={l('/faq')}>{t.nav.faq}</a><a class="link tap" href={l('/rsvp')}>{t.nav.rsvp}</a></p>
+    <p class="mt-8"><a class="btn btn-solid" href={l('/rsvp')}>{t.nav.rsvp}</a></p>
   </div>
 </Base>

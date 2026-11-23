@@ -1,20 +1,22 @@
 ---
 import { LANGS, htmlLang, dictionaries, swapLangPath, useLang } from '../i18n';
 const { lang, t } = useLang(Astro);
+const short: Record<string, string> = { en: 'EN', es: 'ES' };
+const full: Record<string, string> = { en: 'English', es: 'Español' };
 const { class: cls = '' } = Astro.props as { class?: string };
 ---
 <div role="group" aria-label={t.nav.language} class={`flex items-center ${cls}`} data-lang-switch-group>
   {LANGS.map((l) => (
     <a href={swapLangPath(Astro.url, l)} lang={htmlLang[l]} hreflang={htmlLang[l]} data-lang-switch={l}
-      aria-label={`${l.toUpperCase()}: ${dictionaries[l].localeLabel}`} aria-current={l === lang ? 'true' : undefined}
-      class="lang-link inline-flex min-h-11 min-w-11 items-center justify-center px-1.5 text-[1.0625rem] font-semibold no-underline">{l.toUpperCase()}</a>
+      aria-label={`${short[l]} ${full[l]}`} aria-current={l === lang ? 'true' : undefined}
+      class="lang-link inline-flex min-h-11 min-w-11 items-center justify-center px-2 text-[1.0625rem] font-semibold no-underline"><span class="sm:hidden" aria-hidden="true">{short[l]}</span><span class="hidden sm:inline" aria-hidden="true">{full[l]}</span></a>
   ))}
 </div>
 <style>
   .lang-link { color: var(--color-taupe); }
   .lang-link:hover { color: var(--color-charcoal); }
-  .lang-link[aria-current='true'] { color: var(--color-charcoal); text-decoration: underline; text-decoration-color: var(--color-clay); text-decoration-thickness: 2px; text-underline-offset: .3em; }
-  .lang-link + .lang-link { border-left: 1px solid color-mix(in srgb, var(--color-charcoal) 25%, transparent); }
+  .lang-link[aria-current='true'] { color: var(--color-charcoal); font-weight: 700; text-decoration: underline; text-decoration-color: var(--color-clay); text-decoration-thickness: 3px; text-underline-offset: .3em; }
+  .lang-link + .lang-link { border-left: 1px solid color-mix(in srgb, var(--color-charcoal) 35%, transparent); }
 </style>
 <script>
   // Switching language: remember the choice, stay on the same page and (when we can tell) the same section.

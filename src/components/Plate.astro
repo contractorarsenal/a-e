@@ -12,7 +12,7 @@ const m = manifest[slug];
 const p = t.photos[slug];
 const srcset = (m.widths as number[]).map((w) => `${u('/img/' + slug + '-' + w + '.webp')} ${w}w`).join(', ');
 ---
-<figure class={`reveal min-w-0 ${cls}`} style={`max-width:${maxWidth}`}>
+<figure class={`min-w-0 ${cls}`} style={`max-width:${maxWidth}`}>
   <button type="button" data-lb data-srcset={srcset} data-alt={p.alt} data-caption={p.caption} aria-label={fmt(t.story.photoOpen, { caption: p.caption })} class="group block w-full cursor-zoom-in text-left">
     <span class={`block ${mat ? 'bg-paper p-2 ring-1 ring-charcoal/15 md:p-3' : ''}`}>
       <span class="block overflow-hidden bg-champagne" style={`aspect-ratio:${m.width}/${m.height}`}>

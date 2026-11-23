@@ -11,7 +11,7 @@ function Photo({ h }: { h: HotelData }) {
   return (
     <div className="grid h-full w-full place-items-center bg-champagne/70 text-center">
       <div>
-        <p className="font-display text-3xl italic text-charcoal/80">{h.area}</p>
+        <p className="h3">{h.area}</p>
         <p className="mt-2 text-sm text-taupe">{t.photoNote}</p>
       </div>
     </div>
@@ -157,7 +157,7 @@ function Compare({ data, trip, update }: { data: ConciergeData; trip: TripState;
   return (
     <section aria-labelledby="cmp" className="mt-14">
       <div className="flex items-end justify-between gap-4">
-        <h3 id="cmp" className="display text-4xl">{t.sideBySide}</h3>
+        <h3 id="cmp" className="h2">{t.sideBySide}</h3>
         <button type="button" className="link tap" onClick={() => update({ compare: [] })}>{t.clear}</button>
       </div>
       <p className="mt-2 text-taupe">{t.cmpNote}</p>

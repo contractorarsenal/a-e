@@ -1,73 +1,95 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Picture from '../../components/Picture.astro';
-import Countdown from '../../components/Countdown.astro';
 import Optional from '../../components/Optional.astro';
-import { wedding, venue } from '../../content/site';
+import manifest from '../../generated/images.json';
+import { wedding, venue, mapLinks, addressLines } from '../../content/site';
+import { rsvpEndpoint } from '../../lib/env';
 import { useLang, dateLong } from '../../i18n';
 
 export const getStaticPaths = () => [{ params: { lang: 'en' } }, { params: { lang: 'es' } }];
 const { lang, t, l } = useLang(Astro);
-
-const plates = [
-  { slug: 'proposal-moment', n: 'I', pos: '50% 46%', cls: '' },
-  { slug: 'proposal-laughing', n: 'II', pos: '55% 42%', cls: '' },
-  { slug: 'proposal-kiss', n: 'III', pos: '50% 40%', cls: 'hidden md:block' },
-] as const;
-const hrefs: Record<string, string> = { details: '/details', travel: '/travel', faq: '/faq' };
-const hands = t.photos['proposal-hands'];
+const H = t.home;
+const rsvpOpen = !!rsvpEndpoint();
+const hrefs: Record<string, string> = { details: '/details', travel: '/travel' };
+const cards = [
+  ...H.ways.map((w) => ({ id: w.id, title: w.t, body: w.d, action: w.a, href: l(hrefs[w.id]), soon: false })),
+  { id: 'rsvp', title: t.nav.rsvp, body: rsvpOpen ? H.rsvpD : H.rsvpSoonD, action: rsvpOpen ? H.rsvpA : H.rsvpSoonA, href: l('/rsvp'), soon: !rsvpOpen },
+];
+const hero = t.photos['proposal-kiss'];
+const early = ['early-aprons', 'early-luggage'] as const;
+const ratio = (s: keyof typeof manifest) => `${manifest[s].width} / ${manifest[s].height}`;
 ---
 <Base>
-  <!-- The invitation -->
-  <section class="wrap pb-2 pt-8 text-center md:pt-12" aria-labelledby="names">
-    <p class="text-lg text-taupe">{t.home.kicker}</p>
-    <h1 id="names" class="display mt-3 text-[clamp(3.4rem,17vw,6.5rem)] leading-[.95] sm:text-[clamp(3.4rem,9vw,6.5rem)] sm:leading-none"><span class="block sm:inline">Adrian</span> <span class="italic-display">&amp;</span> Emma</h1>
-    <div class="mx-auto mt-6 h-px w-16 bg-charcoal/40" aria-hidden="true"></div>
-    <p class="mt-6 text-[1.25rem] font-semibold md:text-[1.375rem]">{dateLong(wedding.dateISO, lang)}</p>
-    <p class="mt-1.5 text-lg">{venue.name} · {wedding.cityLine}</p>
-    <p class="mt-6"><a href={l('/rsvp')} class="btn btn-solid">{t.nav.rsvp}</a></p>
-    <p class="mt-4 text-taupe"><Countdown /></p>
-  </section>
-
-  <!-- The photograph -->
-  <section class="wrap mt-8 md:mt-10" aria-label={t.home.photo}>
-    <figure class="mx-auto max-w-[34rem]">
-      <div class="aspect-[3/4] overflow-hidden bg-champagne">
-        <Picture slug="proposal-hands" alt={hands.alt} loading="eager" sizes="(min-width:768px) 544px, calc(100vw - 2.5rem)" position="50% 45%" />
+  <!-- 1. The welcome -->
+  <section class="wrap pt-8 text-center md:pt-14" aria-labelledby="names">
+    <p class="text-[1.25rem] text-taupe">{H.kicker}</p>
+    <h1 id="names" class="display mt-2 text-[clamp(2.25rem,10vw,5.25rem)] leading-[1.1]">Adrian <span class="italic-display">&amp;</span> Emma</h1>
+    <p class="mt-5 text-[1.5rem] font-bold md:text-[1.75rem]">{dateLong(wedding.dateISO, lang)}</p>
+    <p class="mt-1 text-[1.25rem]">{venue.name}<span aria-hidden="true" class="hidden sm:inline"> · </span><br class="sm:hidden" />{wedding.cityLine}</p>
+    <p class="mt-2"><a href="#find" class="link tap font-semibold">{H.jump} <span aria-hidden="true">↓</span></a></p>
+    <figure class="mx-auto mt-8 w-full max-w-[26rem]">
+      <div class="bg-paper p-2 shadow-[0_0_0_1px_rgba(34,29,25,.18)] md:p-3" style={`aspect-ratio:${ratio('proposal-kiss')}`}>
+        <Picture slug="proposal-kiss" alt={hero.alt} loading="eager" sizes="(min-width:640px) 416px, calc(100vw - 3.5rem)" position="50% 50%" />
       </div>
-      <figcaption class="caption mt-3 text-center">{hands.caption}</figcaption>
+      <figcaption class="caption mt-3">{hero.caption}</figcaption>
     </figure>
   </section>
 
-  <!-- A short series -->
-  <section class="wrap mt-20 md:mt-32" aria-labelledby="series">
-    <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-t border-charcoal/25 pt-4">
-      <h2 id="series" class="heading text-xl text-taupe">{t.home.series}</h2>
-      <a href={l('/story')} class="link tap">{t.home.storyLink}</a>
-    </div>
-    <div class="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6">
-      {plates.map((p) => (
-        <figure class={`reveal ${p.cls}`}>
-          <div class="aspect-[3/4] overflow-hidden bg-champagne"><Picture slug={p.slug} alt={t.photos[p.slug].alt} sizes="(min-width:768px) 30vw, 46vw" position={p.pos} /></div>
-          <figcaption class="caption mt-2"><span class="numeral mr-2 text-clay not-italic">{p.n}</span>{t.photos[p.slug].caption}</figcaption>
-        </figure>
-      ))}
-    </div>
-  </section>
-
-  <!-- Where to go next -->
-  <nav class="wrap mt-20 md:mt-32" aria-label={t.home.waysLabel}>
-    <ul class="border-t border-charcoal/25">
-      {t.home.ways.map((w) => (
-        <li class="border-b border-charcoal/25">
-          <a href={l(hrefs[w.id])} class="group flex min-h-20 items-center justify-between gap-6 py-5 no-underline">
-            <span><span class="display block text-[clamp(1.6rem,4vw,2.4rem)]">{w.t}</span><span class="mt-1 block text-taupe">{w.d}</span></span>
-            <span aria-hidden="true" class="text-2xl transition-transform duration-300 group-hover:translate-x-1">→</span>
+  <!-- 2. What guests need -->
+  <section class="wrap mt-14 md:mt-20" aria-labelledby="ways-h">
+    <h2 id="ways-h" class="h2">{H.waysH}</h2>
+    <ul class="mt-6 grid gap-4 lg:grid-cols-3 lg:gap-6">
+      {cards.map((c) => (
+        <li class="flex">
+          <a href={c.href} class="card flex w-full flex-col justify-between gap-5 border-[1.5px] border-charcoal bg-paper p-6 no-underline">
+            <span>
+              <span class="h3 block">{c.title}</span>
+              <span class="mt-2 block text-[1.125rem]">{c.body}</span>
+            </span>
+            <span class={`card-action inline-flex min-h-12 items-center gap-2 font-bold ${c.soon ? 'text-taupe' : ''}`}>{c.action}{!c.soon && <span aria-hidden="true">→</span>}</span>
           </a>
         </li>
       ))}
     </ul>
-  </nav>
+  </section>
+
+  <!-- 3. Our story -->
+  <section class="wrap mt-16 md:mt-24" aria-labelledby="story-h">
+    <div class="grid items-center gap-8 border-t border-charcoal/25 pt-10 md:grid-cols-[1fr_1.1fr] md:gap-14">
+      <div class="flex items-start gap-4">
+        {early.map((s) => (
+          <figure class="min-w-0 flex-1">
+            <div class="bg-paper p-1.5 shadow-[0_0_0_1px_rgba(34,29,25,.18)] md:p-2" style={`aspect-ratio:${ratio(s)}`}>
+              <Picture slug={s} alt={t.photos[s].alt} sizes="(min-width:768px) 220px, 42vw" position="50% 50%" />
+            </div>
+          </figure>
+        ))}
+      </div>
+      <div>
+        <h2 id="story-h" class="h2">{H.storyH}</h2>
+        <p class="prose-soft mt-3">{H.storyBody}</p>
+        <p class="mt-5"><a href={l('/story')} class="btn">{H.storyLink} <span aria-hidden="true">→</span></a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Finding us -->
+  <section id="find" class="wrap mt-16 md:mt-24" aria-labelledby="find-h">
+    <div class="border-t border-charcoal/25 pt-10">
+      <h2 id="find-h" class="h2">{H.findH}</h2>
+      <p class="mt-3 text-[1.25rem]"><strong class="font-bold">{venue.name}</strong><br />{addressLines[0]}<br />{addressLines[1]}</p>
+      <p class="mt-5 flex flex-wrap items-center gap-x-8 gap-y-2">
+        <a href={mapLinks.googleDirections} class="btn btn-solid" target="_blank" rel="noopener noreferrer">{H.directions} ↗<span class="sr-only"> {t.newTab}</span></a>
+        <a href={l('/details')} class="link tap">{H.allDetails}</a>
+      </p>
+    </div>
+  </section>
 
   <Optional />
 </Base>
+
+<style>
+  .card:hover { background: var(--color-champagne); }
+  .card:hover .card-action { text-decoration: underline; text-underline-offset: .25em; }
+</style>

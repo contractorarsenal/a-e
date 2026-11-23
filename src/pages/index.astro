@@ -55,14 +55,14 @@ const opts = [
   <body>
     <main id="main" class="grid min-h-svh place-items-center px-5 py-12">
       <div class="w-full max-w-md text-center">
-        <h1 class="display text-[clamp(3.4rem,17vw,5.5rem)] leading-[.95]"><span class="block sm:inline">Adrian</span> <span class="italic-display">&amp;</span> Emma</h1>
+        <h1 class="display text-[clamp(3.4rem,17vw,5.5rem)] leading-[1.05]"><span class="block sm:inline">Adrian</span> <span class="italic-display">&amp;</span> Emma</h1>
         <div class="mx-auto mt-7 h-px w-16 bg-charcoal/40" aria-hidden="true"></div>
 
         <form id="chooser" class="mt-8" novalidate>
           <fieldset>
             <legend class="w-full">
-              <span lang="en" class="italic-display block text-[1.6rem] leading-tight">{en.chooser.choose}</span>
-              <span lang="es-MX" class="italic-display mt-1 block text-[1.6rem] leading-tight">{esMX.chooser.choose}</span>
+              <span lang="en" class="heading block text-[1.5rem]">{en.chooser.choose}</span>
+              <span lang="es-MX" class="heading mt-1 block text-[1.5rem]">{esMX.chooser.choose}</span>
             </legend>
             <div class="mt-6 grid gap-3 text-left">
               {opts.map((o) => (

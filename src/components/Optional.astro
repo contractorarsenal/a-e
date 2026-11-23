@@ -6,31 +6,31 @@ const o = optional;
 ---
 {o.weekend.enabled && o.weekend.events.length > 0 && (
   <section class="section border-t border-charcoal/15"><div class="wrap">
-    <h2 class="display text-[clamp(1.8rem,4vw,2.6rem)]">{t.optional.weekend}</h2><p class="prose-soft mt-5">{t.optional.weekendIntro}</p>
+    <h2 class="h2">{t.optional.weekend}</h2><p class="prose-soft mt-5">{t.optional.weekendIntro}</p>
     <ul class="mt-10 divide-y divide-charcoal/15 border-y border-charcoal/15">{o.weekend.events.map((e) => <li class="grid gap-1 py-5 md:grid-cols-[12rem_1fr]"><span class="label">{tx(e.when, lang)}</span><span>{tx(e.title, lang)}{e.note && <span class="text-taupe"> · {tx(e.note, lang)}</span>}</span></li>)}</ul>
   </div></section>
 )}
 {o.nearby.enabled && o.nearby.places.length > 0 && (
   <section class="section border-t border-charcoal/15"><div class="wrap">
-    <h2 class="display text-[clamp(1.8rem,4vw,2.6rem)]">{t.optional.nearby}</h2><p class="prose-soft mt-5">{t.optional.nearbyIntro}</p>
-    <ul class="mt-10 grid gap-6 md:grid-cols-2">{o.nearby.places.map((p) => <li class="border-t border-charcoal/15 pt-5"><p class="label">{tx(p.kind, lang)}</p><p class="heading mt-1 text-2xl">{p.href ? <a class="link" href={p.href} target="_blank" rel="noopener noreferrer">{p.name} ↗<span class="sr-only"> {t.newTab}</span></a> : p.name}</p>{p.note && <p class="text-taupe">{tx(p.note, lang)}</p>}</li>)}</ul>
+    <h2 class="h2">{t.optional.nearby}</h2><p class="prose-soft mt-5">{t.optional.nearbyIntro}</p>
+    <ul class="mt-10 grid gap-6 md:grid-cols-2">{o.nearby.places.map((p) => <li class="border-t border-charcoal/15 pt-5"><p class="label">{tx(p.kind, lang)}</p><p class="h3 mt-1">{p.href ? <a class="link" href={p.href} target="_blank" rel="noopener noreferrer">{p.name} ↗<span class="sr-only"> {t.newTab}</span></a> : p.name}</p>{p.note && <p class="text-taupe">{tx(p.note, lang)}</p>}</li>)}</ul>
   </div></section>
 )}
 {o.weddingParty.enabled && o.weddingParty.members.length > 0 && (
   <section class="section border-t border-charcoal/15"><div class="wrap">
-    <h2 class="display text-[clamp(1.8rem,4vw,2.6rem)]">{t.optional.party}</h2>
-    <ul class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">{o.weddingParty.members.map((m) => <li><p class="heading text-2xl">{m.name}</p><p class="label mt-1 text-taupe">{tx(m.role, lang)}</p>{m.note && <p class="mt-2 text-taupe">{tx(m.note, lang)}</p>}</li>)}</ul>
+    <h2 class="h2">{t.optional.party}</h2>
+    <ul class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">{o.weddingParty.members.map((m) => <li><p class="h3">{m.name}</p><p class="label mt-1 text-taupe">{tx(m.role, lang)}</p>{m.note && <p class="mt-2 text-taupe">{tx(m.note, lang)}</p>}</li>)}</ul>
   </div></section>
 )}
 {o.registry.enabled && o.registry.links.length > 0 && (
   <section class="section border-t border-charcoal/15"><div class="wrap">
-    <h2 class="display text-[clamp(1.8rem,4vw,2.6rem)]">{t.optional.registry}</h2><p class="prose-soft mt-5">{t.optional.registryIntro}</p>
+    <h2 class="h2">{t.optional.registry}</h2><p class="prose-soft mt-5">{t.optional.registryIntro}</p>
     <p class="mt-8 flex flex-wrap gap-4">{o.registry.links.map((x) => <a class="btn" href={x.href} target="_blank" rel="noopener noreferrer">{tx(x.label, lang)} ↗<span class="sr-only"> {t.newTab}</span></a>)}</p>
   </div></section>
 )}
 {o.photoSharing.enabled && o.photoSharing.href && (
   <section class="section border-t border-charcoal/15"><div class="wrap">
-    <h2 class="display text-[clamp(1.8rem,4vw,2.6rem)]">{t.optional.photos}</h2><p class="prose-soft mt-5">{t.optional.photosIntro}</p>
+    <h2 class="h2">{t.optional.photos}</h2><p class="prose-soft mt-5">{t.optional.photosIntro}</p>
     <a class="btn mt-8" href={o.photoSharing.href} target="_blank" rel="noopener noreferrer">{t.optional.openAlbum} ↗<span class="sr-only"> {t.newTab}</span></a>
   </div></section>
 )}

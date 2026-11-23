@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
 import TripConcierge from '../../components/trip/TripConcierge';
 import GuestConnect from '../../components/GuestConnect.astro';
 import ComingSoon from '../../components/ComingSoon.astro';
@@ -7,7 +8,7 @@ import { couple, venue, wedding, mapLinks, schedule, shuttle } from '../../conte
 import { hotels, rentals, stayDates, rentalCompanies, links } from '../../content/travel';
 import geo from '../../generated/geo.json';
 import { groupUrl, groupGate } from '../../lib/env';
-import { useLang, fmt, mi, miOnly, dur, dateShort, dateLong, tx } from '../../i18n';
+import { useLang, fmt, mi, dur, dateShort, dateLong, tx } from '../../i18n';
 import type { ConciergeData } from '../../components/trip/types';
 
 export const getStaticPaths = () => [{ params: { lang: 'en' } }, { params: { lang: 'es' } }];
@@ -49,39 +50,27 @@ const NT = `<span class="sr-only"> ${t.newTab}</span>`;
 const ext = (href: string, label: string) => `<a class="tap link" href="${href}" target="_blank" rel="noopener noreferrer">${label} ↗${NT}</a>`;
 ---
 <Base title={t.nav.travel} description={fmt(t.meta.travelDesc, { couple: couple.display, venue: venue.name, city: wedding.cityLine })}>
-  <div class="wrap pb-6 pt-10 md:pt-16">
-    <h1 class="display text-[clamp(2.4rem,8vw,5rem)]">{t.nav.travel}</h1>
-    <p class="prose-soft mt-5">{T.intro}</p>
-  </div>
+  <PageHead title={t.nav.travel} />
 
   <!-- 1. Where to stay -->
-  <section id="stay" class="wrap mt-10 md:mt-14" aria-labelledby="stay-h">
-    <h2 id="stay-h" class="display text-[clamp(1.8rem,4vw,2.6rem)]">{T.stayH}</h2>
+  <section id="stay" class="wrap mt-10 md:mt-12" aria-labelledby="stay-h">
+    <h2 id="stay-h" class="h2">{T.stayH}</h2>
     <p class="mt-3 max-w-xl text-taupe">{fmt(T.stayNote, { venue: venue.name })}</p>
     <ol class="mt-8 border-t border-charcoal/25">
       {hotelData.map((h: any) => (
         <li class="border-b border-charcoal/25 py-7 md:py-9">
-          <div class="grid gap-5 md:grid-cols-[1fr_auto] md:gap-12">
-            <div>
-              <h3 class="heading text-[clamp(1.35rem,3vw,1.75rem)]">{h.name}</h3>
-              <p class="mt-1 text-taupe">{h.tier} · {h.area}</p>
-              <p class="mt-3 max-w-md">{h.why}</p>
-            </div>
-            <p class="md:text-right">
-              <span class="numeral block text-[2.2rem] md:text-[2.6rem]">{miOnly(h.toVenue.miles)}</span>
-              <span class="block text-lg font-semibold">{fmt(T.driveAbout, { t: dur(h.toVenue.minutes, lang) })}</span>
-              {lang === 'es' && <span class="block text-taupe">≈ {Math.round(h.toVenue.miles * 1.609344)} km</span>}
-              <span class="block text-taupe">{fmt(T.toVenueApprox, { venue: venue.name })}</span>
-            </p>
-          </div>
+          <h3 class="h3 md:text-[1.625rem]">{h.name}</h3>
+          <p class="mt-2 text-[1.25rem] font-bold">{fmt(T.driveLine, { t: dur(h.toVenue.minutes, lang), d: mi(h.toVenue.miles, lang) })}</p>
+          <p class="text-taupe">{fmt(T.toVenueApprox, { venue: venue.name })}</p>
+          <p class="mt-3"><span class="sr-only">{T.address}: </span>{h.address}</p>
+          <p class="mt-3 max-w-xl text-taupe">{h.why}</p>
           <div class="mt-5 flex flex-wrap gap-3">
-            <a class="btn btn-solid" href={h.bookingUrl} target="_blank" rel="noopener noreferrer">{T.book} ↗<span class="sr-only"> {t.newTab}</span></a>
-            <a class="btn" href={h.googleDirections} target="_blank" rel="noopener noreferrer">{T.directions} ↗<span class="sr-only"> {t.newTab}</span></a>
+            <a class="btn btn-solid" href={h.bookingUrl} target="_blank" rel="noopener noreferrer">{T.book} ↗<span class="sr-only"> {h.name}, {t.newTab}</span></a>
+            <a class="btn" href={h.googleDirections} target="_blank" rel="noopener noreferrer">{T.directions} ↗<span class="sr-only"> {h.name}, {t.newTab}</span></a>
           </div>
           <details class="disclose mt-4">
             <summary class="tap inline-flex items-center gap-2 font-semibold"><span class="plus text-2xl leading-none text-clay" aria-hidden="true">+</span> {T.more}</summary>
             <div class="mt-3 grid gap-x-10 gap-y-4 md:grid-cols-2">
-              <p><span class="label">{T.address}</span>{h.address}</p>
               <p><span class="label">{T.fromSan}</span>{fmt(T.fromSanVal, { mi: mi(sanFromHotel(h.id).miles, lang), t: dur(sanFromHotel(h.id).minutes, lang) })}</p>
               <p><span class="label">{T.rooms}</span>{h.roomTypes}</p>
               <p><span class="label">{T.kitchen}</span>{h.kitchen}</p>
@@ -99,10 +88,10 @@ const ext = (href: string, label: string) => `<a class="tap link" href="${href}"
 
   <!-- 2. Airports and getting around -->
   <section id="airports" class="wrap mt-16 md:mt-24" aria-labelledby="air-h">
-    <h2 id="air-h" class="display text-[clamp(1.8rem,4vw,2.6rem)]">{T.airportsH}</h2>
+    <h2 id="air-h" class="h2">{T.airportsH}</h2>
     <div class="mt-8 grid gap-10 border-t border-charcoal/25 pt-8 md:grid-cols-2 md:gap-16">
       <div id="airport-info">
-        <h3 class="heading text-2xl">{T.flyingIn}</h3>
+        <h3 class="h3">{T.flyingIn}</h3>
         <p class="mt-3" set:html={fmt(T.sanText, { b: `<strong class="font-semibold">${T.airportNames.SAN} (SAN)</strong>`, d: mi(ato.SAN.miles, lang), t: dur(ato.SAN.minutes, lang) })} />
         <p class="mt-3" set:html={fmt(T.crqText, { b: `<strong class="font-semibold">${T.airportNames.CRQ.replace(' (Carlsbad)', '')} (CRQ)</strong>`, d: mi(ato.CRQ.miles, lang) })} />
         <details class="disclose mt-3">
@@ -112,7 +101,7 @@ const ext = (href: string, label: string) => `<a class="tap link" href="${href}"
         </details>
       </div>
       <div id="cars">
-        <h3 class="heading text-2xl">{T.carsH}</h3>
+        <h3 class="h3">{T.carsH}</h3>
         <p class="mt-3">{T.rentalFact1} {T.rentalFact2}</p>
         <p class="mt-3" set:html={fmt(T.rideshare, { uber: `<a class="link" href="${links.uber}" target="_blank" rel="noopener noreferrer">Uber${NT}</a>`, lyft: `<a class="link" href="${links.lyft}" target="_blank" rel="noopener noreferrer">Lyft${NT}</a>` })} />
         <details class="disclose mt-3">
@@ -130,12 +119,12 @@ const ext = (href: string, label: string) => `<a class="tap link" href="${href}"
 
   <!-- 3. Airbnb / Vrbo -->
   <section id="stay-rentals" class="wrap mt-16 md:mt-24" aria-labelledby="rent-h">
-    <h2 id="rent-h" class="display text-[clamp(1.8rem,4vw,2.6rem)]">{T.rentalsH}</h2>
+    <h2 id="rent-h" class="h2">{T.rentalsH}</h2>
     <p class="mt-3 max-w-xl text-taupe">{T.rentalsNote}</p>
     <ul class="mt-6 border-t border-charcoal/25">
       {data.rentals.map((r) => (
         <li class="flex flex-wrap items-center justify-between gap-x-8 gap-y-1 border-b border-charcoal/25 py-4">
-          <p><span class="heading text-xl">{r.area}</span><span class="ml-3 text-taupe">{r.note}</span></p>
+          <p><span class="h3">{r.area}</span><span class="ml-3 text-taupe">{r.note}</span></p>
           <p class="flex gap-5"><a class="tap link" href={r.airbnb} target="_blank" rel="noopener noreferrer">Airbnb ↗<span class="sr-only"> {t.newTab}</span></a><a class="tap link" href={r.vrbo} target="_blank" rel="noopener noreferrer">Vrbo ↗<span class="sr-only"> {t.newTab}</span></a></p>
         </li>
       ))}
@@ -146,7 +135,7 @@ const ext = (href: string, label: string) => `<a class="tap link" href="${href}"
   <section id="together" class="wrap mt-16 md:mt-24">
     <div class="grid gap-10 border-t border-charcoal/25 pt-8 md:grid-cols-2 md:gap-16">
       <div id="shuttle">
-        <h2 class="heading text-2xl">{T.shuttleH}</h2>
+        <h2 class="h3">{T.shuttleH}</h2>
         <div class="mt-3">{shuttle.arranged && shuttle.details ? <p>{tx(shuttle.details, lang)}</p> : <ComingSoon>{T.shuttleTbc}</ComingSoon>}</div>
       </div>
       <GuestConnect />

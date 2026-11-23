@@ -57,7 +57,7 @@ export default function Planner({ data, trip, update, reset, saved, goStay, step
         </div>
         <article className="mt-8 border border-charcoal/20 bg-paper p-6 md:p-12" aria-labelledby="ww">
           <p className="text-taupe">{data.couple} · {data.dateLong}</p>
-          <h3 id="ww" className="display mt-3 text-[clamp(2.2rem,6vw,4rem)]">{t.planTitle}</h3>
+          <h3 id="ww" className="h2 mt-3">{t.planTitle}</h3>
           <p className="mt-3 text-taupe">{t.planNote}</p>
           <ol className="mt-10 space-y-0">
             {itinerary.map((s, k) => (
@@ -87,7 +87,7 @@ export default function Planner({ data, trip, update, reset, saved, goStay, step
 
       <fieldset className="mt-10 min-w-0">
         {name === 'arrival' && (<>
-          <legend className="display text-[clamp(1.8rem,5vw,2.4rem)]">{t.qArrival}</legend>
+          <legend className="h3">{t.qArrival}</legend>
           <div className="mt-6 grid gap-3">
             <Choice name="mode" checked={trip.mode === 'fly'} onChange={() => update({ mode: 'fly' })} title={t.fly} />
             <Choice name="mode" checked={trip.mode === 'drive'} onChange={() => update({ mode: 'drive' })} title={t.drive} sub={t.driveSub} />
@@ -99,7 +99,7 @@ export default function Planner({ data, trip, update, reset, saved, goStay, step
         </>)}
 
         {name === 'airport' && (<>
-          <legend className="display text-[clamp(1.8rem,5vw,2.4rem)]">{t.qAirport}</legend>
+          <legend className="h3">{t.qAirport}</legend>
           <div className="mt-6 grid gap-3">
             {data.airports.map((a) => (
               <Choice key={a.code} name="airport" checked={trip.airport === a.code} onChange={() => update({ airport: a.code })} title={`${a.name} (${a.code})`} sub={fmt(t.airportSub, { note: a.note, mi: mi(a.toVenue.miles), t: dur(a.toVenue.minutes) })} />
@@ -108,13 +108,13 @@ export default function Planner({ data, trip, update, reset, saved, goStay, step
         </>)}
 
         {name === 'travelers' && (<>
-          <legend className="display text-[clamp(1.8rem,5vw,2.4rem)]">{t.qTravelers}</legend>
+          <legend className="h3">{t.qTravelers}</legend>
           <div className="mt-6 grid gap-6 sm:grid-cols-2">
             <div className="sm:col-span-2">
               <span className="label" id="party-l">{t.numTravelers}</span>
               <div className="mt-2 flex items-center gap-4" role="group" aria-labelledby="party-l">
                 <button type="button" className="btn !min-h-12 !w-12 !px-0 text-2xl" aria-label={t.fewer} onClick={() => update({ party: Math.max(1, trip.party - 1) })}>−</button>
-                <output className="display w-12 text-center text-4xl" aria-live="polite">{trip.party}</output>
+                <output className="heading w-12 text-center text-3xl" aria-live="polite">{trip.party}</output>
                 <button type="button" className="btn !min-h-12 !w-12 !px-0 text-2xl" aria-label={t.more} onClick={() => update({ party: Math.min(20, trip.party + 1) })}>+</button>
               </div>
             </div>
@@ -127,7 +127,7 @@ export default function Planner({ data, trip, update, reset, saved, goStay, step
         </>)}
 
         {name === 'stay' && (<>
-          <legend className="display text-[clamp(1.8rem,5vw,2.4rem)]">{t.qStay}</legend>
+          <legend className="h3">{t.qStay}</legend>
           <div className="mt-6 grid gap-3">
             <Choice name="stay" checked={trip.stayType === 'hotel'} onChange={() => update({ stayType: 'hotel' })} title={t.stayHotel} />
             <Choice name="stay" checked={trip.stayType === 'rental'} onChange={() => update({ stayType: 'rental' })} title={t.stayRental} />
@@ -145,7 +145,7 @@ export default function Planner({ data, trip, update, reset, saved, goStay, step
         </>)}
 
         {name === 'around' && (<>
-          <legend className="display text-[clamp(1.8rem,5vw,2.4rem)]">{t.qAround}</legend>
+          <legend className="h3">{t.qAround}</legend>
           <div className="mt-6 grid gap-3">
             <Choice name="tr" checked={trip.transport === 'rental'} onChange={() => update({ transport: 'rental' })} title={t.rentalCar} sub={trip.mode === 'drive' ? t.rentalSubDrive : t.rentalSubFly} />
             <Choice name="tr" checked={trip.transport === 'rideshare'} onChange={() => update({ transport: 'rideshare' })} title={t.rideshare} sub={t.rideSub} />
@@ -154,7 +154,7 @@ export default function Planner({ data, trip, update, reset, saved, goStay, step
         </>)}
 
         {name === 'together' && (<>
-          <legend className="display text-[clamp(1.8rem,5vw,2.4rem)]">{t.qTogether}</legend>
+          <legend className="h3">{t.qTogether}</legend>
           <p className="mt-3 text-taupe">{t.togetherIntro}</p>
           <div className="mt-6 grid gap-3">
             {TOGETHER.map((k) => (

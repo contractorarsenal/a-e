@@ -1,31 +1,35 @@
 ---
-import { primaryNav, allPages } from '../content/site';
 import { useLang } from '../i18n';
-import Monogram from './Monogram.astro';
 import LangSwitch from './LangSwitch.astro';
 
 const { t, l } = useLang(Astro);
 const baseP = import.meta.env.BASE_URL.replace(/\/$/, '');
 const rest = Astro.url.pathname.slice(baseP.length).split('/').slice(2).join('/').replace(/\/$/, '');
 const path = rest ? '/' + rest : '/';
-const here = ({ '/details': t.nav.wedding, '/travel': t.nav.travel, '/rsvp': t.nav.rsvp, '/story': t.nav.story, '/faq': t.nav.faq } as Record<string, string>)[path];
+// Four main places, in the order a guest needs them. Story and FAQ sit under "More" (menu and footer).
+const main = [
+  { href: '/', label: t.nav.home },
+  { href: '/details', label: t.nav.wedding },
+  { href: '/travel', label: t.nav.travel },
+];
+const more = [
+  { href: '/story', label: t.nav.story },
+  { href: '/faq', label: t.nav.faq },
+];
 ---
-<header id="site-header" class="sticky top-0 z-40 border-b border-charcoal/15 bg-ivory">
+<header id="site-header" class="sticky top-0 z-40 border-b border-charcoal/25 bg-ivory">
   <div class="wrap flex min-h-16 flex-wrap items-center justify-between gap-x-3 gap-y-1 py-1">
-    <div class="flex min-w-0 items-baseline gap-3">
-      <a href={l('/')} class="tap shrink-0 text-[1.6rem] no-underline" aria-label={t.nav.home} aria-current={path === '/' ? 'page' : undefined}><Monogram /></a>
-      {here && <span class="hidden truncate text-taupe xl:inline"><span aria-hidden="true" class="mr-2">/</span>{here}</span>}
-    </div>
+    <a href={l('/')} class="tap min-w-0 font-display text-[1.3rem] font-semibold no-underline md:text-[1.5rem]" aria-label={t.nav.homeAria} aria-current={path === '/' ? 'page' : undefined}>Adrian &amp; Emma</a>
 
-    <div class="flex flex-wrap items-center justify-end gap-1 sm:gap-3">
-      <nav aria-label={t.nav.primary} class="hidden items-center gap-7 lg:flex">
-        {primaryNav.map((n) => (
-          <a href={l(n.href)} aria-current={path === n.href ? 'page' : undefined} class="nav-link tap text-[1.0625rem] font-semibold">{t.nav[n.key]}</a>
+    <div class="flex flex-wrap items-center justify-end gap-x-2 gap-y-1 sm:gap-x-4">
+      <nav aria-label={t.nav.primary} class="hidden items-center gap-6 lg:flex">
+        {main.map((n) => (
+          <a href={l(n.href)} aria-current={path === n.href ? 'page' : undefined} class="nav-link tap text-[1.125rem] font-semibold">{n.label}</a>
         ))}
-        <a href={l('/rsvp')} aria-current={path === '/rsvp' ? 'page' : undefined} class="btn btn-solid !min-h-11 !px-5">{t.nav.rsvp}</a>
+        <a href={l('/rsvp')} aria-current={path === '/rsvp' ? 'page' : undefined} class="btn btn-solid !min-h-12 !px-5">{t.nav.rsvp}</a>
       </nav>
-      <LangSwitch class="lg:ml-2" />
-      <button id="menu-btn" type="button" class="tap min-w-11 justify-center px-2 text-[1.0625rem] font-semibold lg:hidden" aria-expanded="false" aria-controls="mobile-menu"
+      <LangSwitch />
+      <button id="menu-btn" type="button" class="menu-btn tap min-w-11 justify-center border-[1.5px] border-charcoal px-3 text-[1.0625rem] font-bold lg:hidden" aria-expanded="false" aria-controls="mobile-menu"
         data-open={t.nav.menu} data-close={t.nav.close}>
         <span data-menu-label>{t.nav.menu}</span>
       </button>
@@ -34,26 +38,33 @@ const here = ({ '/details': t.nav.wedding, '/travel': t.nav.travel, '/rsvp': t.n
 </header>
 
 <div id="mobile-menu" hidden class="fixed inset-x-0 bottom-0 top-16 z-30 flex flex-col overflow-y-auto bg-ivory lg:hidden" role="dialog" aria-modal="true" aria-label={t.nav.menuLabel}>
-  <nav aria-label={t.nav.mobile} class="wrap flex flex-1 flex-col pb-8 pt-4">
-    <ul class="border-t border-charcoal/20">
-      {allPages.map((n) => (
+  <nav aria-label={t.nav.mobile} class="wrap flex flex-1 flex-col pb-8 pt-3">
+    <ul>
+      {main.map((n) => (
         <li class="border-b border-charcoal/20">
-          <a href={l(n.href)} aria-current={path === n.href ? 'page' : undefined} class="display flex min-h-16 flex-wrap items-center justify-between gap-x-4 py-2 text-[1.75rem] no-underline aria-[current=page]:italic">
-            <span>{t.nav[n.key]}</span>{path === n.href && <span class="font-sans text-base font-normal not-italic text-clay">{t.nav.here}</span>}
-          </a>
+          <a href={l(n.href)} aria-current={path === n.href ? 'page' : undefined} class="menu-link flex min-h-16 items-center py-2 pl-3 text-[1.5rem] font-semibold no-underline">{n.label}</a>
         </li>
       ))}
     </ul>
-    <div class="mt-auto pt-10">
-      <a href={l('/rsvp')} aria-current={path === '/rsvp' ? 'page' : undefined} class="btn btn-solid w-full">{t.nav.rsvp}</a>
-    </div>
+    <p class="mt-6"><a href={l('/rsvp')} aria-current={path === '/rsvp' ? 'page' : undefined} class="btn btn-solid w-full !min-h-16 text-[1.25rem]">{t.nav.rsvp}</a></p>
+    <p class="mt-8 pl-3 font-semibold text-taupe">{t.nav.more}</p>
+    <ul class="mt-1">
+      {more.map((n) => (
+        <li>
+          <a href={l(n.href)} aria-current={path === n.href ? 'page' : undefined} class="menu-link flex min-h-14 items-center py-2 pl-3 text-[1.25rem] no-underline">{n.label}</a>
+        </li>
+      ))}
+    </ul>
   </nav>
 </div>
 
 <style>
-  .nav-link { color: color-mix(in srgb, var(--color-charcoal) 82%, transparent); transition: color .2s; }
-  .nav-link:hover, .nav-link[aria-current='page'] { color: var(--color-charcoal); }
-  .nav-link[aria-current='page'] { text-decoration: underline; text-decoration-color: var(--color-clay); text-underline-offset: .4em; text-decoration-thickness: 2px; }
+  .nav-link { color: var(--color-charcoal); border-bottom: 3px solid transparent; }
+  .nav-link:hover { border-bottom-color: color-mix(in srgb, var(--color-charcoal) 35%, transparent); }
+  .nav-link[aria-current='page'] { border-bottom-color: var(--color-clay); }
+  .menu-link { border-left: 4px solid transparent; }
+  .menu-link[aria-current='page'] { border-left-color: var(--color-clay); font-weight: 700; }
+  .menu-btn[aria-expanded='true'] { background: var(--color-charcoal); color: var(--color-ivory); }
 </style>
 
 <script>
@@ -70,9 +81,10 @@ const here = ({ '/details': t.nav.wedding, '/travel': t.nav.travel, '/rsvp': t.n
     btn.setAttribute('aria-expanded', String(open));
     label.textContent = open ? btn.dataset.close! : btn.dataset.open!;
     document.documentElement.style.overflow = open ? 'hidden' : '';
-    if (open) (menu.querySelector('a') as HTMLElement)?.focus();
+    if (open && viaKey) (menu.querySelector('a') as HTMLElement)?.focus();
   };
-  btn.addEventListener('click', () => setOpen(!!menu.hidden));
+  let viaKey = false;
+  btn.addEventListener('click', (e) => { viaKey = (e as MouseEvent).detail === 0; setOpen(!!menu.hidden); });
   menu.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) setOpen(false); });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !menu.hidden) { setOpen(false); btn.focus(); }

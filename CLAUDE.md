@@ -12,13 +12,16 @@ Astro 6 (static) + Tailwind 4 + TypeScript; one React island (`src/components/tr
 `vite` is pinned via `overrides` (7.3.8) so Astro 6 and `@tailwindcss/vite` share one Vite. Don't upgrade Astro/Vite without testing the build.
 
 ## Design rules
-Paper-cream ground, near-black text, one terracotta `clay` accent (the dress). Bodoni Moda (display) + Jost (text). No dark bands, arches, gradient overlays or scroll animation; avoid decorative overlines above every heading. Self-hosted via fontsource. Photographs as uncropped framed prints with captions, hairlines and whitespace over cards, progressive disclosure (`<details>`) for secondary info, one primary action per view; restrained rectangular buttons; no gold gradients, clip-art or decorative animation. Mobile-first: test 320 → 1440, no horizontal overflow, tap targets ≥ 44px, respect `prefers-reduced-motion`. Faces/hands/rings must never be cropped (tune `position` on `<Picture>`).
+Paper-cream ground, near-black text, one terracotta `clay` accent (the dress). Source Serif 4 (couple's names and page titles only) + Source Sans 3 (everything else); two font families, no italics for reading text, no thin or high-contrast display faces. No dark bands, arches, gradient overlays or scroll animation; avoid decorative overlines above every heading. Self-hosted via fontsource. Photographs as uncropped framed prints with captions, hairlines and whitespace over cards, progressive disclosure (`<details>`) for secondary info, one primary action per view; restrained rectangular buttons; no gold gradients, clip-art or decorative animation. Mobile-first: test 320 → 1440, no horizontal overflow, tap targets ≥ 44px, respect `prefers-reduced-motion`. Faces/hands/rings must never be cropped (tune `position` on `<Picture>`).
+
+## Navigation & page flow
+Header: "Adrian & Emma" (home link), Home · The Wedding · Travel & Hotels · RSVP, EN/ES (full words from 640px). Our Story and FAQ live under "More" in the mobile menu and in the footer. Every inner page starts with a "Back to home" link (`PageHead.astro`). Home order: welcome → three choices (Wedding Details, Travel & Hotels, RSVP; "RSVP opens soon" until an endpoint exists) → Our Story teaser → Finding us. Travel opens with "Where to stay"; map/compare/planner/budget stay in one collapsed section.
 
 ## Languages (English + Mexican Spanish)
 - Routes are `/en/…` and `/es/…` (same slugs); `/` is the first-visit chooser and forwards returning visitors (localStorage `ae-lang`). Old `/travel/`-style links forward too.
 - All guest-facing wording lives in `src/i18n/en.ts` (defines the type) and `src/i18n/es-MX.ts` (must match; `npm run check` fails otherwise). Never hard-code visible text in a component. Use `useLang(Astro)` in Astro files and `useI18n()` in the React island.
 - Facts the couple edits (`src/content/site.ts`) are language-neutral or `{ en, es }` (`L10n`). Trip state stores codes only, so switching language never loses selections.
-- Voice: warm, informal "tú", Mexican vocabulary; proper nouns unchanged. Sans (Source Sans 3) for everything people read; Bodoni Moda only for the names and page titles. Body ≥17px, nothing under 15px, tap targets ≥44px.
+- Voice: warm, informal "tú", Mexican vocabulary; proper nouns unchanged. Sans (Source Sans 3) for everything people read; Source Serif 4 only for the names and page titles. Body 18px, labels ≥16px, tap targets ≥44px.
 
 ## Where things live
 - Content: `src/content/site.ts`, `src/content/travel.ts`; photo captions/alt text in the dictionaries (`photos`); photo list in `scripts/optimize-images.mjs`.

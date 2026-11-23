@@ -58,7 +58,7 @@ export default function Budget({ trip, update }: Props) {
             <h3 className="heading text-xl">{s.name}</h3>
             {s.show ? (<>
               <dl className="mt-3 space-y-1">{s.lines.map(([k, v]) => <div key={k} className="flex justify-between gap-4"><dt className="text-taupe">{k}</dt><dd>{money(v)}</dd></div>)}</dl>
-              <p className="mt-4 flex items-baseline justify-between gap-4"><span className="label">{tb.total}</span><span className="display text-4xl">{money(s.total)}</span></p>
+              <p className="mt-4 flex items-baseline justify-between gap-4"><span className="label">{tb.total}</span><span className="h2">{money(s.total)}</span></p>
               <p className="flex items-baseline justify-between gap-4"><span className="text-taupe">{fmt(tb.perPerson, { n: party })}</span><span>{money(s.total / party)}</span></p>
             </>) : <p className="mt-2 text-taupe">{tb.enterNightly}</p>}
           </div>
