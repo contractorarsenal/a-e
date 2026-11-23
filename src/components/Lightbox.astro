@@ -1,0 +1,62 @@
+---
+import { useLang } from '../i18n';
+const { t } = useLang(Astro);
+---
+<dialog id="lightbox" aria-label={t.story.viewer} class="m-0 h-full max-h-none w-full max-w-none bg-transparent p-0 backdrop:bg-charcoal/95">
+  <div class="relative flex h-full w-full flex-col text-ivory" data-lb-stage>
+    <div class="flex items-center justify-between px-4 py-3 md:px-8">
+      <p class="text-lg text-ivory/80" data-lb-count aria-live="polite"></p>
+      <button type="button" data-lb-close class="grid h-12 w-12 place-items-center text-3xl leading-none" aria-label={t.story.close}>×</button>
+    </div>
+    <div class="relative min-h-0 flex-1 touch-pan-y select-none" data-lb-swipe>
+      <img data-lb-img alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" class="mx-auto h-full w-full object-contain px-2 transition-opacity duration-300 md:px-20" />
+      <button type="button" data-lb-prev class="absolute left-1 top-1/2 grid h-14 w-14 -translate-y-1/2 place-items-center rounded-full bg-charcoal/50 text-4xl" aria-label={t.story.prev}>‹</button>
+      <button type="button" data-lb-next class="absolute right-1 top-1/2 grid h-14 w-14 -translate-y-1/2 place-items-center rounded-full bg-charcoal/50 text-4xl" aria-label={t.story.next}>›</button>
+    </div>
+    <p data-lb-caption class="px-6 py-4 text-center text-xl italic text-ivory/90"></p>
+  </div>
+</dialog>
+
+<script>
+  // One lightbox for every [data-lb] photo on the page, in page order.
+  const dlg = document.getElementById('lightbox') as HTMLDialogElement | null;
+  const items = [...document.querySelectorAll<HTMLButtonElement>('[data-lb]')];
+  if (dlg && items.length) {
+    const img = dlg.querySelector<HTMLImageElement>('[data-lb-img]')!;
+    const count = dlg.querySelector<HTMLElement>('[data-lb-count]')!;
+    const cap = dlg.querySelector<HTMLElement>('[data-lb-caption]')!;
+    const swipe = dlg.querySelector<HTMLElement>('[data-lb-swipe]')!;
+    let i = 0, opener: HTMLElement | null = null;
+    const show = (n: number) => {
+      i = (n + items.length) % items.length;
+      const b = items[i];
+      img.style.opacity = '0';
+      img.sizes = '100vw';
+      img.srcset = b.dataset.srcset!;
+      img.alt = b.dataset.alt!;
+      cap.textContent = b.dataset.caption ?? '';
+      count.textContent = `${i + 1} / ${items.length}`;
+      requestAnimationFrame(() => (img.style.opacity = '1'));
+    };
+    const open = (n: number, from: HTMLElement) => { opener = from; show(n); dlg.showModal(); document.documentElement.style.overflow = 'hidden'; };
+    items.forEach((b, n) => b.addEventListener('click', () => open(n, b)));
+    dlg.addEventListener('close', () => { document.documentElement.style.overflow = ''; opener?.focus(); });
+    dlg.querySelector('[data-lb-close]')!.addEventListener('click', () => dlg.close());
+    dlg.querySelector('[data-lb-prev]')!.addEventListener('click', () => show(i - 1));
+    dlg.querySelector('[data-lb-next]')!.addEventListener('click', () => show(i + 1));
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); show(i + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); show(i - 1); }
+    });
+    dlg.addEventListener('click', (e) => { if (e.target === dlg || (e.target as HTMLElement).dataset.lbStage !== undefined) dlg.close(); });
+    // swipe is a bonus; the arrow buttons are always visible
+    let x0 = 0, y0 = 0, tracking = false;
+    swipe.addEventListener('pointerdown', (e) => { x0 = e.clientX; y0 = e.clientY; tracking = true; });
+    swipe.addEventListener('pointerup', (e) => {
+      if (!tracking) return; tracking = false;
+      const dx = e.clientX - x0, dy = e.clientY - y0;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4) show(i + (dx < 0 ? 1 : -1));
+    });
+    swipe.addEventListener('pointercancel', () => (tracking = false));
+  }
+</script>

@@ -15,6 +15,12 @@ const PHOTOS = {
   'proposal-moment': 'IMG_7091.JPG',
   'proposal-laughing': 'Facetune_13-06-2024-10-18-38.JPEG',
   'proposal-kiss': 'Facetune_13-06-2024-10-19-52.JPEG',
+  // Older photographs (resolution 764–1320 px): never upscaled, no sharpening or filters.
+  'early-aprons': 'IMG_1863.jpg',
+  'early-cart': 'IMG_1864.jpg',
+  'early-couch': 'IMG_1865.jpg',
+  'early-luggage': 'IMG_1866.jpg',
+  'early-airport': 'IMG_1867.jpg',
 };
 
 await rm(OUT, { recursive: true, force: true });
@@ -28,13 +34,14 @@ for (const [slug, file] of Object.entries(PHOTOS)) {
   const { dominant } = await sharp(src).rotate().resize(64).stats();
   const color = `rgb(${dominant.r},${dominant.g},${dominant.b})`;
   const widths = WIDTHS.filter((w) => w <= orientedW);
+  if (orientedW < WIDTHS[WIDTHS.length - 1] && orientedW > widths[widths.length - 1]) widths.push(orientedW); // keep the native size of small originals (no upscaling)
   for (const w of widths) {
     const base = sharp(src).rotate().resize({ width: w, withoutEnlargement: true });
     await Promise.all([
       base.clone().avif({ quality: 52, effort: 4 }).toFile(path.join(OUT, `${slug}-${w}.avif`)),
       base.clone().webp({ quality: 78 }).toFile(path.join(OUT, `${slug}-${w}.webp`)),
       // JPEG is only the legacy fallback: one size is enough
-      ...(w === 1080 ? [base.clone().jpeg({ quality: 80, mozjpeg: true }).toFile(path.join(OUT, `${slug}-${w}.jpg`))] : []),
+      ...(w === (widths.includes(1080) ? 1080 : widths[widths.length - 1]) ? [base.clone().jpeg({ quality: 80, mozjpeg: true }).toFile(path.join(OUT, `${slug}-${w}.jpg`))] : []),
     ]);
   }
   manifest[slug] = { width: orientedW, height: orientedH, color, widths };

@@ -1,11 +1,13 @@
 import { useEffect, useRef } from 'react';
 import type { ConciergeData } from './types';
+import { useI18n } from './i18n';
 
 type Props = { data: ConciergeData; selectedId: string | null; airport: string | null; showAirportRoute: boolean; onSelect: (id: string) => void };
 
 const reduced = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export default function MapView({ data, selectedId, airport, showAirportRoute, onSelect }: Props) {
+  const { t, fmt } = useI18n();
   const el = useRef<HTMLDivElement>(null);
   const state = useRef<any>({});
   const drawRef = useRef<() => void>(() => {});
@@ -18,11 +20,11 @@ export default function MapView({ data, selectedId, airport, showAirportRoute, o
       await import('leaflet/dist/leaflet.css');
       if (cancelled || !el.current) return;
       const map = L.map(el.current, { zoomControl: false, scrollWheelZoom: false, attributionControl: true, tap: true } as any);
-      L.control.zoom({ position: 'bottomright' }).addTo(map);
+      L.control.zoom({ position: 'bottomright', zoomInTitle: t.zoomIn, zoomOutTitle: t.zoomOut }).addTo(map);
       // OpenStreetMap standard tiles: no API key, fine for a low-traffic site with attribution.
       // For heavy traffic or a custom style swap this URL for a provider such as Mapbox, Stadia or MapTiler (needs a public key).
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        attribution: t.mapAttribution,
         maxZoom: 18,
       }).addTo(map);
       const v = data.venue;
@@ -82,8 +84,8 @@ export default function MapView({ data, selectedId, airport, showAirportRoute, o
 
   return (
     <div className="relative h-full w-full overflow-hidden bg-champagne/50">
-      <div ref={el} className="ae-map h-full w-full" role="region" aria-label={`Map of hotels near ${data.venue.name}. A list of the same places follows for keyboard and screen-reader use.`} />
-      <p className="pointer-events-none absolute left-3 top-3 z-[500] bg-ivory/90 px-3 py-1.5 text-[.65rem] uppercase tracking-[.22em] text-taupe backdrop-blur">Interactive map</p>
+      <div ref={el} className="ae-map h-full w-full" role="region" aria-label={fmt(t.mapLabel, { venue: data.venue.name })} />
+      <p className="pointer-events-none absolute left-3 top-3 z-[500] bg-ivory/90 px-3 py-1.5 text-sm font-semibold text-taupe">{t.mapBadge}</p>
     </div>
   );
 }

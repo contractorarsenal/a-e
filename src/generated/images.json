@@ -42,5 +42,56 @@
       1080,
       1600
     ]
+  },
+  "early-aprons": {
+    "width": 951,
+    "height": 1266,
+    "color": "rgb(40,40,40)",
+    "widths": [
+      480,
+      768,
+      951
+    ]
+  },
+  "early-cart": {
+    "width": 764,
+    "height": 1392,
+    "color": "rgb(168,200,168)",
+    "widths": [
+      480,
+      764
+    ]
+  },
+  "early-couch": {
+    "width": 1320,
+    "height": 1288,
+    "color": "rgb(24,24,40)",
+    "widths": [
+      480,
+      768,
+      1080,
+      1320
+    ]
+  },
+  "early-luggage": {
+    "width": 1320,
+    "height": 1298,
+    "color": "rgb(216,216,200)",
+    "widths": [
+      480,
+      768,
+      1080,
+      1320
+    ]
+  },
+  "early-airport": {
+    "width": 965,
+    "height": 1289,
+    "color": "rgb(24,56,104)",
+    "widths": [
+      480,
+      768,
+      965
+    ]
   }
 }

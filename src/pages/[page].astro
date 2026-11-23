@@ -1,0 +1,29 @@
+---
+/** Old, language-less links (/travel/, /rsvp/ …) still work: they forward to the saved language, or to the chooser. */
+import '../styles/global.css';
+import { u } from '../lib/url';
+import { pageSlugs } from '../content/site';
+
+export const getStaticPaths = () => pageSlugs.map((page) => ({ params: { page } }));
+const { page } = Astro.params;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adrian &amp; Emma</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={new URL(u(`/en/${page}/`), Astro.site).href} />
+    <script is:inline define:vars={{ BASE: base, PAGE: page }}>
+      var l; try { l = localStorage.getItem('ae-lang'); } catch (e) {}
+      location.replace(l === 'en' || l === 'es' ? BASE + '/' + l + '/' + PAGE + '/' : BASE + '/?next=' + PAGE);
+    </script>
+  </head>
+  <body class="p-8 text-center">
+    <noscript>
+      <p><a class="link" lang="en" href={u(`/en/${page}/`)}>English</a> · <a class="link" lang="es-MX" href={u(`/es/${page}/`)}>Español (México)</a></p>
+    </noscript>
+  </body>
+</html>

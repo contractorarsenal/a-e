@@ -1,29 +1,30 @@
 /**
  * ═══════════════════════════════════════════════════════════════════
- *  A + E — EDITABLE WEDDING CONTENT
- *  Everything guest-facing that may change lives here (and in travel.ts).
+ *  A + E — EDITABLE WEDDING FACTS (language-neutral)
  *  Use `null` for anything not yet confirmed: the site shows a tasteful
  *  "Details coming soon" state instead of inventing information.
+ *
+ *  Guest-facing wording lives in src/i18n/en.ts and src/i18n/es-MX.ts.
+ *  Where YOU supply text here (arrival notes, schedule titles, FAQ answers…), give both languages:
+ *      { en: 'Garden lawn', es: 'El jardín' }
+ *  or a plain string when it is identical in both (e.g. a name).
  *  See WEDDING_CONTENT.md for the full list of open questions.
  * ═══════════════════════════════════════════════════════════════════
  */
+import type { L10n } from '../i18n';
 
 export const couple = {
   /** Decorative monogram and small branding. */
   initials: 'A + E',
   first: 'Adrian',
   second: 'Emma',
-  /** Primary public-facing name. */
+  /** Primary public-facing name (a proper noun: not translated). */
   display: 'Adrian & Emma',
-  displayPlus: 'Adrian + Emma',
-  tagline: 'Together is our favorite place to be.',
 };
 
 export const wedding = {
-  /** Local date of the wedding (venue time zone). */
+  /** Local date of the wedding (venue time zone). Long/short dates are formatted per language from this. */
   dateISO: '2027-08-28',
-  dateLong: 'Saturday, August 28, 2027',
-  dateShort: 'August 28, 2027',
   timeZone: 'America/Los_Angeles',
   /** Offset in force on the wedding date (PDT). Used by the countdown. */
   utcOffset: '-07:00',
@@ -45,16 +46,12 @@ export const venue = {
   region: 'CA',
   postal: '92026',
   country: 'United States',
-  website: 'https://trademarkvenues.com/ethereal-gardens/',
   /** Apple Maps place link supplied by the couple. */
   appleMapsPlace: 'https://maps.apple/p/pVYvAG1Jc2gwNb',
-  /** Short, factual description. Only add what the venue/couple has confirmed. */
-  blurb:
-    'Ethereal Gardens is a private garden venue on 40 acres in Escondido, California.',
-  /** Arrival notes (gate, shuttle from parking, drop-off). null = hidden until confirmed. */
-  arrivalNotes: null as string | null,
+  /** Arrival notes (gate, shuttle from parking, drop-off). null = "to be confirmed" until supplied. */
+  arrivalNotes: null as L10n | null,
   /** Parking guidance specific to the wedding. null until confirmed with couple/venue. */
-  parkingNotes: null as string | null,
+  parkingNotes: null as L10n | null,
 };
 
 export const fullAddress = `${venue.street}, ${venue.city}, ${venue.region} ${venue.postal}`;
@@ -73,25 +70,22 @@ export const mapLinks = {
 /**
  * Wedding-day schedule. Add confirmed items; nothing is shown until you do.
  * Example item:
- *   { time: '4:00 PM', title: 'Ceremony', note: 'Garden lawn' }
+ *   { time: '4:00 PM', title: { en: 'Ceremony', es: 'Ceremonia' }, note: { en: 'Garden lawn', es: 'En el jardín' } }
  */
-export type ScheduleItem = { time: string; title: string; note?: string };
+export type ScheduleItem = { time: string; title: L10n; note?: L10n };
 export const schedule: ScheduleItem[] = [];
 
 /** Shuttle info — fill in only if the couple arranges one. */
 export const shuttle = {
   arranged: false,
-  details: null as string | null,
+  details: null as L10n | null,
 };
 
 export const rsvp = {
-  /** e.g. 'June 1, 2027' once confirmed. */
-  deadline: null as string | null,
-  /** ISO date (YYYY-MM-DD). If set, the server stops accepting RSVPs after this day. */
+  /** ISO date (YYYY-MM-DD) of the reply-by date, or null. Shown in the guest's language; the form closes after this day. */
   deadlineISO: null as string | null,
   /** Max additional guests a household may name on the public form. Invitations are reconciled against your guest list by hand. */
   maxAdditionalGuests: 3,
-  contactNote: 'Questions about your invitation? We will share a contact here soon.',
 };
 
 export const contact = {
@@ -99,107 +93,47 @@ export const contact = {
   email: null as string | null,
 };
 
-/** Story copy. Keep it to what the couple has confirmed; the photos carry the feeling for now. */
+/** Story chapters. Empty = only the photographs are shown. */
 export const story = {
-  eyebrow: 'Our Story',
-  headline: 'The moment we said yes.',
-  /** Only describes what the photographs show — add the real story below when ready. */
-  intro:
-    'A beach at golden hour, flower leis, and a question asked on one knee. These are the photographs from the day we got engaged.',
-  /** Add paragraphs of the couple's real story here. Empty array = section is omitted. */
-  chapters: [] as { title: string; body: string }[],
+  chapters: [] as { title: L10n; body: L10n }[],
 };
 
-export const faq: { q: string; a: string | null; link?: { href: string; label: string } }[] = [
-  {
-    q: 'Where is the wedding?',
-    a: `${venue.name}, ${fullAddress}.`,
-    link: { href: '/details#directions', label: 'Directions' },
-  },
-  { q: 'What day is it?', a: `${wedding.dateLong}.` },
-  { q: 'What time should we arrive?', a: null },
-  {
-    q: 'Is parking available?',
-    a: venue.parkingNotes,
-  },
-  { q: 'What should we wear?', a: null },
-  {
-    q: 'Where should we stay?',
-    a: 'We have collected hotels in Escondido and San Marcos, with approximate drive times to the venue, plus Airbnb and Vrbo searches.',
-    link: { href: '/travel#stay', label: 'Where to stay' },
-  },
-  {
-    q: 'What is the closest airport?',
-    a: 'McClellan-Palomar Airport (CRQ) in Carlsbad is the closest, at roughly 21 road miles from the venue, but commercial service there is limited and may change. San Diego International Airport (SAN) has far more flights and is roughly 44 road miles away. Distances are approximate.',
-    link: { href: '/travel#airports', label: 'Airports' },
-  },
-  {
-    q: 'Should I rent a car?',
-    a: 'A rental car is usually the most flexible way to get around. We cannot promise rideshare availability from the venue late in the evening, so please plan how you will get back to your hotel.',
-    link: { href: '/travel#cars', label: 'Rental cars & rides' },
-  },
-  { q: 'Are children invited?', a: null },
-  { q: 'Can I bring a plus-one?', a: null },
-  {
-    q: 'When should I RSVP?',
-    a: rsvp.deadline ? `Please reply by ${rsvp.deadline}.` : null,
-  },
-  { q: 'Is there a wedding registry?', a: null },
-  {
-    q: 'Who should I contact with questions?',
-    a: contact.email ? `Email us at ${contact.email}.` : null,
-  },
-];
+/**
+ * Answers for the FAQ items that need real wedding facts. Keep null until confirmed ("To be confirmed" is shown).
+ * Keys are the FAQ ids in the dictionaries. (Parking comes from venue.parkingNotes; reply-by from rsvp.deadlineISO;
+ * contact from contact.email.)
+ */
+export const faqAnswers: Record<'arrive' | 'dress' | 'kids' | 'plusone' | 'registry', L10n | null> = {
+  arrive: null,
+  dress: null,
+  kids: null,
+  plusone: null,
+  registry: null,
+};
 
 /**
- * Optional sections — flip `enabled` to true and fill in the content.
+ * Optional sections — flip `enabled` to true and fill in the content (both languages).
  * Components for each already exist; nothing needs redesigning.
  */
 export const optional = {
-  registry: {
-    enabled: false,
-    intro: 'Your presence is the gift. If you wish to give something, we have gathered a few ideas.',
-    links: [] as { label: string; href: string }[],
-  },
-  weekend: {
-    enabled: false,
-    intro: 'Making a weekend of it? Here is what is happening around the wedding.',
-    events: [] as { when: string; title: string; note?: string }[],
-  },
-  nearby: {
-    enabled: false,
-    intro: 'A few of our favorite places to eat and explore nearby.',
-    places: [] as { name: string; kind: string; note?: string; href?: string }[],
-  },
-  weddingParty: {
-    enabled: false,
-    members: [] as { name: string; role: string; note?: string }[],
-  },
-  photoSharing: {
-    enabled: false,
-    intro: 'Share your photos from the weekend.',
-    href: null as string | null,
-  },
-  /** Spanish / bilingual support: add a locale dictionary in src/lib/i18n.ts, then enable. */
-  spanish: { enabled: false },
+  registry: { enabled: false, links: [] as { label: L10n; href: string }[] },
+  weekend: { enabled: false, events: [] as { when: L10n; title: L10n; note?: L10n }[] },
+  nearby: { enabled: false, places: [] as { name: string; kind: L10n; note?: L10n; href?: string }[] },
+  weddingParty: { enabled: false, members: [] as { name: string; role: L10n; note?: L10n }[] },
+  photoSharing: { enabled: false, href: null as string | null },
 };
 
-/** Desktop primary navigation (kept short on purpose). RSVP is rendered as the action button. */
-export const nav = [
-  { href: '/details', label: 'The Wedding' },
-  { href: '/travel', label: 'Travel & Stay' },
+/** Page order. Labels come from the dictionaries (t.nav[key]). Desktop shows `primaryNav`; the menu and footer show `allPages`. */
+export type PageKey = 'wedding' | 'travel' | 'story' | 'faq';
+export const primaryNav: { href: string; key: PageKey }[] = [
+  { href: '/details', key: 'wedding' },
+  { href: '/travel', key: 'travel' },
 ];
-/** Everything, in the order used by the mobile menu and footer. */
-export const allPages = [
-  { href: '/details', label: 'The Wedding' },
-  { href: '/travel', label: 'Travel & Stay' },
-  { href: '/story', label: 'Our Story' },
-  { href: '/faq', label: 'Questions' },
+export const allPages: { href: string; key: PageKey }[] = [
+  { href: '/details', key: 'wedding' },
+  { href: '/travel', key: 'travel' },
+  { href: '/story', key: 'story' },
+  { href: '/faq', key: 'faq' },
 ];
-export const pageNames: Record<string, string> = {
-  '/details': 'The Wedding',
-  '/travel': 'Travel & Stay',
-  '/rsvp': 'RSVP',
-  '/story': 'Our Story',
-  '/faq': 'Questions',
-};
+/** The page slugs that exist in every language (used for localized routes and the language switcher). */
+export const pageSlugs = ['details', 'travel', 'story', 'faq', 'rsvp'] as const;

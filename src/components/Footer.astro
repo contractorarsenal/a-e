@@ -1,19 +1,20 @@
 ---
 import { wedding, venue, allPages, contact } from '../content/site';
-import { u } from '../lib/url';
+import { useLang, dateShort } from '../i18n';
 import Monogram from './Monogram.astro';
+const { lang, t, l } = useLang(Astro);
 ---
-<footer class="mt-8 border-t border-charcoal/15">
+<footer class="mt-8 border-t border-charcoal/20">
   <div class="wrap flex flex-col items-center gap-8 py-12 text-center md:flex-row md:justify-between md:text-left">
     <div>
       <Monogram class="text-[2.2rem]" />
-      <p class="mt-3 text-taupe">Adrian &amp; Emma · {wedding.dateShort}<br />{venue.name}, {wedding.cityLine}</p>
+      <p class="mt-3 text-taupe">Adrian &amp; Emma · {dateShort(wedding.dateISO, lang)}<br />{venue.name}, {wedding.cityLine}</p>
     </div>
-    <nav aria-label="Footer">
-      <ul class="flex flex-wrap justify-center gap-x-6 text-[.8rem] uppercase tracking-[.14em]">
-        {[...allPages, { href: '/rsvp', label: 'RSVP' }].map((n) => <li><a href={u(n.href)} class="tap">{n.label}</a></li>)}
+    <nav aria-label={t.nav.footer}>
+      <ul class="flex flex-wrap justify-center gap-x-6 gap-y-1">
+        {[...allPages.map((n) => ({ href: n.href, label: t.nav[n.key] })), { href: '/rsvp', label: t.nav.rsvp }].map((n) => <li><a href={l(n.href)} class="tap link">{n.label}</a></li>)}
       </ul>
     </nav>
   </div>
-  {contact.email && <p class="wrap pb-10 text-center text-sm text-taupe">Questions? <a class="link" href={`mailto:${contact.email}`}>{contact.email}</a></p>}
+  {contact.email && <p class="wrap pb-10 text-center text-taupe">{t.footer.questions} <a class="link" href={`mailto:${contact.email}`}>{contact.email}</a></p>}
 </footer>

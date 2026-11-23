@@ -1,14 +1,13 @@
 ---
-import { u } from '../lib/url';
 import { googleCalendarUrl, isTimed } from '../lib/calendar';
-const g = googleCalendarUrl(new URL(u('/'), Astro.site).href);
+import { useLang } from '../i18n';
+const { lang, t, l } = useLang(Astro);
+const g = googleCalendarUrl(new URL(l('/'), Astro.site).href, lang);
 ---
 <div>
   <div class="flex flex-wrap gap-3">
-    <a class="btn btn-solid" href={u("/calendar.ics")} download>Add to Calendar (.ics)</a>
-    <a class="btn" href={g} target="_blank" rel="noopener noreferrer">Google Calendar ↗</a>
+    <a class="btn btn-solid" href={l('/calendar.ics')} download>{t.calendar.ics}</a>
+    <a class="btn" href={g} target="_blank" rel="noopener noreferrer">{t.calendar.google} ↗<span class="sr-only"> {t.newTab}</span></a>
   </div>
-  <p class="mt-3 max-w-md text-sm text-taupe">
-    {isTimed() ? 'Adds the wedding with its confirmed start time.' : 'This saves the date as an all-day reminder. We will update the times here once they are confirmed.'}
-  </p>
+  <p class="mt-3 max-w-md text-taupe">{isTimed() ? t.calendar.noteTimed : t.calendar.noteDate}</p>
 </div>

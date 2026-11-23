@@ -1,6 +1,10 @@
+import type { Lang } from '../../i18n/format';
+import type { TripT } from './i18n';
+
 export type Leg = { miles: number; minutes: number };
 export type RoutePath = Leg & { path: [number, number][] };
 
+/** Hotel with its text already resolved into the page language. */
 export type HotelData = {
   id: string; name: string; area: string; address: string; type: string; tier: string; why: string;
   amenities: string[]; roomTypes: string; kitchen: string; family: string; parking: string;
@@ -11,6 +15,9 @@ export type HotelData = {
 };
 export type AirportData = { code: string; name: string; note: string; lat: number; lon: number; toVenue: RoutePath; toHotel: Record<string, Leg> };
 export type ConciergeData = {
+  lang: Lang;
+  t: TripT;
+  newTab: string;
   hotels: HotelData[];
   airports: AirportData[];
   venue: { name: string; address: string; lat: number; lon: number; googleDirections: string; appleDirections: string };
@@ -18,13 +25,21 @@ export type ConciergeData = {
   dateISO: string; dateLong: string;
   schedule: { time: string; title: string; note?: string }[];
   stay: { checkin: string; checkout: string };
-  rentals: { area: string; note: string; airbnb: string; vrbo: string }[];
+  rentals: { id: string; area: string; note: string; airbnb: string; vrbo: string }[];
   rentalCompanies: { name: string; href: string }[];
-  routeMeta: { provider: string; date: string; note: string };
+  routeMeta: { source: string; date: string; note: string };
   group: { state: 'none' | 'gated' | 'public'; url: string | null };
-  base: string;
+  /** Localized path to the RSVP page, e.g. /es/rsvp/ */
+  rsvpHref: string;
+  /** Link text for “RSVP” inside sentences (e.g. “after you RSVP”). */
+  rsvpVerb: string;
+  /** Label for the hotels tab, used inside sentences. */
+  stayTab: string;
 };
 
+/**
+ * Everything stored here is language-neutral (codes and numbers), so switching language never loses a selection.
+ */
 export type TripState = {
   hotelId: string | null;
   airport: string;

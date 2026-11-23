@@ -1,0 +1,57 @@
+---
+import Base from '../../layouts/Base.astro';
+import Schedule from '../../components/Schedule.astro';
+import AddToCalendar from '../../components/AddToCalendar.astro';
+import VenueMap from '../../components/VenueMap.astro';
+import NavigateButtons from '../../components/NavigateButtons.astro';
+import ComingSoon from '../../components/ComingSoon.astro';
+import { wedding, venue, addressLines, couple } from '../../content/site';
+import { useLang, dateLong, fmt, tx } from '../../i18n';
+
+export const getStaticPaths = () => [{ params: { lang: 'en' } }, { params: { lang: 'es' } }];
+const { lang, t, l } = useLang(Astro);
+const link = `<a class="link" href="${l('/travel')}">${t.nav.travel.replace('&', '&amp;')}</a>`;
+---
+<Base title={t.nav.wedding} description={fmt(t.meta.detailsDesc, { couple: couple.display, date: dateLong(wedding.dateISO, lang), venue: venue.name, city: wedding.cityLine })}>
+  <div class="wrap pb-6 pt-10 md:pt-16">
+    <h1 class="display text-[clamp(2.6rem,8vw,5rem)]">{t.nav.wedding}</h1>
+
+    <dl class="mt-10 border-t border-charcoal/25 md:mt-14">
+      <!-- WHEN -->
+      <div class="grid gap-3 border-b border-charcoal/25 py-8 md:grid-cols-[11rem_1fr] md:gap-10 md:py-10" id="when">
+        <dt class="label pt-1.5 text-taupe">{t.details.when}</dt>
+        <dd>
+          <p class="display text-[clamp(1.7rem,4vw,2.4rem)]">{dateLong(wedding.dateISO, lang)}</p>
+          <div class="mt-6"><Schedule /></div>
+          <div class="mt-7"><AddToCalendar /></div>
+        </dd>
+      </div>
+
+      <!-- WHERE -->
+      <div class="grid gap-3 border-b border-charcoal/25 py-8 md:grid-cols-[11rem_1fr] md:gap-10 md:py-10" id="directions">
+        <dt class="label pt-1.5 text-taupe">{t.details.where}</dt>
+        <dd>
+          <p class="display text-[clamp(1.7rem,4vw,2.4rem)]">{venue.name}</p>
+          <address class="mt-2 text-lg not-italic text-taupe">{addressLines.slice(0, 2).map((line) => <span class="block">{line}</span>)}</address>
+          <p class="mt-5 max-w-lg">{t.details.venueBlurb}</p>
+          <div class="mt-7"><NavigateButtons /></div>
+          <div class="mt-8"><VenueMap /></div>
+          <div class="mt-8 grid gap-6 md:grid-cols-2">
+            <div><p class="label">{t.details.arrival}</p><div class="mt-2">{venue.arrivalNotes ? <p>{tx(venue.arrivalNotes, lang)}</p> : <ComingSoon>{t.details.arrivalTbc}</ComingSoon>}</div></div>
+            <div><p class="label">{t.details.parking}</p><div class="mt-2">{venue.parkingNotes ? <p>{tx(venue.parkingNotes, lang)}</p> : <ComingSoon>{t.details.parkingTbc}</ComingSoon>}</div></div>
+          </div>
+        </dd>
+      </div>
+
+      <!-- GETTING HERE -->
+      <div class="grid gap-3 border-b border-charcoal/25 py-8 md:grid-cols-[11rem_1fr] md:gap-10 md:py-10" id="getting-here">
+        <dt class="label pt-1.5 text-taupe">{t.details.getting}</dt>
+        <dd class="max-w-lg">
+          <p set:html={fmt(t.details.gettingBody, { venue: venue.name, link })} />
+        </dd>
+      </div>
+    </dl>
+
+    <p class="mt-10 flex flex-wrap gap-x-8"><a class="link tap" href={l('/story')}>{t.nav.story}</a><a class="link tap" href={l('/faq')}>{t.nav.faq}</a><a class="link tap" href={l('/rsvp')}>{t.nav.rsvp}</a></p>
+  </div>
+</Base>

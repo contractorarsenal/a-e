@@ -1,19 +1,21 @@
 ---
 import { schedule } from '../content/site';
+import { useLang, tx } from '../i18n';
 import ComingSoon from './ComingSoon.astro';
+const { lang, t } = useLang(Astro);
 ---
 {schedule.length ? (
-  <ol class="relative border-l border-charcoal/25 pl-8 md:pl-12">
+  <ol class="relative border-l border-charcoal/30 pl-8 md:pl-12">
     {schedule.map((s) => (
       <li class="relative pb-12 last:pb-0">
         <span class="absolute -left-[2.43rem] top-3 h-[.6rem] w-[.6rem] rounded-full bg-clay md:-left-[3.43rem]" aria-hidden="true"></span>
         <p class="display text-3xl md:text-4xl">{s.time}</p>
-        <p class="mt-1 text-lg">{s.title}</p>{s.note && <p class="text-taupe">{s.note}</p>}
+        <p class="mt-1 text-lg">{tx(s.title, lang)}</p>{s.note && <p class="text-taupe">{tx(s.note, lang)}</p>}
       </li>
     ))}
   </ol>
 ) : (
-  <div class="border-l border-charcoal/25 pl-8 md:pl-12">
-    <ComingSoon>Ceremony and reception times to be confirmed</ComingSoon>
+  <div class="border-l border-charcoal/30 pl-8 md:pl-12">
+    <ComingSoon>{t.details.scheduleTbc}</ComingSoon>
   </div>
 )}

@@ -1,15 +1,21 @@
 ---
 import { wedding } from '../content/site';
+import { useLang, fmt } from '../i18n';
+const { t } = useLang(Astro);
 const target = `${wedding.dateISO}T${wedding.calendarStart ?? '00:00'}:00${wedding.utcOffset}`;
 const days = Math.max(0, Math.ceil((new Date(target).getTime() - Date.now()) / 86400000));
+const text = days === 0 ? t.countdown.zero : days === 1 ? t.countdown.one : fmt(t.countdown.many, { n: days });
 ---
-<p class="countdown" data-target={target} role="timer" aria-label="Days until the wedding"><span data-unit="days" class="tabular-nums">{days}</span> days to go</p>
+<p class="countdown" data-target={target} data-many={t.countdown.many} data-one={t.countdown.one} data-zero={t.countdown.zero} aria-label={t.countdown.label}><span data-text class="tabular-nums">{text}</span></p>
 <script>
   document.querySelectorAll<HTMLElement>('.countdown').forEach((root) => {
     if (root.dataset.bound) return; root.dataset.bound = '1';
     const target = new Date(root.dataset.target!).getTime();
-    const el = root.querySelector('[data-unit=days]')!;
-    const tick = () => { el.textContent = String(Math.max(0, Math.ceil((target - Date.now()) / 864e5))); };
+    const el = root.querySelector('[data-text]')!;
+    const tick = () => {
+      const n = Math.max(0, Math.ceil((target - Date.now()) / 864e5));
+      el.textContent = n === 0 ? root.dataset.zero! : n === 1 ? root.dataset.one! : root.dataset.many!.replace('{n}', String(n));
+    };
     tick(); setInterval(tick, 60000);
   });
 </script>

@@ -1,8 +1,0 @@
----
-const { eyebrow, title, align = 'left', as: Tag = 'h2', class: cls = '' } = Astro.props as { eyebrow?: string; title: string; align?: 'left' | 'center'; as?: 'h1' | 'h2'; class?: string };
----
-<div class={`reveal ${align === 'center' ? 'text-center mx-auto' : ''} ${cls}`}>
-  {eyebrow && <p class="eyebrow mb-5">{eyebrow}</p>}
-  <Tag class="display text-[clamp(2.5rem,6vw,4.75rem)]" set:html={title} />
-  <slot />
-</div>

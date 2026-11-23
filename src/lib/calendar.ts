@@ -1,6 +1,7 @@
 import { couple, wedding, venue, fullAddress } from '../content/site';
+import { getT, fmt, type Lang } from '../i18n';
 
-const esc = (s: string) => s.replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+const esc = (s: string) => s.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
 const compact = (d: string) => d.replace(/-/g, '');
 const hm = (t: string) => t.replace(':', '') + '00';
 const nextDay = (iso: string) => {
@@ -11,15 +12,13 @@ const nextDay = (iso: string) => {
 const fold = (line: string) => (line.match(/.{1,73}/g) ?? ['']).join('\r\n ');
 
 export const isTimed = () => !!wedding.calendarStart;
-export const eventTitle = () => (isTimed() ? `${couple.display} Wedding` : `${couple.display} Wedding (date reminder)`);
-export const eventDescription = (siteUrl: string) =>
-  isTimed()
-    ? `The wedding of ${couple.display} at ${venue.name}. Details: ${siteUrl}`
-    : `Date reminder: the ${couple.display} wedding. Ceremony and reception times are still to be confirmed. Details will appear at ${siteUrl}`;
+export const eventTitle = (lang: Lang) => fmt(getT(lang).calendar[isTimed() ? 'title' : 'titleReminder'], { couple: couple.display });
+export const eventDescription = (siteUrl: string, lang: Lang) =>
+  fmt(getT(lang).calendar[isTimed() ? 'descTimed' : 'descReminder'], { couple: couple.display, venue: venue.name, url: siteUrl });
 
-export function buildIcs(siteUrl: string): string {
+export function buildIcs(siteUrl: string, lang: Lang): string {
   const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
-  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//A+E Wedding//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', `PRODID:-//A+E Wedding//${lang.toUpperCase()}`, 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
   if (isTimed()) {
     lines.push(
       'BEGIN:VTIMEZONE', 'TZID:America/Los_Angeles',
@@ -39,26 +38,26 @@ export function buildIcs(siteUrl: string): string {
     lines.push(`DTSTART;VALUE=DATE:${compact(wedding.dateISO)}`, `DTEND;VALUE=DATE:${compact(nextDay(wedding.dateISO))}`, 'TRANSP:TRANSPARENT');
   }
   lines.push(
-    `SUMMARY:${esc(eventTitle())}`,
+    `SUMMARY:${esc(eventTitle(lang))}`,
     `LOCATION:${esc(`${venue.name}, ${fullAddress}`)}`,
-    `DESCRIPTION:${esc(eventDescription(siteUrl))}`,
+    `DESCRIPTION:${esc(eventDescription(siteUrl, lang))}`,
     `URL:${siteUrl}`,
     'END:VEVENT', 'END:VCALENDAR',
   );
   return lines.map(fold).join('\r\n') + '\r\n';
 }
 
-export function googleCalendarUrl(siteUrl: string): string {
+export function googleCalendarUrl(siteUrl: string, lang: Lang): string {
   const d = compact(wedding.dateISO);
   const dates = isTimed()
     ? `${d}T${hm(wedding.calendarStart!)}/${d}T${hm(wedding.calendarEnd ?? wedding.calendarStart!)}`
     : `${d}/${compact(nextDay(wedding.dateISO))}`;
   const p = new URLSearchParams({
     action: 'TEMPLATE',
-    text: eventTitle(),
+    text: eventTitle(lang),
     dates,
     location: `${venue.name}, ${fullAddress}`,
-    details: eventDescription(siteUrl),
+    details: eventDescription(siteUrl, lang),
   });
   if (isTimed()) p.set('ctz', wedding.timeZone);
   return `https://calendar.google.com/calendar/render?${p}`;

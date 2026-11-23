@@ -1,8 +1,8 @@
 ---
-const { class: cls = '', size = 'md' } = Astro.props as { class?: string; size?: 'sm' | 'md' | 'lg' };
+const { class: cls = '' } = Astro.props as { class?: string };
 ---
-<span class={`inline-flex items-baseline gap-[.28em] font-display leading-none ${cls}`} aria-label="A and E">
-  <span aria-hidden="true">A</span>
-  <span aria-hidden="true" class="text-[.5em] font-light italic opacity-70 relative -top-[.12em]">+</span>
-  <span aria-hidden="true">E</span>
+<span class={`inline-flex items-baseline gap-[.28em] font-display leading-none ${cls}`} aria-hidden="true">
+  <span>A</span>
+  <span class="relative -top-[.12em] text-[.5em] font-normal italic opacity-70">+</span>
+  <span>E</span>
 </span>

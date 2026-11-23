@@ -1,28 +1,44 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/bodoni-moda/opsz.css';
 @import '@fontsource-variable/bodoni-moda/opsz-italic.css';
-@import '@fontsource-variable/jost/index.css';
+@import '@fontsource-variable/source-sans-3/wght.css';
+@import '@fontsource-variable/source-sans-3/wght-italic.css';
 
 @theme {
   --color-ivory: #f5f0e6; /* paper */
   --color-paper: #faf6ee;
   --color-champagne: #e7dcc6;
-  --color-sand: #c9ad86;
-  --color-taupe: #685a4d; /* AA on ivory */
+  --color-sand: #c9ad86; /* decorative rules only, never text */
+  --color-taupe: #5f5246; /* secondary text: 6.8:1 on ivory (WCAG AA/AAA) */
   --color-mist: #a39382;
   --color-charcoal: #221d19;
-  --color-clay: #8f4a33; /* terracotta from the dress; tiny accents only */
+  --color-clay: #8f4a33; /* terracotta from the dress; accents. 5.8:1 on ivory */
+  --color-line: #7d7063; /* borders of form fields and controls: 3.9:1 on paper (WCAG 1.4.11) */
+  --color-error: #9b2f20;
+  /* Display serif for the names and page titles only; everything people must read is in the sans. */
   --font-display: 'Bodoni Moda Variable', 'Bodoni Moda', 'Didot', Georgia, serif;
-  --font-sans: 'Jost Variable', 'Jost', system-ui, sans-serif;
+  --font-sans: 'Source Sans 3 Variable', 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+  /* Nothing on the site is smaller than 15px; text-sm is a full 16px. */
+  --text-xs: 0.9375rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 1rem;
+  --text-sm--line-height: 1.55;
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.65;
+  --text-lg: 1.1875rem;
+  --text-lg--line-height: 1.6;
 }
 
 @layer base {
-  html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; -webkit-text-size-adjust: 100%; }
-  body { background: var(--color-ivory); color: var(--color-charcoal); font-family: var(--font-sans); font-weight: 400; line-height: 1.65; overflow-x: clip; text-rendering: optimizeLegibility; }
+  html { scroll-behavior: smooth; scroll-padding-top: 6rem; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body { background: var(--color-ivory); color: var(--color-charcoal); font-family: var(--font-sans); font-weight: 400; font-size: 1.0625rem; line-height: 1.65; overflow-x: clip; text-rendering: optimizeLegibility; }
+  @media (min-width: 768px) { body { font-size: 1.125rem; } }
   ::selection { background: var(--color-champagne); }
-  :focus-visible { outline: 2px solid var(--color-clay); outline-offset: 3px; border-radius: 2px; }
+  :focus-visible { outline: 3px solid var(--color-clay); outline-offset: 3px; border-radius: 2px; }
   img { max-width: 100%; }
+  h1, h2, h3, h4 { text-wrap: balance; }
+  p, li, dd { overflow-wrap: break-word; }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
@@ -30,31 +46,37 @@
 }
 
 @layer components {
-  .display { font-family: var(--font-display); font-weight: 400; font-optical-sizing: auto; letter-spacing: -0.012em; line-height: 1.08; }
+  /* Serif: names, page titles, a few invitation moments. */
+  .display { font-family: var(--font-display); font-weight: 500; font-optical-sizing: auto; letter-spacing: -0.01em; line-height: 1.1; }
   .italic-display { font-family: var(--font-display); font-style: italic; font-weight: 400; }
-  .numeral { font-family: var(--font-display); font-weight: 400; line-height: 1; font-variant-numeric: lining-nums; }
-  /* small label — used sparingly, never as a decorative overline above every heading */
-  .eyebrow { font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; color: var(--color-taupe); font-weight: 500; }
-  .label { display: block; font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--color-taupe); font-weight: 500; }
+  .numeral { font-family: var(--font-display); font-weight: 500; line-height: 1; font-variant-numeric: lining-nums; }
+  /* Sans: every heading below the page title, so it stays legible at any size, in either language. */
+  .heading { font-family: var(--font-sans); font-weight: 600; letter-spacing: 0; line-height: 1.25; }
+  .caption { font-style: italic; color: var(--color-taupe); }
+  /* Field and group labels: sentence case, never tiny uppercase. */
+  .eyebrow { font-size: 1rem; color: var(--color-taupe); font-weight: 600; }
+  .label { display: block; font-size: 1rem; color: var(--color-charcoal); font-weight: 600; line-height: 1.4; }
   .wrap { width: 100%; max-width: 72rem; margin-inline: auto; padding-inline: 1.25rem; }
   @media (min-width: 768px) { .wrap { padding-inline: 2.5rem; } }
   .section { padding-block: clamp(3.5rem, 8vw, 6.5rem); }
   .hairline { height: 1px; background: color-mix(in srgb, var(--color-charcoal) 18%, transparent); border: 0; }
-  .prose-soft { font-size: 1.0625rem; color: color-mix(in srgb, var(--color-charcoal) 88%, white); max-width: 38rem; }
+  .prose-soft { font-size: 1.125rem; color: var(--color-charcoal); max-width: 40rem; }
 
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; min-height: 3rem; padding: .7rem 1.6rem; font-size: .8rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 500; border: 1px solid var(--color-charcoal); color: var(--color-charcoal); background: transparent; cursor: pointer; transition: background-color .3s var(--ease-soft), color .3s var(--ease-soft); text-decoration: none; text-align: center; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; min-height: 3rem; min-width: 3rem; padding: .65rem 1.5rem; font-size: 1.0625rem; letter-spacing: .01em; font-weight: 600; line-height: 1.3; border: 1.5px solid var(--color-charcoal); color: var(--color-charcoal); background: transparent; cursor: pointer; transition: background-color .25s var(--ease-soft), color .25s var(--ease-soft); text-decoration: none; text-align: center; }
   .btn:hover { background: var(--color-charcoal); color: var(--color-ivory); }
   .btn-solid { background: var(--color-charcoal); color: var(--color-ivory); }
   .btn-solid:hover { background: var(--color-clay); border-color: var(--color-clay); }
-  .btn[disabled], .btn[aria-disabled='true'] { opacity: .5; cursor: not-allowed; }
+  .btn[disabled], .btn[aria-disabled='true'] { opacity: .55; cursor: not-allowed; }
   .tap { display: inline-flex; min-height: 2.75rem; align-items: center; }
-  .link { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .28em; text-decoration-color: var(--color-sand); transition: text-decoration-color .25s; }
+  .link { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: .22em; text-decoration-color: var(--color-clay); transition: text-decoration-color .25s; }
   .link:hover { text-decoration-color: currentColor; }
 
-  .field { display: block; width: 100%; background: transparent; border: 0; border-bottom: 1px solid color-mix(in srgb, var(--color-charcoal) 40%, transparent); padding: .7rem 0; font: inherit; color: inherit; border-radius: 0; min-height: 3rem; }
-  .field:focus { outline: none; border-bottom-color: var(--color-clay); box-shadow: 0 1px 0 0 var(--color-clay); }
-  .field[aria-invalid='true'] { border-bottom-color: #9b3d2e; }
-  textarea.field { min-height: 5.5rem; resize: vertical; }
+  /* Form fields: a visible box (not just a hairline), 17px+ text so phones do not zoom in. */
+  .field { display: block; width: 100%; background: var(--color-paper); border: 1.5px solid var(--color-line); padding: .7rem .9rem; font: inherit; font-size: 1.0625rem; color: inherit; border-radius: 2px; min-height: 3rem; margin-top: .4rem; }
+  .field:focus { outline: 3px solid var(--color-clay); outline-offset: 1px; border-color: var(--color-charcoal); }
+  .field[aria-invalid='true'] { border-color: var(--color-error); }
+  textarea.field { min-height: 6rem; resize: vertical; }
+  .check { width: 1.375rem; height: 1.375rem; flex: none; accent-color: var(--color-charcoal); }
 
   /* disclosure (progressive disclosure for details) */
   .disclose > summary { list-style: none; cursor: pointer; }
@@ -70,15 +92,15 @@
 /* ── Travel map ───────────────────────────────── */
 .ae-map { font-family: var(--font-sans); background: #efe7d8; }
 .ae-map .leaflet-tile-pane { filter: sepia(.28) saturate(.75) contrast(.96) brightness(1.02); }
-.ae-map .leaflet-control-attribution { font-size: .62rem; background: color-mix(in srgb, var(--color-ivory) 85%, transparent); }
-.ae-map .leaflet-bar a { background: var(--color-ivory); color: var(--color-charcoal); border-color: color-mix(in srgb, var(--color-charcoal) 15%, transparent); }
-.ae-tip { background: var(--color-charcoal); color: var(--color-ivory); border: 0; border-radius: 0; font-size: .72rem; letter-spacing: .08em; padding: .35rem .6rem; box-shadow: none; }
+.ae-map .leaflet-control-attribution { font-size: .8125rem; background: color-mix(in srgb, var(--color-ivory) 85%, transparent); }
+.ae-map .leaflet-bar a { width: 44px; height: 44px; line-height: 44px; font-size: 1.4rem; background: var(--color-ivory); color: var(--color-charcoal); border-color: color-mix(in srgb, var(--color-charcoal) 15%, transparent); }
+.ae-tip { background: var(--color-charcoal); color: var(--color-ivory); border: 0; border-radius: 0; font-size: .9375rem; padding: .4rem .7rem; box-shadow: none; }
 .ae-tip::before { display: none; }
 .ae-pin { display: grid; place-items: center; font-family: var(--font-display); transition: transform .3s var(--ease-soft), background-color .3s, color .3s; }
 .ae-pin-venue { width: 46px; height: 46px; border-radius: 50%; background: var(--color-ivory); border: 1px solid var(--color-charcoal); box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-ivory) 70%, transparent), 0 6px 18px rgba(43,39,36,.25); font-size: .95rem; color: var(--color-charcoal); }
-.ae-pin-hotel { width: 32px; height: 32px; border-radius: 50%; background: var(--color-charcoal); color: var(--color-ivory); font-size: 1rem; font-family: var(--font-sans); font-weight: 500; border: 2px solid var(--color-ivory); box-shadow: 0 3px 10px rgba(43,39,36,.3); }
+.ae-pin-hotel { width: 34px; height: 34px; border-radius: 50%; background: var(--color-charcoal); color: var(--color-ivory); font-size: 1.0625rem; font-family: var(--font-sans); font-weight: 600; border: 2px solid var(--color-ivory); box-shadow: 0 3px 10px rgba(43,39,36,.3); }
 .ae-pin-hotel.is-selected { background: var(--color-clay); transform: scale(1.3); }
-.ae-pin-air { width: 44px; height: 26px; background: var(--color-taupe); color: var(--color-ivory); font-family: var(--font-sans); font-size: .68rem; letter-spacing: .1em; font-weight: 500; }
+.ae-pin-air { width: 52px; height: 30px; background: var(--color-taupe); color: var(--color-ivory); font-family: var(--font-sans); font-size: .875rem; font-weight: 600; }
 .ae-route { stroke-dasharray: 1200; animation: draw 1s var(--ease-soft) forwards; }
 @keyframes draw { from { stroke-dashoffset: 1200; } to { stroke-dashoffset: 0; } }
 .leaflet-container:focus-visible, .leaflet-marker-icon:focus-visible { outline: 2px solid var(--color-clay); outline-offset: 2px; }

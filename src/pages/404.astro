@@ -1,15 +1,44 @@
 ---
+/** 404 is served for any unknown URL, so it cannot know the language server-side: both are shown, then trimmed to the guest's language when it is known. */
+import '../styles/global.css';
 import { u } from '../lib/url';
-import Base from '../layouts/Base.astro';
 import Monogram from '../components/Monogram.astro';
+import { en } from '../i18n/en';
+import { esMX } from '../i18n/es-MX';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const blocks = [{ code: 'en', lang: 'en', d: en }, { code: 'es', lang: 'es-MX', d: esMX }] as const;
 ---
-<Base title="Page not found">
-  <section class="section grid min-h-[60svh] place-items-center text-center">
-    <div class="wrap">
-      <Monogram class="text-6xl text-sand" />
-      <h1 class="display mt-8 text-5xl">We can’t find that page.</h1>
-      <p class="mt-4 text-taupe">It may have moved. Let’s get you back.</p>
-      <a href={u("/")} class="btn mt-8">Home</a>
-    </div>
-  </section>
-</Base>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{en.meta.notFound} · {esMX.meta.notFound}</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href={u('/favicon.svg')} type="image/svg+xml" />
+    <script is:inline define:vars={{ BASE: base }}>
+      // Pick the language from the URL (/es/…) or the saved choice, if either is known.
+      var seg = location.pathname.slice(BASE.length).split('/')[1], l = seg === 'en' || seg === 'es' ? seg : null;
+      try { if (!l) { var s = localStorage.getItem('ae-lang'); if (s === 'en' || s === 'es') l = s; } } catch (e) {}
+      if (l) { document.documentElement.lang = l === 'es' ? 'es-MX' : 'en'; document.documentElement.setAttribute('data-l', l); }
+    </script>
+    <style is:global>
+      html[data-l='en'] [data-block='es'], html[data-l='es'] [data-block='en'] { display: none; }
+    </style>
+  </head>
+  <body>
+    <main id="main" class="grid min-h-svh place-items-center px-5 py-12 text-center">
+      <div class="w-full max-w-lg">
+        <Monogram class="text-6xl text-charcoal/50" />
+        {blocks.map((b) => (
+          <section data-block={b.code} lang={b.lang} class="mt-8 first:mt-8 [&+&]:mt-12 [&+&]:border-t [&+&]:border-charcoal/20 [&+&]:pt-10">
+            <h1 class="display text-4xl">{b.d.notFound.title}</h1>
+            <p class="mt-4 text-taupe">{b.d.notFound.body}</p>
+            <a href={u(`/${b.code}/`)} class="btn mt-6">{b.d.notFound.home}</a>
+          </section>
+        ))}
+      </div>
+    </main>
+  </body>
+</html>

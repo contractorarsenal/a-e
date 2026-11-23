@@ -1,17 +1,19 @@
 ---
 import { mapLinks, fullAddress } from '../content/site';
+import { useLang } from '../i18n';
+const { t } = useLang(Astro);
 ---
 <div class="flex flex-wrap gap-3" data-nav-buttons>
-  <a class="btn btn-solid" href={mapLinks.appleDirections} target="_blank" rel="noopener noreferrer">Apple Maps ↗</a>
-  <a class="btn btn-solid" href={mapLinks.googleDirections} target="_blank" rel="noopener noreferrer">Google Maps ↗</a>
-  <button type="button" class="btn" data-copy={fullAddress} aria-live="polite">Copy address</button>
+  <a class="btn btn-solid" href={mapLinks.appleDirections} target="_blank" rel="noopener noreferrer">Apple Maps ↗<span class="sr-only"> {t.newTab}</span></a>
+  <a class="btn btn-solid" href={mapLinks.googleDirections} target="_blank" rel="noopener noreferrer">Google Maps ↗<span class="sr-only"> {t.newTab}</span></a>
+  <button type="button" class="btn" data-copy={fullAddress} data-copied={t.address.copied} data-manual={t.address.manual} aria-live="polite">{t.address.copy}</button>
 </div>
 <script>
   document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => {
     const label = b.textContent;
     b.addEventListener('click', async () => {
-      try { await navigator.clipboard.writeText(b.dataset.copy!); b.textContent = 'Copied ✓'; }
-      catch { b.textContent = 'Select and copy manually'; }
+      try { await navigator.clipboard.writeText(b.dataset.copy!); b.textContent = b.dataset.copied!; }
+      catch { b.textContent = b.dataset.manual!; }
       setTimeout(() => (b.textContent = label), 2200);
     });
   });

@@ -106,3 +106,14 @@ src/
 scripts/     optimize-images, build-geo, check-links
 public/img/  optimized photos (committed)
 ```
+
+
+## Languages
+
+The site is bilingual: English (`/en/`) and Mexican Spanish (`/es/`). `/` asks first-time visitors to choose (nothing is guessed from location), remembers the choice in `localStorage` (`ae-lang`), and sends returning visitors straight to their language. Direct links to `/en/…` or `/es/…` always work without any saved choice. The EN / ES control in the header switches language on the same page and section; trip-planner selections (localStorage) and an unsent RSVP draft (sessionStorage, this tab only) carry over.
+
+Edit wording in `src/i18n/en.ts` and `src/i18n/es-MX.ts` (TypeScript fails the build check if a key is missing in either). Wedding facts such as times, parking and FAQ answers go in `src/content/site.ts` as `{ en: '…', es: '…' }`.
+
+## Our Story photos
+
+Older photographs are listed in `scripts/optimize-images.mjs` (originals in `Photos/` are never modified or committed). They are small files, so they are never upscaled or sharpened, and they are shown uncropped at their natural proportions. Captions are intentionally undated.

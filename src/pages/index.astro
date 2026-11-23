@@ -1,74 +1,117 @@
 ---
-import Base from '../layouts/Base.astro';
-import Picture from '../components/Picture.astro';
-import Countdown from '../components/Countdown.astro';
-import Optional from '../components/Optional.astro';
-import { wedding, venue } from '../content/site';
-import { photos } from '../lib/photos';
+/**
+ * "/" is the first-visit language chooser. Returning visitors (saved choice in localStorage) are sent straight to
+ * their language before anything paints. Nothing here guesses a language from location or browser settings.
+ * Without JavaScript the two links in <noscript> still work.
+ */
+import '../styles/global.css';
 import { u } from '../lib/url';
+import { visibility } from '../lib/env';
+import { en } from '../i18n/en';
+import { esMX } from '../i18n/es-MX';
+import { pageSlugs } from '../content/site';
+import { wedding, venue } from '../content/site';
+import { dateLong } from '../i18n/format';
 
-const plates = [
-  { slug: 'proposal-moment', n: 'I', pos: '50% 46%', cls: '' },
-  { slug: 'proposal-laughing', n: 'II', pos: '55% 42%', cls: '' },
-  { slug: 'proposal-kiss', n: 'III', pos: '50% 40%', cls: 'hidden md:block' },
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const index = visibility() === 'public';
+const opts = [
+  { code: 'en', lang: 'en', label: en.localeLabel, d: en },
+  { code: 'es', lang: 'es-MX', label: esMX.localeLabel, d: esMX },
 ] as const;
-const ways = [
-  { href: '/details', t: 'The Wedding', d: 'Date, venue, directions and the schedule' },
-  { href: '/travel', t: 'Travel & Stay', d: 'Hotels with drive times, airports and rides' },
-  { href: '/faq', t: 'Questions', d: 'Answers to the things guests ask most' },
-];
 ---
-<Base>
-  <!-- The invitation -->
-  <section class="wrap pb-2 pt-8 text-center md:pt-12" aria-labelledby="names">
-    <p class="text-taupe">We’re getting married</p>
-    <h1 id="names" class="display mt-3 text-[clamp(3.4rem,17vw,6.5rem)] leading-[.95] sm:text-[clamp(3.4rem,9vw,6.5rem)] sm:leading-none"><span class="block sm:inline">Adrian</span> <span class="italic-display">&amp;</span> Emma</h1>
-    <div class="mx-auto mt-6 h-px w-16 bg-charcoal/30" aria-hidden="true"></div>
-    <p class="mt-6 text-[.84rem] font-medium uppercase tracking-[.2em]">{wedding.dateLong}</p>
-    <p class="mt-1.5 text-lg">{venue.name} · {wedding.cityLine}</p>
-    <p class="mt-6"><a href={u('/rsvp')} class="btn btn-solid">RSVP</a></p>
-    <p class="mt-4 text-sm text-taupe"><Countdown /></p>
-  </section>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adrian &amp; Emma · Choose your language · Elige tu idioma</title>
+    <meta name="description" content={`${dateLong(wedding.dateISO, 'en')} · ${dateLong(wedding.dateISO, 'es')} · ${venue.name}, ${wedding.cityLine}`} />
+    <meta name="theme-color" content="#f5f0e6" />
+    {!index && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={new URL(u('/'), Astro.site).href} />
+    <link rel="alternate" hreflang="en" href={new URL(u('/en/'), Astro.site).href} />
+    <link rel="alternate" hreflang="es-MX" href={new URL(u('/es/'), Astro.site).href} />
+    <link rel="alternate" hreflang="x-default" href={new URL(u('/'), Astro.site).href} />
+    <link rel="icon" href={u('/favicon.svg')} type="image/svg+xml" />
+    <meta property="og:title" content="Adrian &amp; Emma" />
+    <meta property="og:image" content={new URL(u('/img/og.jpg'), Astro.site).href} />
+    <script is:inline define:vars={{ BASE: base, SLUGS: pageSlugs }}>
+      // Returning visitors go straight to their saved language (before first paint, so the chooser never flashes).
+      (function () {
+        try {
+          var l = localStorage.getItem('ae-lang');
+          if (l === 'en' || l === 'es') {
+            var n = (new URLSearchParams(location.search).get('next') || '').replace(/\//g, '');
+            var path = SLUGS.indexOf(n) > -1 ? n + '/' : '';
+            document.documentElement.className += ' go';
+            location.replace(BASE + '/' + l + '/' + path);
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <style is:global>html.go body { visibility: hidden; }</style>
+  </head>
+  <body>
+    <main id="main" class="grid min-h-svh place-items-center px-5 py-12">
+      <div class="w-full max-w-md text-center">
+        <h1 class="display text-[clamp(3.4rem,17vw,5.5rem)] leading-[.95]"><span class="block sm:inline">Adrian</span> <span class="italic-display">&amp;</span> Emma</h1>
+        <div class="mx-auto mt-7 h-px w-16 bg-charcoal/40" aria-hidden="true"></div>
 
-  <!-- The photograph -->
-  <section class="wrap mt-8 md:mt-10" aria-label="Photograph">
-    <figure class="mx-auto max-w-[34rem]">
-      <div class="aspect-[3/4] overflow-hidden bg-champagne">
-        <Picture slug="proposal-hands" alt={photos['proposal-hands'].alt} loading="eager" sizes="(min-width:768px) 544px, calc(100vw - 2.5rem)" position="50% 45%" />
+        <form id="chooser" class="mt-8" novalidate>
+          <fieldset>
+            <legend class="w-full">
+              <span lang="en" class="italic-display block text-[1.6rem] leading-tight">{en.chooser.choose}</span>
+              <span lang="es-MX" class="italic-display mt-1 block text-[1.6rem] leading-tight">{esMX.chooser.choose}</span>
+            </legend>
+            <div class="mt-6 grid gap-3 text-left">
+              {opts.map((o) => (
+                <label class="flex min-h-[4.5rem] cursor-pointer items-center gap-4 border-[1.5px] border-line bg-paper px-5 text-[1.4rem] font-semibold has-[:checked]:border-charcoal has-[:checked]:bg-champagne/50 has-[:focus-visible]:outline has-[:focus-visible]:outline-[3px] has-[:focus-visible]:outline-clay">
+                  <input type="radio" name="lang" value={o.code} class="check !h-6 !w-6" />
+                  <span lang={o.lang}>{o.label}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <p id="msg" role="alert" class="mt-4 min-h-[1.5rem] font-semibold text-error"></p>
+          <button type="submit" class="btn btn-solid mt-2 w-full !min-h-14 !text-[1.15rem]">
+            <span id="go-label"><span lang="en">{en.chooser.continue}</span> / <span lang="es-MX">{esMX.chooser.continue}</span></span>
+          </button>
+        </form>
+
+        <noscript>
+          <p class="mt-8 text-taupe"><span lang="en">{en.chooser.noscript}</span><br /><span lang="es-MX">{esMX.chooser.noscript}</span></p>
+          <p class="mt-3 flex justify-center gap-6"><a class="link tap" lang="en" href={u('/en/')}>{en.localeLabel}</a><a class="link tap" lang="es-MX" href={u('/es/')}>{esMX.localeLabel}</a></p>
+        </noscript>
       </div>
-      <figcaption class="mt-3 text-center italic-display text-taupe">{photos['proposal-hands'].caption}</figcaption>
-    </figure>
-  </section>
+    </main>
 
-  <!-- A short series -->
-  <section class="wrap mt-20 md:mt-32" aria-labelledby="series">
-    <div class="flex items-baseline justify-between gap-6 border-t border-charcoal/20 pt-4">
-      <h2 id="series" class="text-taupe">The day we got engaged</h2>
-      <a href={u('/story')} class="link tap text-sm">Our story →</a>
-    </div>
-    <div class="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6">
-      {plates.map((p) => (
-        <figure class={`reveal ${p.cls}`}>
-          <div class="aspect-[3/4] overflow-hidden bg-champagne"><Picture slug={p.slug} alt={photos[p.slug].alt} sizes="(min-width:768px) 30vw, 46vw" position={p.pos} /></div>
-          <figcaption class="mt-2 text-sm text-taupe"><span class="numeral mr-2 text-clay">{p.n}</span><span class="italic-display">{photos[p.slug].caption}</span></figcaption>
-        </figure>
-      ))}
-    </div>
-  </section>
-
-  <!-- Where to go next -->
-  <nav class="wrap mt-20 md:mt-32" aria-label="Wedding information">
-    <ul class="border-t border-charcoal/20">
-      {ways.map((w) => (
-        <li class="border-b border-charcoal/20">
-          <a href={u(w.href)} class="group flex min-h-20 items-center justify-between gap-6 py-5 no-underline">
-            <span><span class="display block text-[clamp(1.6rem,4vw,2.4rem)]">{w.t}</span><span class="mt-1 block text-taupe">{w.d}</span></span>
-            <span aria-hidden="true" class="text-2xl transition-transform duration-300 group-hover:translate-x-1">→</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </nav>
-
-  <Optional />
-</Base>
+    <script is:inline define:vars={{ BASE: base, SLUGS: pageSlugs, EN: en.chooser, ES: esMX.chooser }}>
+      var form = document.getElementById('chooser');
+      var msg = document.getElementById('msg');
+      var label = document.getElementById('go-label');
+      var T = { en: EN, es: ES };
+      var attr = { en: 'en', es: 'es-MX' };
+      form.addEventListener('change', function () {
+        var v = form.elements.lang.value;
+        if (!v) return;
+        msg.textContent = '';
+        label.innerHTML = '';
+        var s = document.createElement('span'); s.lang = attr[v]; s.textContent = T[v].continue; label.appendChild(s);
+      });
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var v = form.elements.lang.value;
+        if (!v) {
+          msg.innerHTML = '';
+          ['en', 'es'].forEach(function (k) { var s = document.createElement('span'); s.lang = attr[k]; s.className = 'block'; s.textContent = T[k].pick; msg.appendChild(s); });
+          form.querySelector('input').focus();
+          return;
+        }
+        try { localStorage.setItem('ae-lang', v); } catch (err) {}
+        var n = (new URLSearchParams(location.search).get('next') || '').replace(/\//g, '');
+        location.href = BASE + '/' + v + '/' + (SLUGS.indexOf(n) > -1 ? n + '/' : '');
+      });
+    </script>
+  </body>
+</html>
