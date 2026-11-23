@@ -5,7 +5,7 @@ import TripConcierge from '../../components/trip/TripConcierge';
 import GuestConnect from '../../components/GuestConnect.astro';
 import ComingSoon from '../../components/ComingSoon.astro';
 import { couple, venue, wedding, mapLinks, schedule, shuttle } from '../../content/site';
-import { hotels, rentals, stayDates, rentalCompanies, links } from '../../content/travel';
+import { hotels, rentals, stayDates, rentalCompanies, links, priceChecked } from '../../content/travel';
 import geo from '../../generated/geo.json';
 import { groupUrl, groupGate } from '../../lib/env';
 import { useLang, fmt, mi, dur, dateShort, dateLong, tx } from '../../i18n';
@@ -53,13 +53,13 @@ const ext = (href: string, label: string) => `<a class="tap link" href="${href}"
   <PageHead title={t.nav.travel} />
 
   <!-- 1. Where to stay -->
-  <section id="stay" class="wrap mt-10 md:mt-12" aria-labelledby="stay-h">
+  <section id="stay" class="wrap band band-ivory py-12 md:py-16" aria-labelledby="stay-h">
     <h2 id="stay-h" class="h2">{T.stayH}</h2>
     <p class="mt-3 max-w-xl text-taupe">{fmt(T.stayNote, { venue: venue.name })}</p>
     <ol class="mt-8 border-t border-charcoal/25">
       {hotelData.map((h: any) => (
         <li class="border-b border-charcoal/25 py-7 md:py-9">
-          <h3 class="h3 md:text-[1.625rem]">{h.name}</h3>
+          <h3 class="h3 md:text-[1.625rem]">{h.name}{h.priceTier && <span class="ml-3 inline-block text-[1.0625rem] font-semibold text-taupe"><span aria-hidden="true">{'$'.repeat(h.priceTier)}</span><span aria-hidden="true"> · {T.priceNames[h.priceTier - 1]}</span><span class="sr-only"> ({T.priceWord}: {T.priceNames[h.priceTier - 1]})</span></span>}</h3>
           <p class="mt-2 text-[1.25rem] font-bold">{fmt(T.driveLine, { t: dur(h.toVenue.minutes, lang), d: mi(h.toVenue.miles, lang) })}</p>
           <p class="text-taupe">{fmt(T.toVenueApprox, { venue: venue.name })}</p>
           <p class="mt-3"><span class="sr-only">{T.address}: </span>{h.address}</p>
@@ -83,13 +83,14 @@ const ext = (href: string, label: string) => `<a class="tap link" href="${href}"
         </li>
       ))}
     </ol>
-    <p class="mt-5 max-w-2xl text-taupe">{fmt(T.foot, { source: T.routeSource, date: routeDate })} <button type="button" class="link tap" data-open-tools>{T.seeMap}</button></p>
+    {hotelData.some((h: any) => h.priceTier) && <p class="mt-5 max-w-2xl text-taupe">{fmt(T.priceLegend, { date: dateShort(priceChecked, lang) })}</p>}
+    <p class="mt-3 max-w-2xl text-taupe">{fmt(T.foot, { source: T.routeSource, date: routeDate })} <button type="button" class="link tap" data-open-tools>{T.seeMap}</button></p>
   </section>
 
   <!-- 2. Airports and getting around -->
-  <section id="airports" class="wrap mt-16 md:mt-24" aria-labelledby="air-h">
+  <section id="airports" class="wrap band band-cream py-12 md:py-16" aria-labelledby="air-h">
     <h2 id="air-h" class="h2">{T.airportsH}</h2>
-    <div class="mt-8 grid gap-10 border-t border-charcoal/25 pt-8 md:grid-cols-2 md:gap-16">
+    <div class="mt-8 grid gap-10 md:grid-cols-2 md:gap-16">
       <div id="airport-info">
         <h3 class="h3">{T.flyingIn}</h3>
         <p class="mt-3" set:html={fmt(T.sanText, { b: `<strong class="font-semibold">${T.airportNames.SAN} (SAN)</strong>`, d: mi(ato.SAN.miles, lang), t: dur(ato.SAN.minutes, lang) })} />
@@ -112,13 +113,17 @@ const ext = (href: string, label: string) => `<a class="tap link" href="${href}"
         </details>
       </div>
     </div>
+    <div id="ride-back" class="mt-10 border-[1.5px] border-charcoal bg-paper p-6 md:p-8">
+      <h3 class="h3">{T.rideH}</h3>
+      <p class="mt-2 max-w-2xl">{T.rideBody}</p>
+    </div>
     <ul class="mt-10 grid gap-x-12 gap-y-3 border-t border-charcoal/25 pt-6 text-taupe md:grid-cols-2">
       {T.guidance.map((g) => <li><strong class="font-semibold text-charcoal">{g.t}.</strong> {g.b}</li>)}
     </ul>
   </section>
 
   <!-- 3. Airbnb / Vrbo -->
-  <section id="stay-rentals" class="wrap mt-16 md:mt-24" aria-labelledby="rent-h">
+  <section id="stay-rentals" class="wrap band band-ivory py-12 md:py-16" aria-labelledby="rent-h">
     <h2 id="rent-h" class="h2">{T.rentalsH}</h2>
     <p class="mt-3 max-w-xl text-taupe">{T.rentalsNote}</p>
     <ul class="mt-6 border-t border-charcoal/25">
@@ -132,8 +137,8 @@ const ext = (href: string, label: string) => `<a class="tap link" href="${href}"
   </section>
 
   <!-- 4. Shuttle + travel together -->
-  <section id="together" class="wrap mt-16 md:mt-24">
-    <div class="grid gap-10 border-t border-charcoal/25 pt-8 md:grid-cols-2 md:gap-16">
+  <section id="together" class="wrap band band-cream py-12 md:py-16">
+    <div class="grid gap-10 md:grid-cols-2 md:gap-16">
       <div id="shuttle">
         <h2 class="h3">{T.shuttleH}</h2>
         <div class="mt-3">{shuttle.arranged && shuttle.details ? <p>{tx(shuttle.details, lang)}</p> : <ComingSoon>{T.shuttleTbc}</ComingSoon>}</div>
@@ -143,7 +148,7 @@ const ext = (href: string, label: string) => `<a class="tap link" href="${href}"
   </section>
 
   <!-- 5. Optional tools (collapsed) -->
-  <section id="trip-tools" class="wrap mt-16 md:mt-24" aria-labelledby="tools-h">
+  <section id="trip-tools" class="wrap band band-sand py-12 md:py-16" aria-labelledby="tools-h">
     <details class="disclose border border-charcoal/30 bg-paper" data-tools>
       <summary class="flex min-h-[4.5rem] items-center justify-between gap-6 px-5 py-4 md:px-8">
         <span><span id="tools-h" class="heading block text-[clamp(1.25rem,3vw,1.6rem)]">{T.toolsH}</span><span class="mt-1 block text-taupe">{T.toolsSub}</span></span>

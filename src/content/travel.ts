@@ -24,8 +24,11 @@ export type Hotel = {
   photo: string | null;
   googleDirections: string;
   appleDirections: string;
+  /** Approximate price category 1–4 ($–$$$$) from a dated comparison of each hotel's own booking page (see TRAVEL_RESEARCH.md), or null = show nothing. */
+  priceTier: 1 | 2 | 3 | 4 | null;
 };
 
+export const priceChecked = '2026-11-22';
 const h = (x: Omit<Hotel, 'googleDirections' | 'appleDirections' | 'photo'> & { photo?: string | null }): Hotel => ({
   photo: null,
   ...x,
@@ -39,24 +42,28 @@ export const hotels: Hotel[] = [
     name: 'Best Western Escondido Hotel',
     address: '1700 Seven Oakes Rd, Escondido, CA 92026',
     bookingUrl: 'https://www.bestwestern.com/en_US/book/escondido/hotel-rooms/best-western-escondido-hotel/propertyCode.05487.html',
+    priceTier: 2,
   }),
   h({
     id: 'springhill',
     name: 'SpringHill Suites by Marriott San Diego Escondido/Downtown',
     address: '200 La Terraza Blvd, Escondido, CA 92025',
     bookingUrl: 'https://www.marriott.com/en-us/hotels/sansd-springhill-suites-san-diego-escondido-downtown/overview/',
+    priceTier: 1,
   }),
   h({
     id: 'residence-inn',
     name: 'Residence Inn by Marriott San Diego North/San Marcos',
     address: '1245 Los Vallecitos Blvd, San Marcos, CA 92069',
     bookingUrl: 'https://www.marriott.com/en-us/hotels/sanmc-residence-inn-san-diego-north-san-marcos/overview/',
+    priceTier: 2,
   }),
   h({
     id: 'welk',
     name: 'Hyatt Vacation Club at The Welk',
     address: '8860 Lawrence Welk Dr, Escondido, CA 92026',
     bookingUrl: 'https://www.hyatt.com/en-US/hotel/california/the-welk/sansw',
+    priceTier: 3,
   }),
 ];
 

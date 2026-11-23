@@ -5,18 +5,18 @@ import Picture from './Picture.astro';
 import manifest from '../generated/images.json';
 import type { PhotoSlug } from '../lib/photos';
 import { useLang, fmt } from '../i18n';
-interface Props { slug: PhotoSlug; sizes: string; class?: string; maxWidth?: string; mat?: boolean; loading?: 'lazy' | 'eager' }
-const { slug, sizes, class: cls = '', maxWidth = '100%', mat = false, loading = 'lazy' } = Astro.props;
+interface Props { slug: PhotoSlug; sizes: string; class?: string; maxWidth?: string; mat?: boolean; loading?: 'lazy' | 'eager'; delay?: number }
+const { slug, sizes, class: cls = '', maxWidth = '100%', mat = false, loading = 'lazy', delay = 0 } = Astro.props;
 const { t } = useLang(Astro);
 const m = manifest[slug];
 const p = t.photos[slug];
 const srcset = (m.widths as number[]).map((w) => `${u('/img/' + slug + '-' + w + '.webp')} ${w}w`).join(', ');
 ---
-<figure class={`min-w-0 ${cls}`} style={`max-width:${maxWidth}`}>
+<figure class={`reveal reveal-photo mx-auto w-full min-w-0 ${cls}`} style={`max-width:${maxWidth};--d:${delay}ms`}>
   <button type="button" data-lb data-srcset={srcset} data-alt={p.alt} data-caption={p.caption} aria-label={fmt(t.story.photoOpen, { caption: p.caption })} class="group block w-full cursor-zoom-in text-left">
     <span class={`block ${mat ? 'bg-paper p-2 ring-1 ring-charcoal/15 md:p-3' : ''}`}>
       <span class="block overflow-hidden bg-champagne" style={`aspect-ratio:${m.width}/${m.height}`}>
-        <Picture slug={slug} alt="" sizes={sizes} loading={loading} />
+        <Picture class="block h-full w-full" slug={slug} alt="" sizes={sizes} loading={loading} />
       </span>
     </span>
   </button>

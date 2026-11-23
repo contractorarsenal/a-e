@@ -59,6 +59,17 @@ const ld = index && {
     <main id="main"><slot /></main>
     <Footer />
     <script>
+      // Gentle entrance for photos and a few blocks. Anything already on screen is shown at once.
+      const els = [...document.querySelectorAll<HTMLElement>('.reveal')];
+      const show = (el: Element) => el.classList.add('in');
+      if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { show(e.target); io.unobserve(e.target); } }), { rootMargin: '0px 0px -6% 0px', threshold: 0.05 });
+        els.forEach((el) => io.observe(el));
+      } else els.forEach(show);
+      // Header gets a soft shadow once the page has moved.
+      const mark = () => document.documentElement.toggleAttribute('data-scrolled', window.scrollY > 8);
+      mark(); addEventListener('scroll', mark, { passive: true });
+
       // After a language switch, land at the same place on the page (a #section in the URL wins; otherwise the same scroll position).
       try {
         const raw = sessionStorage.getItem('ae-switch');

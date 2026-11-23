@@ -103,7 +103,7 @@ export const en = {
     ics: 'Add to Apple or Outlook calendar',
     google: 'Google Calendar',
     noteTimed: 'Adds the wedding with its confirmed start time.',
-    noteDate: 'This saves the date as an all-day reminder. We will update the times here once they are confirmed.',
+    noteDate: 'Save the date of our wedding to your calendar. When the time is confirmed, we’ll update the details.',
     title: '{couple} Wedding',
     titleReminder: '{couple} Wedding (date reminder)',
     descTimed: 'The wedding of {couple} at {venue}. Details: {url}',
@@ -143,6 +143,7 @@ export const en = {
   },
 
   faq: {
+    emailLabel: 'Email',
     intro: 'Anything that is still being decided says so, and we’ll fill it in once it’s confirmed.',
     items: [
       { id: 'where', q: 'Where is the wedding?', a: '{venue}, {address}.', link: 'Directions' },
@@ -157,7 +158,7 @@ export const en = {
       { id: 'plusone', q: 'Can I bring a plus-one?', a: '', link: '' },
       { id: 'rsvp', q: 'When should I RSVP?', a: 'Please reply by {date}.', link: '' },
       { id: 'registry', q: 'Is there a wedding registry?', a: '', link: '' },
-      { id: 'contact', q: 'Who should I contact with questions?', a: 'Email us at {email}.', link: '' },
+      { id: 'contact', q: 'Who can I contact if I have questions?', a: 'You can reach out to Adrian or Emma if you have questions about the wedding.', link: '' },
     ],
   },
 
@@ -268,7 +269,10 @@ export const en = {
   travel: {
     intro: 'Escondido is in north San Diego County. Here are places to stay nearby, closest to the venue first.',
     stayH: 'Where to stay',
-    stayNote: 'Listed by approximate drive time to {venue}. We have not checked availability or prices, so please look at each hotel’s own site for your dates.',
+    stayNote: 'Listed by approximate drive time to {venue}. Availability and rates change, so please check each hotel’s own site for your dates.',
+    priceLegend: 'The $ symbols are an approximate price category, not a rate: $ more economical, $$ moderate, $$$ higher priced. They compare each hotel’s own booking page for August 27–29, 2027 (1 room, 2 adults, before taxes), as seen on {date}. Your price may differ.',
+    priceWord: 'Approximate price category',
+    priceNames: ['More economical', 'Moderate', 'Higher priced', 'Luxury'],
     driveAbout: 'about {t} drive',
     driveLine: 'About {t} drive · {d}',
     toVenueApprox: 'to {venue} · approximate',
@@ -305,17 +309,19 @@ export const en = {
     carsH: 'Cars, rides & transit',
     rentalFact1: 'The SAN Rental Car Center is at 3355 Admiral Boland Way, San Diego, off the airport grounds.',
     rentalFact2: 'A free shuttle runs between the terminals and the center, around the clock. Individual rental counters keep their own hours, so check yours.',
-    rideshare: 'Rideshare ({uber}, {lyft}) works for the airport and around town. We can’t promise availability from the venue late in the evening, so please plan your ride back.',
+    rideshare: 'Rideshare ({uber}, {lyft}) works for the airport and around town.',
     carCompanies: 'Rental car companies and public transit',
     compareKayak: 'Compare on Kayak',
     companiesNote: 'Links go to each company’s own website. We haven’t checked prices or availability.',
     sprinter: 'NCTD’s SPRINTER light rail runs between Oceanside and Escondido (stops include San Marcos and Vista) and connects with the COASTER and Amtrak Pacific Surfliner at Oceanside. It is a reasonable way to reach Escondido without a car, but it will not take you to the venue, and weekend frequency is lower in the early morning and evening.',
     guidance: [
       { t: 'Book early', b: 'It is a Saturday in late August, peak travel season in Southern California. Hotels and rentals can fill, so look sooner rather than later.' },
-      { t: 'Plan your ride home', b: 'We cannot promise rideshare availability at the venue late at night. Decide in advance who is driving or how you will get back.' },
       { t: 'Share a car or a stay', b: 'Splitting a rental car or a house keeps costs down and takes care of the ride. Our guest group is the easiest place to find a travel buddy.' },
       { t: 'Use the live drive time', b: 'Every hotel card has Maps links that show the current drive time to the venue from that address.' },
     ],
+
+    rideH: 'Plan your ride back',
+    rideBody: 'Before the wedding, make sure you have a plan to get from Ethereal Gardens back to your hotel or wherever you’re staying. Rideshare availability may be limited later in the evening, so arranging transportation ahead of time is recommended.',
 
     rentalsH: 'Airbnb & Vrbo',
     rentalsNote: 'Searches for each area, set to the wedding weekend. Change the dates and group size on their sites.',

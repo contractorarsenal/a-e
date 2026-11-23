@@ -3,15 +3,19 @@ import { wedding, venue, contact } from '../content/site';
 import { useLang, dateShort } from '../i18n';
 const { lang, t, l } = useLang(Astro);
 ---
-<footer class="mt-16 border-t border-charcoal/25">
+<footer class="bg-ink text-ivory">
   <div class="wrap flex flex-col gap-5 py-10 md:flex-row md:items-center md:justify-between">
-    <p>Adrian &amp; Emma · {dateShort(wedding.dateISO, lang)}<br /><span class="text-taupe">{venue.name}, {wedding.cityLine}</span></p>
+    <p>Adrian &amp; Emma · {dateShort(wedding.dateISO, lang)}<br /><span class="text-ivory/80">{venue.name}, {wedding.cityLine}</span></p>
     <nav aria-label={t.nav.footer}>
       <ul class="flex flex-wrap gap-x-6">
-        <li><a href={l('/story')} class="tap link">{t.nav.story}</a></li>
-        <li><a href={l('/faq')} class="tap link min-w-11 justify-center">{t.nav.faq}</a></li>
+        <li><a href={l('/story')} class="tap link footer-link">{t.nav.story}</a></li>
+        <li><a href={l('/faq')} class="tap link footer-link min-w-11 justify-center">{t.nav.faq}</a></li>
       </ul>
     </nav>
   </div>
-  {contact.email && <p class="wrap pb-10 text-taupe">{t.footer.questions} <a class="link" href={`mailto:${contact.email}`}>{contact.email}</a></p>}
+  {contact.approved && contact.email && <p class="wrap pb-10 text-ivory/80">{t.footer.questions} <a class="link" href={`mailto:${contact.email}`}>{contact.email}</a></p>}
 </footer>
+<style>
+  .footer-link { text-decoration-color: var(--color-sand); }
+  .footer-link:hover { text-decoration-color: currentColor; }
+</style>

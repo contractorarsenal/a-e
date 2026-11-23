@@ -17,7 +17,8 @@ export function buildFaq(lang: Lang): FaqEntry[] {
       case 'airport': a = fmt(it.a, { crq: mi(g.CRQ.miles, lang), san: mi(g.SAN.miles, lang) }); break;
       case 'parking': a = venue.parkingNotes ? tx(venue.parkingNotes, lang) : null; break;
       case 'rsvp': a = rsvp.deadlineISO ? fmt(it.a, { date: dateShort(rsvp.deadlineISO, lang) }) : null; break;
-      case 'contact': a = contact.email ? fmt(it.a, { email: contact.email }) : null; break;
+      // Shown only after the couple approve being the public contact (contact.approved). Never publishes details they haven't supplied.
+      case 'contact': a = contact.approved ? (contact.email ? `${it.a} ${t.faq.emailLabel}: ${contact.email}` : it.a) : null; break;
       case 'arrive': case 'dress': case 'kids': case 'plusone': case 'registry': {
         const v = faqAnswers[it.id as keyof typeof faqAnswers];
         a = v ? tx(v, lang) : null; break;

@@ -180,3 +180,19 @@ Venue lat/long: UNVERIFIED (not in any source opened).
 - These are labeled approximate on the site. They are not Google/Apple figures; guests are pointed to the live Maps links.
 - Hotel amenities on the site are limited to what search results attributed to each official page; brand pages blocked automated fetches. Parking fees were deliberately not published.
 - No hotel photographs were collected (rights not established).
+
+
+## Price categories (added 2026-11-22)
+
+Method: each hotel's own booking page, opened in a real browser with check-in Fri Aug 27 and check-out Sun Aug 29, 2027, 1 room, 2 adults, English, USD, as seen on 2026-11-22. Entry-level room with a king bed, public (non-member) rate where one is shown, before taxes.
+
+| Hotel | Room type compared | Rate per night | Notes |
+|---|---|---|---|
+| SpringHill Suites San Diego Escondido/Downtown | Suite, 1 King, trundle sofa | $191 (Suite 2 Queens: $213) | Marriott "rates from" |
+| Residence Inn San Diego North/San Marcos | Studio, 1 King, sofa bed | $224 (1-bedroom suite: $258) | Marriott "rates from" |
+| Best Western Escondido Hotel | 1 King (2 Queens the same) | $259 public flexible rate; $227.92 member-only | Includes full breakfast; free cancellation to Aug 26 |
+| Hyatt Vacation Club at The Welk | 1-bedroom villa, king + sleeper sofa, kitchenette | $308 World of Hyatt member retail rate; $321 prepaid | Includes the $35/night resort fee, before taxes; cash-free property |
+
+Categories shown on the site (approximate, relative to these four hotels, and nothing is called "luxury"): under $200 = $ (SpringHill), $200–$270 = $$ (Residence Inn, Best Western), $270–$350 = $$$ (Hyatt Welk). Brand reputation was NOT used: the Best Western costs more than the SpringHill.
+
+Limits: one snapshot nine months before the stay; room types and rate conditions are not identical (suites vs. king room vs. villa; flexible vs. member vs. prepaid; the Hyatt figure includes its resort fee); rates and availability change daily. The site shows only the category (never a dollar figure) with the check date, and tells guests to confirm on the hotel's site. Re-check before inviting guests and update `priceTier` in `src/content/travel.ts`. Set it to `null` for a hotel to hide its indicator.

@@ -15,11 +15,11 @@ const link = `<a class="link" href="${l('/travel')}">${t.nav.travel.replace('&',
 ---
 <Base title={t.nav.wedding} description={fmt(t.meta.detailsDesc, { couple: couple.display, date: dateLong(wedding.dateISO, lang), venue: venue.name, city: wedding.cityLine })}>
   <PageHead title={t.nav.wedding} />
-  <div class="wrap pb-6">
+  <div class="wrap pb-0">
 
-    <dl class="mt-8 border-t border-charcoal/25">
+    <dl>
       <!-- WHEN -->
-      <div class="grid gap-3 border-b border-charcoal/25 py-8 md:grid-cols-[11rem_1fr] md:gap-10 md:py-10" id="when">
+      <div class="band band-cream grid gap-3 py-10 md:grid-cols-[11rem_1fr] md:gap-10 md:py-14" id="when">
         <dt class="h3 pt-1">{t.details.when}</dt>
         <dd>
           <p class="h2">{dateLong(wedding.dateISO, lang)}</p>
@@ -29,7 +29,7 @@ const link = `<a class="link" href="${l('/travel')}">${t.nav.travel.replace('&',
       </div>
 
       <!-- WHERE -->
-      <div class="grid gap-3 border-b border-charcoal/25 py-8 md:grid-cols-[11rem_1fr] md:gap-10 md:py-10" id="directions">
+      <div class="band band-linen grid gap-3 py-10 md:grid-cols-[11rem_1fr] md:gap-10 md:py-14" id="directions">
         <dt class="h3 pt-1">{t.details.where}</dt>
         <dd>
           <p class="h2">{venue.name}</p>
@@ -45,7 +45,7 @@ const link = `<a class="link" href="${l('/travel')}">${t.nav.travel.replace('&',
       </div>
 
       <!-- GETTING HERE -->
-      <div class="grid gap-3 border-b border-charcoal/25 py-8 md:grid-cols-[11rem_1fr] md:gap-10 md:py-10" id="getting-here">
+      <div class="band band-cream grid gap-3 py-10 md:grid-cols-[11rem_1fr] md:gap-10 md:py-14" id="getting-here">
         <dt class="h3 pt-1">{t.details.getting}</dt>
         <dd class="max-w-lg">
           <p set:html={fmt(t.details.gettingBody, { venue: venue.name, link })} />
@@ -53,6 +53,6 @@ const link = `<a class="link" href="${l('/travel')}">${t.nav.travel.replace('&',
       </div>
     </dl>
 
-    <p class="mt-8"><a class="btn btn-solid" href={l('/rsvp')}>{t.nav.rsvp}</a></p>
+    <p class="py-12 md:py-16"><a class="btn btn-solid" href={l('/rsvp')}>{t.nav.rsvp}</a></p>
   </div>
 </Base>

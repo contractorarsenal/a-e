@@ -15,22 +15,22 @@ const s = t.story;
   <PageHead title={t.nav.story} intro={s.lead} />
 
   <!-- 01 · Where it all began: older photographs, shown as they are -->
-  <section id="began" class="wrap mt-10 md:mt-16" aria-labelledby="ch1">
-    <div class="border-t border-charcoal/25 pt-6">
+  <section id="began" class="wrap band band-cream py-14 md:py-20" aria-labelledby="ch1">
+    <div>
       <h2 id="ch1" class="h2">{s.ch1}</h2>
       {storyData.earlyYears.approved && <p class="prose-soft mt-4">{tx(storyData.earlyYears.text, lang)}</p>}
       <p class="caption mt-2">{s.ch1Note}</p>
     </div>
-    <div class="mt-10 grid grid-cols-1 gap-y-12 md:mt-14 md:grid-cols-12 md:gap-x-0 md:gap-y-16">
-      <Plate slug="early-aprons" mat maxWidth="26rem" sizes="(min-width:768px) 26rem, 85vw" class="md:col-span-6 md:col-start-1" />
-      <Plate slug="early-cart" mat maxWidth="17rem" sizes="(min-width:768px) 17rem, 62vw" class="ml-auto md:col-span-4 md:col-start-9 md:mt-24" />
-      <Plate slug="early-couch" mat maxWidth="32rem" sizes="(min-width:768px) 32rem, 94vw" class="md:col-span-7 md:col-start-3" />
+    <div class="mt-10 grid grid-cols-1 gap-x-10 gap-y-12 md:mt-14 md:grid-cols-2 md:items-center md:gap-y-16">
+      <Plate slug="early-aprons" mat maxWidth="24rem" sizes="(min-width:768px) 24rem, 88vw" />
+      <Plate slug="early-cart" mat maxWidth="17.5rem" sizes="(min-width:768px) 17.5rem, 70vw" delay={140} />
+      <Plate slug="early-couch" mat maxWidth="30rem" sizes="(min-width:768px) 30rem, 94vw" class="md:col-span-2" />
     </div>
   </section>
 
   <!-- 02 · Through it all: the words, with two more photographs -->
-  <section id="through" class="wrap mt-20 md:mt-32" aria-labelledby="ch2">
-    <div class="border-t border-charcoal/25 pt-6">
+  <section id="through" class="wrap band band-ivory py-14 md:py-20" aria-labelledby="ch2">
+    <div>
       <div class="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-x-14">
         <div class="md:pt-6">
           <h2 id="ch2" class="h2">{s.heading}</h2>
@@ -44,24 +44,24 @@ const s = t.story;
           )}
         </div>
         <div class="grid grid-cols-1 gap-10 md:gap-14">
-          <Plate slug="early-luggage" mat maxWidth="27rem" sizes="(min-width:768px) 27rem, 90vw" />
-          <Plate slug="early-airport" mat maxWidth="20rem" sizes="(min-width:768px) 20rem, 72vw" class="ml-auto md:ml-12" />
+          <Plate slug="early-luggage" mat maxWidth="26rem" sizes="(min-width:768px) 26rem, 90vw" />
+          <Plate slug="early-airport" mat maxWidth="22rem" sizes="(min-width:768px) 22rem, 80vw" delay={140} />
         </div>
       </div>
     </div>
   </section>
 
   <!-- 03 · And then came forever: the proposal -->
-  <section id="forever" class="wrap mt-20 md:mt-32" aria-labelledby="ch3">
-    <div class="border-t border-charcoal/25 pt-6">
+  <section id="forever" class="wrap band band-sand py-14 md:py-20" aria-labelledby="ch3">
+    <div>
       <h2 id="ch3" class="h2">{s.ch3}</h2>
       <p class="caption mt-2">{s.ch3Note}</p>
     </div>
     <div class="mt-10 grid grid-cols-1 gap-x-8 gap-y-12 md:mt-14 md:grid-cols-2 md:gap-y-16">
-      <Plate slug="proposal-moment" maxWidth="30rem" sizes="(min-width:768px) 30rem, 94vw" class="md:ml-auto" />
-      <Plate slug="proposal-laughing" maxWidth="30rem" sizes="(min-width:768px) 30rem, 94vw" class="md:mt-24" />
-      <Plate slug="proposal-hands" maxWidth="30rem" sizes="(min-width:768px) 30rem, 94vw" class="md:ml-auto" />
-      <Plate slug="proposal-kiss" maxWidth="30rem" sizes="(min-width:768px) 30rem, 94vw" class="md:mt-24" />
+      <Plate slug="proposal-moment" maxWidth="28rem" sizes="(min-width:768px) 28rem, 94vw" />
+      <Plate slug="proposal-laughing" maxWidth="28rem" sizes="(min-width:768px) 28rem, 94vw" class="md:mt-24" delay={140} />
+      <Plate slug="proposal-hands" maxWidth="28rem" sizes="(min-width:768px) 28rem, 94vw" />
+      <Plate slug="proposal-kiss" maxWidth="28rem" sizes="(min-width:768px) 28rem, 94vw" class="md:mt-24" delay={140} />
     </div>
 
     <!-- The date -->
@@ -69,9 +69,7 @@ const s = t.story;
       <p class="h2">{dateShort(wedding.dateISO, lang)}</p>
       <p class="mt-6"><a class="link tap" href={l('/details')}>{s.weddingLink}</a></p>
     </div>
+    <p class="mt-12 text-center text-taupe">{s.tap}</p>
   </section>
-
-  <p class="wrap mt-10 text-center text-taupe">{s.tap}</p>
-  <div class="h-8" aria-hidden="true"></div>
   <Lightbox />
 </Base>

@@ -17,12 +17,13 @@ const cards = [
   { id: 'rsvp', title: t.nav.rsvp, body: rsvpOpen ? H.rsvpD : H.rsvpSoonD, action: rsvpOpen ? H.rsvpA : H.rsvpSoonA, href: l('/rsvp'), soon: !rsvpOpen },
 ];
 const hero = t.photos['proposal-kiss'];
-const early = ['early-aprons', 'early-luggage'] as const;
+// Two equal 4:5 frames; object-position keeps both faces inside the crop (aprons: faces sit high; luggage: couple is left of centre).
+const early = [{ slug: 'early-aprons', pos: '50% 28%' }, { slug: 'early-luggage', pos: '42% 40%' }] as const;
 const ratio = (s: keyof typeof manifest) => `${manifest[s].width} / ${manifest[s].height}`;
 ---
 <Base>
-  <!-- 1. The welcome -->
-  <section class="wrap pt-8 text-center md:pt-14" aria-labelledby="names">
+  <!-- 1. The welcome (warm ivory) -->
+  <section class="wrap band band-ivory pb-14 pt-8 text-center md:pb-20 md:pt-14" aria-labelledby="names">
     <p class="text-[1.25rem] text-taupe">{H.kicker}</p>
     <h1 id="names" class="display mt-2 text-[clamp(2.25rem,10vw,5.25rem)] leading-[1.1]">Adrian <span class="italic-display">&amp;</span> Emma</h1>
     <p class="mt-5 text-[1.5rem] font-bold md:text-[1.75rem]">{dateLong(wedding.dateISO, lang)}</p>
@@ -36,47 +37,47 @@ const ratio = (s: keyof typeof manifest) => `${manifest[s].width} / ${manifest[s
     </figure>
   </section>
 
-  <!-- 2. What guests need -->
-  <section class="wrap mt-14 md:mt-20" aria-labelledby="ways-h">
+  <!-- 2. What guests need (cream) -->
+  <section class="wrap band band-cream py-14 md:py-20" aria-labelledby="ways-h">
     <h2 id="ways-h" class="h2">{H.waysH}</h2>
     <ul class="mt-6 grid gap-4 lg:grid-cols-3 lg:gap-6">
-      {cards.map((c) => (
-        <li class="flex">
+      {cards.map((c, i) => (
+        <li class="reveal flex" style={`--d:${i * 90}ms`}>
           <a href={c.href} class="card flex w-full flex-col justify-between gap-5 border-[1.5px] border-charcoal bg-paper p-6 no-underline">
             <span>
               <span class="h3 block">{c.title}</span>
               <span class="mt-2 block text-[1.125rem]">{c.body}</span>
             </span>
-            <span class={`card-action inline-flex min-h-12 items-center gap-2 font-bold ${c.soon ? 'text-taupe' : ''}`}>{c.action}{!c.soon && <span aria-hidden="true">→</span>}</span>
+            <span class={`card-action inline-flex min-h-12 items-center gap-2 font-bold ${c.soon ? 'text-taupe' : ''}`}>{c.action}{!c.soon && <span aria-hidden="true" class="card-arrow">→</span>}</span>
           </a>
         </li>
       ))}
     </ul>
   </section>
 
-  <!-- 3. Our story -->
-  <section class="wrap mt-16 md:mt-24" aria-labelledby="story-h">
-    <div class="grid items-center gap-8 border-t border-charcoal/25 pt-10 md:grid-cols-[1fr_1.1fr] md:gap-14">
-      <div class="flex items-start gap-4">
-        {early.map((s) => (
-          <figure class="min-w-0 flex-1">
-            <div class="bg-paper p-1.5 shadow-[0_0_0_1px_rgba(34,29,25,.18)] md:p-2" style={`aspect-ratio:${ratio(s)}`}>
-              <Picture slug={s} alt={t.photos[s].alt} sizes="(min-width:768px) 220px, 42vw" position="50% 50%" />
+  <!-- 3. Our story (soft sand) -->
+  <section class="wrap band band-sand py-14 md:py-20" aria-labelledby="story-h">
+    <div class="grid items-center gap-8 md:grid-cols-[1fr_1.1fr] md:gap-14">
+      <div class="mx-auto grid w-full max-w-[28rem] grid-cols-2 gap-3 md:gap-5">
+        {early.map((e, i) => (
+          <figure class="reveal reveal-photo min-w-0" style={`--d:${i * 140}ms`}>
+            <div class="aspect-[4/5] overflow-hidden bg-paper p-1.5 shadow-[0_0_0_1px_rgba(34,29,25,.18)] md:p-2">
+              <div class="h-full w-full overflow-hidden"><Picture class="block h-full w-full" slug={e.slug} alt={t.photos[e.slug].alt} sizes="(min-width:768px) 200px, 42vw" position={e.pos} /></div>
             </div>
           </figure>
         ))}
       </div>
-      <div>
+      <div class="reveal">
         <h2 id="story-h" class="h2">{H.storyH}</h2>
         <p class="prose-soft mt-3">{H.storyBody}</p>
-        <p class="mt-5"><a href={l('/story')} class="btn">{H.storyLink} <span aria-hidden="true">→</span></a></p>
+        <p class="mt-5"><a href={l('/story')} class="btn btn-solid">{H.storyLink} <span aria-hidden="true">→</span></a></p>
       </div>
     </div>
   </section>
 
-  <!-- 4. Finding us -->
-  <section id="find" class="wrap mt-16 md:mt-24" aria-labelledby="find-h">
-    <div class="border-t border-charcoal/25 pt-10">
+  <!-- 4. Finding us (natural white) -->
+  <section id="find" class="wrap band band-linen py-14 md:py-20" aria-labelledby="find-h">
+    <div class="reveal">
       <h2 id="find-h" class="h2">{H.findH}</h2>
       <p class="mt-3 text-[1.25rem]"><strong class="font-bold">{venue.name}</strong><br />{addressLines[0]}<br />{addressLines[1]}</p>
       <p class="mt-5 flex flex-wrap items-center gap-x-8 gap-y-2">
@@ -90,6 +91,9 @@ const ratio = (s: keyof typeof manifest) => `${manifest[s].width} / ${manifest[s
 </Base>
 
 <style>
-  .card:hover { background: var(--color-champagne); }
+  .card { transition: background-color .25s var(--ease-soft), transform .25s var(--ease-soft); }
+  .card:hover { background: var(--color-champagne); transform: translateY(-2px); }
   .card:hover .card-action { text-decoration: underline; text-underline-offset: .25em; }
+  .card-arrow { display: inline-block; transition: transform .25s var(--ease-soft); }
+  .card:hover .card-arrow { transform: translateX(3px); }
 </style>

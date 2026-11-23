@@ -25,7 +25,7 @@ Everything guest-facing is edited in `src/content/site.ts` (facts) and `src/i18n
 | RSVP deadline | `rsvp.deadlineISO` |
 | Children policy | `faqAnswers.kids` |
 | Plus-one policy | `faqAnswers.plusone` (and `rsvp.maxAdditionalGuests`) |
-| Wedding contact email | `contact.email` (footer and RSVP show it once set) |
+| Public contact for guest questions | `contact.approved` (set `true` once Adrian and Emma agree to be the public contact; until then the FAQ says "to be confirmed") and, optionally, `contact.email`. Nothing is shown or made clickable before approval. |
 | Group chat invitation link | Cloudflare variable `PUBLIC_GUEST_GROUP_URL` |
 | Shuttle / transportation | `shuttle` |
 | Registry, wedding weekend events, nearby places, wedding party, photo album | `optional` (all off until you fill them in) |

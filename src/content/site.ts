@@ -91,6 +91,8 @@ export const rsvp = {
 export const contact = {
   /** Public contact for guest questions. null until the couple chooses one. */
   email: null as string | null,
+  /** Set true once Adrian and Emma approve being the public point of contact. Until then the FAQ answer reads "to be confirmed". */
+  approved: false,
 };
 
 /** Story content you can edit. Empty chapters = only the photographs and the main text are shown. */
