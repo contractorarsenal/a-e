@@ -31,14 +31,15 @@
 }
 
 @layer base {
-  html { scroll-behavior: smooth; scroll-padding-top: 6rem; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   body { background: var(--color-ivory); color: var(--color-charcoal); font-family: var(--font-sans); font-weight: 400; font-size: 1.0625rem; line-height: 1.65; overflow-x: clip; text-rendering: optimizeLegibility; }
   @media (min-width: 768px) { body { font-size: 1.125rem; } }
   ::selection { background: var(--color-champagne); }
   :focus-visible { outline: 3px solid var(--color-clay); outline-offset: 3px; border-radius: 2px; }
   img { max-width: 100%; }
   h1, h2, h3, h4 { text-wrap: balance; }
-  p, li, dd { overflow-wrap: break-word; }
+  h1, h2, h3, h4, p, li, dd, dt, label, legend, summary { overflow-wrap: anywhere; }
+  html { scroll-padding-top: calc(var(--hh, 4rem) + 1rem); }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }

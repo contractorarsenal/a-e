@@ -93,9 +93,20 @@ export const contact = {
   email: null as string | null,
 };
 
-/** Story chapters. Empty = only the photographs are shown. */
+/** Story content you can edit. Empty chapters = only the photographs and the main text are shown. */
 export const story = {
   chapters: [] as { title: L10n; body: L10n }[],
+  /**
+   * Early-years details, supplied by the couple in chat but AWAITING THEIR FINAL APPROVAL.
+   * Hidden on the live site until `approved` is true. Edit the wording freely; keep both languages in step.
+   */
+  earlyYears: {
+    approved: false,
+    text: {
+      en: 'We met at Snohomish High School, stayed together through college and university, and moved to LA together.',
+      es: 'Nos conocimos en la preparatoria Snohomish High School, seguimos juntos durante la universidad y nos mudamos juntos a Los Ángeles.',
+    } as L10n,
+  },
 };
 
 /**

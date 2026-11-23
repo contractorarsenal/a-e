@@ -1,31 +1,36 @@
-# Wedding content
+# Wedding content: what is confirmed (for Adrian & Emma to review)
 
-All guest-facing content is edited in `src/content/site.ts` and `src/content/travel.ts`. `null` / empty = "Details coming soon" (or hidden).
+Everything guest-facing is edited in `src/content/site.ts` (facts) and `src/i18n/en.ts` + `src/i18n/es-MX.ts` (wording). Anything unknown stays `null` and the site shows "To be confirmed" / "Details coming soon". Nothing below has been invented.
 
-## Confirmed (in the site now)
-- Couple: **Adrian & Emma** (monogram **A + E**)
-- Date: Saturday, August 28, 2027
-- Venue: Ethereal Gardens, 8561 W Lilac Rd, Escondido, CA 92026
-- Venue website: https://trademarkvenues.com/ethereal-gardens/
-- Apple Maps place: https://maps.apple/p/pVYvAG1Jc2gwNb (venue coordinates 33.2983987, −117.1461074 come from this link)
-- Tagline: "Together is our favorite place to be."
-- Photos: 4 proposal photographs (alt text and captions in `src/lib/photos.ts`)
+## ✅ Confirmed (live now)
+- [x] Adrian & Emma, together since 2013
+- [x] Saturday, August 28, 2027
+- [x] Ethereal Gardens, 8561 W Lilac Rd, Escondido, CA 92026 (Apple Maps link supplied by the couple)
+- [x] The Our Story text ("Through it all, together.") and the engagement photographs, as supplied by the couple
 
-## Still needed from the couple
-| Item | Where | Currently shows |
-|---|---|---|
-| Ceremony start time / reception timings | `schedule`, `wedding.calendarStart/End` | "Details coming soon"; calendar file is an all-day *date reminder* |
-| Arrival time guidance | FAQ | "Details coming soon" |
-| Dress code | FAQ | "Details coming soon" |
-| Parking / valet for the wedding (confirm with the venue; the venue page only says parking is included in packages) | `venue.parkingNotes` | "Parking details coming soon" |
-| Venue arrival instructions | `venue.arrivalNotes` | "Arrival instructions coming soon" |
-| Children policy | FAQ | "Details coming soon" |
-| RSVP deadline | `rsvp.deadline`, `rsvp.deadlineISO` | none |
-| Registry | `optional.registry` | hidden |
-| Contact email for guest questions | `contact.email` | "coming soon" |
-| Our real story (chapters) | `story.chapters` | photos + a short factual caption only |
-| Group chat invite link | `PUBLIC_GUEST_GROUP_URL` | "Group link coming soon" |
-| Shuttle (only if arranged) | `shuttle` | "No shuttle has been arranged yet" |
-| Weekend events, nearby places, wedding party, photo album | `optional.*` | hidden |
-| Spanish content | `optional.spanish` (not built yet) | disabled |
-| Hotel photos with usage rights | `public/hotels/`, `photo` in `travel.ts` | neutral placeholder |
+## 🟡 Provided, awaiting the couple's final approval
+- [ ] **Early-years line** (met at Snohomish High School, stayed together through college and university, moved to LA together). **Hidden on the live site** until `story.earlyYears.approved` is set to `true` in `src/content/site.ts`.
+- [ ] Spanish wording throughout: written by Claude in natural Mexican Spanish and **not yet reviewed by a native speaker**.
+- [ ] Photo captions/alt text (neutral and undated by design). Say if you want names or dates added.
+- [ ] Hotel list, descriptions and drive times: my research; approximate; amenities "as reported". Hotels are not partners and no rates/availability/room blocks are claimed. Re-check each hotel's own page before launch.
+
+## ⬜ Unconfirmed (shown as "To be confirmed" / "Details coming soon", or hidden)
+| Item | Where to fill in |
+|---|---|
+| Ceremony start time | `schedule`, `wedding.calendarStart/End` (calendar file is an all-day reminder until set) |
+| Reception schedule | `schedule` |
+| Guest arrival time | `faqAnswers.arrive` |
+| Dress code | `faqAnswers.dress` |
+| Parking arrangements | `venue.parkingNotes` |
+| RSVP deadline | `rsvp.deadlineISO` |
+| Children policy | `faqAnswers.kids` |
+| Plus-one policy | `faqAnswers.plusone` (and `rsvp.maxAdditionalGuests`) |
+| Wedding contact email | `contact.email` (footer and RSVP show it once set) |
+| Group chat invitation link | Cloudflare variable `PUBLIC_GUEST_GROUP_URL` |
+| Shuttle / transportation | `shuttle` |
+| Registry, wedding weekend events, nearby places, wedding party, photo album | `optional` (all off until you fill them in) |
+| Arrival notes at the venue | `venue.arrivalNotes` |
+
+## Needed to go live
+- [ ] RSVP form service connected and tested: see `RSVP_SETUP.md`
+- [ ] Decide search visibility: the site is `noindex` (not shown in search engines) until `SITE_VISIBILITY=public`

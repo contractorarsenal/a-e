@@ -32,7 +32,7 @@ export const en = {
     faq: 'Questions',
     rsvp: 'RSVP',
     rsvpVerb: 'RSVP',
-    home: 'Adrian & Emma, home',
+    home: 'A + E, Adrian & Emma, home',
     primary: 'Primary',
     mobile: 'Mobile',
     footer: 'Footer',
@@ -114,7 +114,6 @@ export const en = {
   story: {
     lead: 'Together since 2013.',
     ch1: 'Where it all began',
-    ch1Intro: 'We met at Snohomish High School, stayed together through college and university, and moved to LA together.',
     ch1Note: 'A few older photographs, kept just as they are.',
     heading: 'Through it all, together.',
     body: [

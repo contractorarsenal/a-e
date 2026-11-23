@@ -20,10 +20,10 @@ const s = t.story;
   <section id="began" class="wrap mt-12 md:mt-20" aria-labelledby="ch1">
     <div class="border-t border-charcoal/25 pt-6">
       <h2 id="ch1" class="display text-[clamp(1.9rem,4.5vw,3rem)]"><span class="numeral mr-3 text-clay" aria-hidden="true">01</span>{s.ch1}</h2>
-      <p class="prose-soft mt-4">{s.ch1Intro}</p>
+      {storyData.earlyYears.approved && <p class="prose-soft mt-4">{tx(storyData.earlyYears.text, lang)}</p>}
       <p class="caption mt-2">{s.ch1Note}</p>
     </div>
-    <div class="mt-10 grid gap-x-10 gap-y-12 md:mt-14 md:grid-cols-12 md:gap-y-16">
+    <div class="mt-10 grid grid-cols-1 gap-y-12 md:mt-14 md:grid-cols-12 md:gap-x-0 md:gap-y-16">
       <Plate slug="early-aprons" mat maxWidth="26rem" sizes="(min-width:768px) 26rem, 85vw" class="md:col-span-6 md:col-start-1" />
       <Plate slug="early-cart" mat maxWidth="17rem" sizes="(min-width:768px) 17rem, 62vw" class="ml-auto md:col-span-4 md:col-start-9 md:mt-24" />
       <Plate slug="early-couch" mat maxWidth="32rem" sizes="(min-width:768px) 32rem, 94vw" class="md:col-span-7 md:col-start-3" />
@@ -33,8 +33,8 @@ const s = t.story;
   <!-- 02 · Through it all: the words, with two more photographs -->
   <section id="through" class="wrap mt-20 md:mt-32" aria-labelledby="ch2">
     <div class="border-t border-charcoal/25 pt-6">
-      <div class="grid gap-10 md:grid-cols-12 md:gap-x-14">
-        <div class="md:col-span-6 md:pt-6">
+      <div class="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-x-14">
+        <div class="md:pt-6">
           <h2 id="ch2" class="display text-[clamp(1.9rem,4.5vw,3rem)]"><span class="numeral mr-3 text-clay" aria-hidden="true">02</span>{s.heading}</h2>
           <div class="mt-6 space-y-5">
             {s.body.map((p) => <p class="text-[1.1875rem] leading-[1.75] md:text-[1.25rem]">{p}</p>)}
@@ -45,7 +45,7 @@ const s = t.story;
             </div>
           )}
         </div>
-        <div class="grid gap-10 md:col-span-6 md:gap-14">
+        <div class="grid grid-cols-1 gap-10 md:gap-14">
           <Plate slug="early-luggage" mat maxWidth="27rem" sizes="(min-width:768px) 27rem, 90vw" />
           <Plate slug="early-airport" mat maxWidth="20rem" sizes="(min-width:768px) 20rem, 72vw" class="ml-auto md:ml-12" />
         </div>
@@ -59,7 +59,7 @@ const s = t.story;
       <h2 id="ch3" class="display text-[clamp(1.9rem,4.5vw,3rem)]"><span class="numeral mr-3 text-clay" aria-hidden="true">03</span>{s.ch3}</h2>
       <p class="caption mt-2">{s.ch3Note}</p>
     </div>
-    <div class="mt-10 grid gap-x-8 gap-y-12 md:mt-14 md:grid-cols-2 md:gap-y-16">
+    <div class="mt-10 grid grid-cols-1 gap-x-8 gap-y-12 md:mt-14 md:grid-cols-2 md:gap-y-16">
       <Plate slug="proposal-moment" maxWidth="30rem" sizes="(min-width:768px) 30rem, 94vw" class="md:ml-auto" />
       <Plate slug="proposal-laughing" maxWidth="30rem" sizes="(min-width:768px) 30rem, 94vw" class="md:mt-24" />
       <Plate slug="proposal-hands" maxWidth="30rem" sizes="(min-width:768px) 30rem, 94vw" class="md:ml-auto" />

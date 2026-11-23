@@ -6,7 +6,7 @@ const { class: cls = '' } = Astro.props as { class?: string };
 <div role="group" aria-label={t.nav.language} class={`flex items-center ${cls}`} data-lang-switch-group>
   {LANGS.map((l) => (
     <a href={swapLangPath(Astro.url, l)} lang={htmlLang[l]} hreflang={htmlLang[l]} data-lang-switch={l}
-      aria-label={dictionaries[l].localeLabel} aria-current={l === lang ? 'true' : undefined}
+      aria-label={`${l.toUpperCase()}: ${dictionaries[l].localeLabel}`} aria-current={l === lang ? 'true' : undefined}
       class="lang-link inline-flex min-h-11 min-w-11 items-center justify-center px-1.5 text-[1.0625rem] font-semibold no-underline">{l.toUpperCase()}</a>
   ))}
 </div>

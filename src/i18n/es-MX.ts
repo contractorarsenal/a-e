@@ -32,7 +32,7 @@ export const esMX: Dict = {
     faq: 'Preguntas',
     rsvp: 'Confirmar asistencia',
     rsvpVerb: 'confirmes que asistirás',
-    home: 'Adrian & Emma, inicio',
+    home: 'A + E, Adrian & Emma, inicio',
     primary: 'Principal',
     mobile: 'Móvil',
     footer: 'Pie de página',
@@ -114,7 +114,6 @@ export const esMX: Dict = {
   story: {
     lead: 'Juntos desde 2013.',
     ch1: 'Donde comenzó todo',
-    ch1Intro: 'Nos conocimos en la preparatoria Snohomish High School, seguimos juntos durante la universidad y nos mudamos juntos a Los Ángeles.',
     ch1Note: 'Algunas fotos de hace tiempo, tal como son.',
     heading: 'Juntos, en las buenas y en las malas.',
     body: [
@@ -302,8 +301,8 @@ export const esMX: Dict = {
     sprinter: 'El tren ligero SPRINTER de NCTD va entre Oceanside y Escondido (con paradas en San Marcos y Vista) y conecta con el COASTER y el Amtrak Pacific Surfliner en Oceanside. Es una opción razonable para llegar a Escondido sin auto, pero no te lleva hasta el lugar de la boda, y los fines de semana pasa con menos frecuencia temprano por la mañana y por la noche.',
     guidance: [
       { t: 'Reserva con tiempo', b: 'Es un sábado de finales de agosto, temporada alta de viajes en el sur de California. Los hoteles y las rentas se pueden llenar, así que conviene buscar cuanto antes.' },
-      { t: 'Planea tu regreso', b: 'No podemos asegurar que haya viajes por app desde el lugar tarde por la noche. Decidan con anticipación quién maneja o cómo regresarán.' },
-      { t: 'Compartan auto o hospedaje', b: 'Dividir la renta de un auto o de una casa ahorra dinero y resuelve el traslado. Nuestro grupo de invitados es el lugar más fácil para encontrar con quién viajar.' },
+      { t: 'Planea tu regreso', b: 'No podemos asegurar que haya viajes por app desde el lugar tarde por la noche. Decide con anticipación quién maneja o cómo regresarás.' },
+      { t: 'Comparte auto o hospedaje', b: 'Dividir la renta de un auto o de una casa ahorra dinero y resuelve el traslado. Nuestro grupo de invitados es el lugar más fácil para encontrar con quién viajar.' },
       { t: 'Consulta el tiempo en vivo', b: 'Cada hotel tiene enlaces a mapas que muestran el tiempo actual en auto al lugar de la boda desde esa dirección.' },
     ],
 
@@ -316,9 +315,9 @@ export const esMX: Dict = {
       vista: 'Un poco más al oeste, hacia la costa.',
     },
 
-    shuttleH: 'Transporte del evento',
-    shuttleTbc: 'Aquí publicaremos la información del transporte, si lo hay',
-    togetherH: 'Viajen juntos',
+    shuttleH: 'Shuttle',
+    shuttleTbc: 'Aquí publicaremos la información sobre el shuttle, si lo hay',
+    togetherH: 'Viaja con otros invitados',
     togetherBody: '¿Viajas para celebrar con nosotros? Ponte en contacto con otros invitados para coordinar hospedaje, traslados y planes.',
     togetherNote: 'Es opcional. No agregamos a nadie automáticamente y en este sitio no se muestran datos de contacto de nadie.',
     groupJoin: 'Unirme al grupo de invitados',
@@ -352,7 +351,7 @@ export const esMX: Dict = {
       amenities: ['Desayuno incluido', 'Alberca exterior climatizada', 'Wi-Fi gratuito', 'Microondas y refrigerador en las habitaciones'],
       roomTypes: 'Habitaciones estándar, suites de dos habitaciones y suites familiares',
       kitchen: 'Microondas y refrigerador en las habitaciones (no se informa de cocina completa)',
-      family: 'Bueno para familias: suites familiares y alberca',
+      family: 'Buena opción para familias: suites familiares y alberca',
       parking: 'Confírmalo con el hotel al reservar',
     },
     springhill: {

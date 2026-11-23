@@ -109,7 +109,7 @@ export default function HotelExplorer({ data, trip, update, goPlan }: Props) {
         </ol>
 
         {/* MAP */}
-        <div className={`${view === 'map' ? 'block' : 'hidden'} lg:sticky lg:top-24 lg:order-2 lg:block`}>
+        <div className={`${view === 'map' ? 'block' : 'hidden'} lg:sticky lg:top-[calc(var(--hh,4rem)+1rem)] lg:order-2 lg:block`}>
           <div className="h-[60svh] min-h-[22rem] border border-charcoal/20 lg:h-[34rem]">
             <MapView data={data} selectedId={trip.hotelId} airport={trip.airport} showAirportRoute={airRoute} onSelect={select} />
           </div>

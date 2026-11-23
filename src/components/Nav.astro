@@ -10,14 +10,14 @@ const rest = Astro.url.pathname.slice(baseP.length).split('/').slice(2).join('/'
 const path = rest ? '/' + rest : '/';
 const here = ({ '/details': t.nav.wedding, '/travel': t.nav.travel, '/rsvp': t.nav.rsvp, '/story': t.nav.story, '/faq': t.nav.faq } as Record<string, string>)[path];
 ---
-<header id="site-header" class="fixed inset-x-0 top-0 z-40 border-b border-charcoal/15 bg-ivory">
-  <div class="wrap flex h-16 items-center justify-between gap-3">
+<header id="site-header" class="sticky top-0 z-40 border-b border-charcoal/15 bg-ivory">
+  <div class="wrap flex min-h-16 flex-wrap items-center justify-between gap-x-3 gap-y-1 py-1">
     <div class="flex min-w-0 items-baseline gap-3">
       <a href={l('/')} class="tap shrink-0 text-[1.6rem] no-underline" aria-label={t.nav.home} aria-current={path === '/' ? 'page' : undefined}><Monogram /></a>
       {here && <span class="hidden truncate text-taupe xl:inline"><span aria-hidden="true" class="mr-2">/</span>{here}</span>}
     </div>
 
-    <div class="flex items-center gap-1 sm:gap-3">
+    <div class="flex flex-wrap items-center justify-end gap-1 sm:gap-3">
       <nav aria-label={t.nav.primary} class="hidden items-center gap-7 lg:flex">
         {primaryNav.map((n) => (
           <a href={l(n.href)} aria-current={path === n.href ? 'page' : undefined} class="nav-link tap text-[1.0625rem] font-semibold">{t.nav[n.key]}</a>
@@ -25,7 +25,7 @@ const here = ({ '/details': t.nav.wedding, '/travel': t.nav.travel, '/rsvp': t.n
         <a href={l('/rsvp')} aria-current={path === '/rsvp' ? 'page' : undefined} class="btn btn-solid !min-h-11 !px-5">{t.nav.rsvp}</a>
       </nav>
       <LangSwitch class="lg:ml-2" />
-      <button id="menu-btn" type="button" class="tap -mr-1 min-w-11 justify-center px-2 text-[1.0625rem] font-semibold lg:hidden" aria-expanded="false" aria-controls="mobile-menu"
+      <button id="menu-btn" type="button" class="tap min-w-11 justify-center px-2 text-[1.0625rem] font-semibold lg:hidden" aria-expanded="false" aria-controls="mobile-menu"
         data-open={t.nav.menu} data-close={t.nav.close}>
         <span data-menu-label>{t.nav.menu}</span>
       </button>
@@ -33,7 +33,7 @@ const here = ({ '/details': t.nav.wedding, '/travel': t.nav.travel, '/rsvp': t.n
   </div>
 </header>
 
-<div id="mobile-menu" hidden class="fixed inset-0 z-30 flex flex-col overflow-y-auto bg-ivory pt-16 lg:hidden" role="dialog" aria-modal="true" aria-label={t.nav.menuLabel}>
+<div id="mobile-menu" hidden class="fixed inset-x-0 bottom-0 top-16 z-30 flex flex-col overflow-y-auto bg-ivory lg:hidden" role="dialog" aria-modal="true" aria-label={t.nav.menuLabel}>
   <nav aria-label={t.nav.mobile} class="wrap flex flex-1 flex-col pb-8 pt-4">
     <ul class="border-t border-charcoal/20">
       {allPages.map((n) => (
@@ -60,6 +60,11 @@ const here = ({ '/details': t.nav.wedding, '/travel': t.nav.travel, '/rsvp': t.n
   const btn = document.getElementById('menu-btn')!;
   const label = btn.querySelector<HTMLElement>('[data-menu-label]')!;
   const menu = document.getElementById('mobile-menu')!;
+  const header = document.getElementById('site-header')!;
+  // The header grows with text size, so everything that sits below it follows its real height.
+  const syncHeight = () => { const h = header.offsetHeight; document.documentElement.style.setProperty('--hh', h + 'px'); menu.style.top = h + 'px'; };
+  syncHeight();
+  new ResizeObserver(syncHeight).observe(header);
   const setOpen = (open: boolean) => {
     menu.hidden = !open;
     btn.setAttribute('aria-expanded', String(open));
