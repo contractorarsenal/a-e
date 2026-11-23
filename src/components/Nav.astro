@@ -1,68 +1,63 @@
 ---
-import { nav } from '../content/site';
+import { nav, allPages, pageNames } from '../content/site';
 import { u } from '../lib/url';
 import Monogram from './Monogram.astro';
-import Picture from './Picture.astro';
 const baseP = import.meta.env.BASE_URL.replace(/\/$/, '');
 const path = Astro.url.pathname.slice(baseP.length).replace(/\/$/, '') || '/';
+const here = pageNames[path];
 ---
-<header id="site-header" class="fixed inset-x-0 top-0 z-40">
-  <div class="wrap flex h-[4.5rem] items-center justify-between">
-    <a href={u('/')} class="text-[1.75rem] no-underline" aria-label="Adrian & Emma — home"><Monogram /></a>
-    <nav aria-label="Primary" class="hidden items-center gap-9 md:flex">
+<header id="site-header" class="fixed inset-x-0 top-0 z-40 border-b border-charcoal/10 bg-ivory/95 backdrop-blur">
+  <div class="wrap flex h-16 items-center justify-between gap-4">
+    <div class="flex min-w-0 items-baseline gap-3">
+      <a href={u('/')} class="shrink-0 text-[1.6rem] no-underline" aria-label="Adrian & Emma, home" aria-current={path === '/' ? 'page' : undefined}><Monogram /></a>
+      {here && <span class="truncate text-sm text-taupe"><span aria-hidden="true" class="mr-2 text-sand">/</span>{here}</span>}
+    </div>
+
+    <nav aria-label="Primary" class="hidden items-center gap-8 md:flex">
       {nav.map((n) => (
-        <a href={u(n.href)} aria-current={path === n.href ? 'page' : undefined} class="nav-link inline-flex min-h-11 items-center text-[.72rem] font-medium uppercase tracking-[.26em]">{n.label}</a>
+        <a href={u(n.href)} aria-current={path === n.href ? 'page' : undefined} class="nav-link tap text-[.8rem] font-medium uppercase tracking-[.16em]">{n.label}</a>
       ))}
-      <a href={u('/rsvp')} class="nav-btn inline-flex min-h-10 items-center border px-5 text-[.7rem] font-medium uppercase tracking-[.24em]">RSVP</a>
+      <a href={u('/rsvp')} aria-current={path === '/rsvp' ? 'page' : undefined} class="btn btn-solid !min-h-10 !px-5 !text-[.74rem]">RSVP</a>
     </nav>
-    <button id="menu-btn" type="button" class="-mr-2 grid h-12 w-12 place-items-center md:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
-      <span class="relative block h-3 w-7" aria-hidden="true">
-        <span class="bar absolute left-0 top-0 h-px w-full bg-current transition-transform duration-300"></span>
-        <span class="bar absolute bottom-0 left-0 h-px w-full bg-current transition-transform duration-300"></span>
-      </span>
+
+    <button id="menu-btn" type="button" class="tap -mr-2 px-2 text-[.8rem] font-medium uppercase tracking-[.16em] md:hidden" aria-expanded="false" aria-controls="mobile-menu">
+      <span data-menu-label>Menu</span>
     </button>
   </div>
 </header>
 
-<div id="mobile-menu" hidden class="on-ink fixed inset-0 z-30 flex flex-col overflow-y-auto pt-[4.5rem] md:hidden" role="dialog" aria-modal="true" aria-label="Menu">
-  <nav aria-label="Mobile" class="relative flex flex-1 flex-col justify-center gap-0 px-7 pb-14">
-    <div class="pointer-events-none absolute bottom-10 right-6 w-[34%] opacity-90" aria-hidden="true">
-      <div class="arch aspect-[3/4]"><Picture slug="proposal-kiss" alt="" sizes="140px" position="55% 40%" /></div>
+<div id="mobile-menu" hidden class="fixed inset-0 z-30 flex flex-col overflow-y-auto bg-ivory pt-16 md:hidden" role="dialog" aria-modal="true" aria-label="Site menu">
+  <nav aria-label="Mobile" class="wrap flex flex-1 flex-col pb-8 pt-6">
+    <ul class="border-t border-charcoal/15">
+      {allPages.map((n) => (
+        <li class="border-b border-charcoal/15">
+          <a href={u(n.href)} aria-current={path === n.href ? 'page' : undefined} class="display flex min-h-16 items-center justify-between py-2 text-[1.9rem] no-underline aria-[current=page]:italic">
+            {n.label}{path === n.href && <span class="text-sm not-italic text-clay" aria-hidden="true">you are here</span>}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-auto pt-10">
+      <a href={u('/rsvp')} aria-current={path === '/rsvp' ? 'page' : undefined} class="btn btn-solid w-full">RSVP</a>
+      <p class="mt-6 text-center text-sm text-taupe">Saturday, August 28, 2027 · Escondido, California</p>
     </div>
-    {[...nav, { href: '/rsvp', label: 'RSVP' }].map((n, i) => (
-      <a href={u(n.href)} style={`--d:${i * 70}ms`} aria-current={path === n.href ? 'page' : undefined} class="menu-link display relative border-b border-ivory/15 py-[.9rem] text-[2.6rem] text-ivory no-underline aria-[current=page]:italic">{n.label}</a>
-    ))}
-    <p class="eyebrow relative mt-10 max-w-[58%] leading-relaxed">Saturday · August 28 · 2027<br />Escondido, California</p>
   </nav>
 </div>
 
 <style>
-  #site-header { color: var(--color-charcoal); background: color-mix(in srgb, var(--color-ivory) 92%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid transparent; transition: background-color .5s var(--ease-soft), color .5s var(--ease-soft), border-color .5s; }
-  #site-header.scrolled { border-bottom-color: color-mix(in srgb, var(--color-charcoal) 12%, transparent); }
-  #site-header.on-dark:not(.scrolled) { color: var(--color-ivory); background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
-  body:has(#mobile-menu:not([hidden])) #site-header { color: var(--color-ivory); background: transparent; backdrop-filter: none; border-color: transparent; }
-  .nav-link { opacity: .78; transition: opacity .3s; }
-  .nav-link:hover, .nav-link[aria-current='page'] { opacity: 1; }
-  .nav-link[aria-current='page'] { text-decoration: underline; text-decoration-color: var(--color-sand); text-underline-offset: .6em; text-decoration-thickness: 1px; }
-  .nav-btn { border-color: currentColor; transition: background-color .35s, color .35s; }
-  .nav-btn:hover { background: var(--color-ivory); color: var(--color-ink); border-color: var(--color-ivory); }
-  #site-header:not(.on-dark) .nav-btn:hover, #site-header.scrolled .nav-btn:hover { background: var(--color-charcoal); color: var(--color-ivory); border-color: var(--color-charcoal); }
-  #mobile-menu:not([hidden]) .menu-link { animation: rise .8s var(--ease-soft) both; animation-delay: var(--d); }
-  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-  #menu-btn[aria-expanded='true'] .bar:first-child { transform: translateY(.34rem) rotate(45deg); }
-  #menu-btn[aria-expanded='true'] .bar:last-child { transform: translateY(-.34rem) rotate(-45deg); }
+  .nav-link { color: color-mix(in srgb, var(--color-charcoal) 75%, transparent); transition: color .2s; }
+  .nav-link:hover, .nav-link[aria-current='page'] { color: var(--color-charcoal); }
+  .nav-link[aria-current='page'] { text-decoration: underline; text-decoration-color: var(--color-clay); text-underline-offset: .55em; text-decoration-thickness: 1px; }
 </style>
 
 <script>
   const btn = document.getElementById('menu-btn')!;
+  const label = btn.querySelector<HTMLElement>('[data-menu-label]')!;
   const menu = document.getElementById('mobile-menu')!;
-  const header = document.getElementById('site-header')!;
-  const dark = document.body.hasAttribute('data-dark-hero');
-  if (dark) header.classList.add('on-dark');
   const setOpen = (open: boolean) => {
     menu.hidden = !open;
     btn.setAttribute('aria-expanded', String(open));
-    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    label.textContent = open ? 'Close' : 'Menu';
     document.documentElement.style.overflow = open ? 'hidden' : '';
     if (open) (menu.querySelector('a') as HTMLElement)?.focus();
   };
@@ -78,6 +73,4 @@ const path = Astro.url.pathname.slice(baseP.length).replace(/\/$/, '') || '/';
     }
   });
   matchMedia('(min-width: 768px)').addEventListener('change', (m) => m.matches && setOpen(false));
-  const onScroll = () => header.classList.toggle('scrolled', scrollY > (dark ? innerHeight * 0.6 : 8));
-  addEventListener('scroll', onScroll, { passive: true }); onScroll();
 </script>

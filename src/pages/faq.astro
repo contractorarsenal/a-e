@@ -3,32 +3,23 @@ import Base from '../layouts/Base.astro';
 import { faq } from '../content/site';
 import { u } from '../lib/url';
 ---
-<Base title="FAQ" description="Answers to common questions about the wedding.">
-  <section class="section">
-    <div class="wrap grid gap-12 lg:grid-cols-12">
-      <header class="lg:col-span-4">
-        <div class="lg:sticky lg:top-32">
-          <p class="eyebrow hero-in" style="--i:0">Questions</p>
-          <h1 class="display hero-in mt-4 text-[clamp(3rem,9vw,6rem)] leading-[.95]" style="--i:1">Good to <span class="italic-display">know</span></h1>
-          <p class="hero-in mt-6 max-w-xs text-taupe" style="--i:2">Anything still being decided says so. We’ll fill it in as soon as it’s confirmed.</p>
-        </div>
-      </header>
-      <div class="reveal lg:col-span-7 lg:col-start-6">
-        <div class="divide-y divide-charcoal/15 border-y border-charcoal/15">
-          {faq.map((f) => (
-            <details class="group">
-              <summary class="flex min-h-[3.75rem] cursor-pointer list-none items-center justify-between gap-6 py-4 marker:hidden [&::-webkit-details-marker]:hidden">
-                <span class="display text-[1.55rem] leading-snug md:text-[1.8rem]">{f.q}</span>
-                <span aria-hidden="true" class="text-2xl text-clay transition-transform duration-300 group-open:rotate-45">+</span>
-              </summary>
-              <div class="pb-8 pr-10">
-                {f.a ? <p class="prose-soft">{f.a}</p> : <p class="italic text-taupe">Details coming soon.</p>}
-                {f.link && f.a && <p class="mt-3"><a class="link tap text-sm" href={u(f.link.href)}>{f.link.label} →</a></p>}
-              </div>
-            </details>
-          ))}
-        </div>
-      </div>
+<Base title="Questions" description="Answers to common questions about the wedding.">
+  <div class="wrap pb-6 pt-10 md:pt-16">
+    <h1 class="display text-[clamp(2.6rem,8vw,5rem)]">Questions</h1>
+    <p class="mt-4 max-w-xl text-taupe">Anything that is still being decided says so, and we’ll fill it in once it’s confirmed.</p>
+    <div class="mt-10 max-w-3xl divide-y divide-charcoal/15 border-y border-charcoal/15">
+      {faq.map((f) => (
+        <details class="disclose">
+          <summary class="flex min-h-[3.75rem] items-center justify-between gap-6 py-3">
+            <span class="display text-[1.3rem] leading-snug md:text-[1.5rem]">{f.q}</span>
+            <span class="plus text-2xl text-clay" aria-hidden="true">+</span>
+          </summary>
+          <div class="pb-6 pr-8">
+            {f.a ? <p class="prose-soft">{f.a}</p> : <p class="italic text-taupe">To be confirmed.</p>}
+            {f.link && f.a && <p class="mt-2"><a class="link tap text-sm" href={u(f.link.href)}>{f.link.label} →</a></p>}
+          </div>
+        </details>
+      ))}
     </div>
-  </section>
+  </div>
 </Base>

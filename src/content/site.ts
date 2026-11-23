@@ -125,25 +125,21 @@ export const faq: { q: string; a: string | null; link?: { href: string; label: s
   { q: 'What should we wear?', a: null },
   {
     q: 'Where should we stay?',
-    a: 'Escondido and San Marcos are the closest places to stay. We have collected hotels and short-term rental searches for you.',
+    a: 'We have collected hotels in Escondido and San Marcos, with approximate drive times to the venue, plus Airbnb and Vrbo searches.',
     link: { href: '/travel#stay', label: 'Where to stay' },
   },
   {
     q: 'What is the closest airport?',
-    a: 'San Diego International Airport (SAN) is the main airport for most guests. See the travel page for alternatives and how to get to Escondido.',
+    a: 'McClellan-Palomar Airport (CRQ) in Carlsbad is the closest, at roughly 21 road miles from the venue, but commercial service there is limited and may change. San Diego International Airport (SAN) has far more flights and is roughly 44 road miles away. Distances are approximate.',
     link: { href: '/travel#airports', label: 'Airports' },
   },
   {
     q: 'Should I rent a car?',
-    a: 'Most guests will find a rental car the simplest way to get to and from Escondido. We cannot promise rideshare availability from the venue late in the evening, so having your own car (or sharing one) is the most dependable plan.',
+    a: 'A rental car is usually the most flexible way to get around. We cannot promise rideshare availability from the venue late in the evening, so please plan how you will get back to your hotel.',
     link: { href: '/travel#cars', label: 'Rental cars & rides' },
   },
   { q: 'Are children invited?', a: null },
-  {
-    q: 'Can I bring a plus-one?',
-    a: 'Your invitation lists exactly who is included, and the RSVP form shows the same names, so you will always know who is invited.',
-    link: { href: '/rsvp', label: 'RSVP' },
-  },
+  { q: 'Can I bring a plus-one?', a: null },
   {
     q: 'When should I RSVP?',
     a: rsvp.deadline ? `Please reply by ${rsvp.deadline}.` : null,
@@ -188,9 +184,22 @@ export const optional = {
   spanish: { enabled: false },
 };
 
+/** Desktop primary navigation (kept short on purpose). RSVP is rendered as the action button. */
 export const nav = [
-  { href: '/story', label: 'Our Story' },
-  { href: '/details', label: 'Details' },
-  { href: '/travel', label: 'Travel' },
-  { href: '/faq', label: 'FAQ' },
+  { href: '/details', label: 'The Wedding' },
+  { href: '/travel', label: 'Travel & Stay' },
 ];
+/** Everything, in the order used by the mobile menu and footer. */
+export const allPages = [
+  { href: '/details', label: 'The Wedding' },
+  { href: '/travel', label: 'Travel & Stay' },
+  { href: '/story', label: 'Our Story' },
+  { href: '/faq', label: 'Questions' },
+];
+export const pageNames: Record<string, string> = {
+  '/details': 'The Wedding',
+  '/travel': 'Travel & Stay',
+  '/rsvp': 'RSVP',
+  '/story': 'Our Story',
+  '/faq': 'Questions',
+};

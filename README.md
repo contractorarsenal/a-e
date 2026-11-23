@@ -19,12 +19,14 @@ Requires Node 22.12+.
 
 | Page | Path | Notes |
 |---|---|---|
-| Home | `/` | Hero with real photos, countdown, details at a glance |
-| Our Story | `/story/` | Editorial layout + gallery with fullscreen lightbox (keyboard, swipe) |
-| Details | `/details/` | Date, venue, schedule (editable), directions, click-to-load map, calendar download |
-| Travel | `/travel/` | **Plan Your Trip**: hotel map/list, compare, trip planner, budget; airports, cars, rides, tips, guest group |
-| RSVP | `/rsvp/` | Posts to an external form service (see below) |
-| FAQ | `/faq/` | Answers come from `src/content/site.ts`; unknown ones show "Details coming soon" |
+| Home | `/` | Names, date, place, one photograph, a short photo series, three wayfinding rows |
+| The Wedding | `/details/` | Date, schedule (editable), venue, Apple/Google directions, map on demand, calendar download |
+| Travel & Stay | `/travel/` | Hotels with approximate drive times and Book/Directions; airports, rides, Airbnb/Vrbo; optional collapsed map, compare, trip planner and budget |
+| RSVP | `/rsvp/` | Posts to an external form service (see below); shows "not open yet" until configured |
+| Our Story | `/story/` | Photo series with lightbox (keyboard, swipe) |
+| Questions | `/faq/` | Answers come from `src/content/site.ts`; unknown ones show "To be confirmed" |
+
+Navigation: desktop shows *The Wedding*, *Travel & Stay* and *RSVP*; Our Story and Questions are in the mobile menu, footer and page links. Design research and decisions: [DESIGN_RESEARCH.md](DESIGN_RESEARCH.md).
 
 ## Editing content (no component edits needed)
 
@@ -56,7 +58,7 @@ The site is static, so there is no server or database. RSVPs go to an **external
 
 The form validates on the client, includes a honeypot, and **only shows the confirmation after the service returns a success status.** Network or service errors are shown honestly, with nothing saved locally.
 
-Trade-off: a static site cannot hold a private guest list or enforce invitation codes. The form lets a guest name up to 3 additional guests (`rsvp.maxAdditionalGuests`), plus an *optional* invitation code, and the couple reconciles submissions against the guest list. If a controlled guest list is needed later, move to a small backend (e.g. Supabase) and keep the static front end.
+Trade-off: a static site cannot hold a private guest list or enforce invitation codes. The form lets a guest name up to 3 additional guests (`rsvp.maxAdditionalGuests`); nothing verifies the names or party size, so the couple must reconcile submissions against the guest list themselves. If a controlled guest list is needed later, move to a small backend (e.g. Supabase) and keep the static front end.
 
 ## Travel concierge: how the numbers are made
 

@@ -1,35 +1,15 @@
 ---
 import { wedding } from '../content/site';
-const { variant = 'full' } = Astro.props as { variant?: 'full' | 'compact' };
 const target = `${wedding.dateISO}T${wedding.calendarStart ?? '00:00'}:00${wedding.utcOffset}`;
 const days = Math.max(0, Math.ceil((new Date(target).getTime() - Date.now()) / 86400000));
 ---
-{variant === 'compact' ? (
-  <p class="countdown" data-target={target} data-compact role="timer" aria-label="Days until the wedding"><span class="numeral text-[1.5rem]" data-unit="days">{days}</span> <span class="eyebrow !text-inherit opacity-80">days to go</span></p>
-) : (
-  <div class="countdown" data-target={target} role="timer" aria-label="Time until the wedding">
-    <ul class="grid grid-cols-4 gap-1 sm:gap-6 md:gap-14">
-      {[['days', String(days)], ['hours', '—'], ['minutes', '—'], ['seconds', '—']].map(([k, v]) => (
-        <li class="text-center">
-          <span class="numeral block text-[clamp(2.6rem,12vw,7rem)] tabular-nums" data-unit={k}>{v}</span>
-          <span class="eyebrow mt-3 block !text-[.6rem] !tracking-[.28em] sm:!text-[.68rem]">{k}</span>
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
+<p class="countdown" data-target={target} role="timer" aria-label="Days until the wedding"><span data-unit="days" class="tabular-nums">{days}</span> days to go</p>
 <script>
   document.querySelectorAll<HTMLElement>('.countdown').forEach((root) => {
     if (root.dataset.bound) return; root.dataset.bound = '1';
     const target = new Date(root.dataset.target!).getTime();
-    const set = (u: string, v: number) => { const el = root.querySelector(`[data-unit=${u}]`); if (el) el.textContent = String(v).padStart(u === 'days' ? 1 : 2, '0'); };
-    const tick = () => {
-      const ms = Math.max(0, target - Date.now());
-      set('days', Math.floor(ms / 864e5)); set('hours', Math.floor(ms / 36e5) % 24);
-      set('minutes', Math.floor(ms / 6e4) % 60); set('seconds', Math.floor(ms / 1e3) % 60);
-    };
-    tick();
-    const slow = matchMedia('(prefers-reduced-motion: reduce)').matches || root.hasAttribute('data-compact');
-    setInterval(tick, slow ? 60000 : 1000);
+    const el = root.querySelector('[data-unit=days]')!;
+    const tick = () => { el.textContent = String(Math.max(0, Math.ceil((target - Date.now()) / 864e5))); };
+    tick(); setInterval(tick, 60000);
   });
 </script>

@@ -1,23 +1,17 @@
 ---
 import { u } from '../lib/url';
 import { groupUrl, groupGate } from '../lib/env';
-import Picture from './Picture.astro';
-import { photos } from '../lib/photos';
+import ComingSoon from './ComingSoon.astro';
 const url = groupUrl();
 const gate = groupGate();
 ---
-<section class="on-ink relative isolate overflow-hidden py-24 md:py-36" aria-labelledby="gc">
-  <Picture slug="proposal-kiss" alt="" sizes="100vw" position="50% 28%" class="absolute inset-0 -z-10 block h-full w-full opacity-35" />
-  <div class="absolute inset-0 -z-10 bg-ink/70" aria-hidden="true"></div>
-  <div class="wrap reveal max-w-3xl text-center">
-    <p class="eyebrow">Travel together</p>
-    <h2 id="gc" class="display mt-5 text-[clamp(2.4rem,6vw,4.4rem)]">Connect with <span class="italic-display text-sand">other guests</span></h2>
-    <p class="mx-auto mt-6 max-w-xl text-lg text-ivory/85">Traveling to celebrate with us? Connect with other guests to coordinate stays, rides, and plans.</p>
-    <p class="mx-auto mt-3 max-w-xl text-sm text-ivory/65">Joining is optional and always your choice. Nobody is added automatically, and no one’s contact details are shown on this website.</p>
-    <div class="mt-8">
-      {url && gate === 'public' && <a class="btn btn-ivory" href={url} target="_blank" rel="noopener noreferrer">Join the guest group ↗</a>}
-      {url && gate === 'rsvp' && <><a class="btn btn-ivory" href={u('/rsvp')}>RSVP to get the link</a><p class="mt-3 text-sm text-ivory/65">The group link is shown to guests once they confirm they are attending.</p></>}
-      {!url && <p class="inline-flex items-center gap-3 italic text-ivory/70"><span class="h-px w-6 bg-sand" aria-hidden="true"></span>Group link coming soon</p>}
-    </div>
+<div>
+  <h2 class="display text-2xl">Travel together</h2>
+  <p class="mt-3">Traveling to celebrate with us? Connect with other guests to coordinate stays, rides, and plans.</p>
+  <p class="mt-2 text-sm text-taupe">Optional. Nobody is added automatically, and no one’s contact details are shown on this site.</p>
+  <div class="mt-4">
+    {url && gate === 'public' && <a class="btn" href={url} target="_blank" rel="noopener noreferrer">Join the guest group ↗</a>}
+    {url && gate === 'rsvp' && <p>The group link appears after you <a class="link" href={u('/rsvp')}>RSVP</a> as attending.</p>}
+    {!url && <ComingSoon>Group link coming soon</ComingSoon>}
   </div>
-</section>
+</div>

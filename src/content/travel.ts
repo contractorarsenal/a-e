@@ -6,7 +6,7 @@
 import { fullAddress, mapLinks } from './site';
 
 export const travelIntro =
-  'Escondido sits in north San Diego County. Most guests fly into San Diego International Airport, rent a car, and stay in Escondido or nearby San Marcos.';
+  'Escondido is in north San Diego County. These are places to stay in Escondido and nearby San Marcos, with approximate drive times to the venue.';
 
 export const stayDates = { checkin: '2027-08-27', checkout: '2027-08-29' }; // suggestion only, guests adjust
 
@@ -21,7 +21,7 @@ export type Hotel = {
   area: string;
   address: string;
   type: string;
-  tier: 'Value' | 'Comfortable midrange' | 'Family & group';
+  tier: string;
   why: string;
   /** Amenities as reported for the property. Brand pages blocked automated checks, so guests should confirm at booking. */
   amenities: string[];
@@ -50,8 +50,8 @@ export const hotels: Hotel[] = [
     area: 'Escondido',
     address: '1700 Seven Oakes Rd, Escondido, CA 92026',
     type: 'Hotel',
-    tier: 'Value',
-    why: 'A straightforward, budget-minded base in Escondido, with family suites listed on the hotel’s page.',
+    tier: 'Hotel',
+    why: 'A straightforward hotel in Escondido, with family suites listed on the hotel’s page.',
     amenities: ['Complimentary breakfast', 'Heated outdoor pool', 'Free Wi-Fi', 'Microwave & fridge in rooms'],
     roomTypes: 'Standard rooms, two-room and family suites',
     kitchen: 'Microwave and refrigerator in rooms (no full kitchen reported)',
@@ -65,7 +65,7 @@ export const hotels: Hotel[] = [
     area: 'Downtown Escondido',
     address: '200 La Terraza Blvd, Escondido, CA 92025',
     type: 'All-suite hotel',
-    tier: 'Comfortable midrange',
+    tier: 'All-suite hotel',
     why: 'Suite-style rooms close to downtown Escondido’s restaurants and the SPRINTER line.',
     amenities: ['All-suite rooms', 'Fitness center', 'Lobby bar', 'Business center'],
     roomTypes: 'Suites',
@@ -80,7 +80,7 @@ export const hotels: Hotel[] = [
     area: 'San Marcos',
     address: '1245 Los Vallecitos Blvd, San Marcos, CA 92069',
     type: 'Extended-stay suites',
-    tier: 'Family & group',
+    tier: 'Suites with kitchens',
     why: 'Studio, one- and two-bedroom suites with kitchens, which suit families or friends sharing a room set.',
     amenities: ['Full kitchens', 'Complimentary breakfast', 'Studio to two-bedroom suites'],
     roomTypes: 'Studio, one-bedroom and two-bedroom suites',
@@ -95,7 +95,7 @@ export const hotels: Hotel[] = [
     area: 'Escondido (Welk Resort)',
     address: '8860 Lawrence Welk Dr, Escondido, CA 92026',
     type: 'Resort (vacation club)',
-    tier: 'Comfortable midrange',
+    tier: 'Resort',
     why: 'A resort setting on large grounds, and the closest of these to the venue. It is a vacation-club property, so check on the Hyatt page whether your dates are bookable.',
     amenities: ['Resort grounds with pools and golf', 'Vacation-club accommodations'],
     roomTypes: 'Vacation-club villas and suites (check Hyatt page)',

@@ -5,23 +5,21 @@ import manifest from '../generated/images.json';
 import { photos, type PhotoSlug } from '../lib/photos';
 
 // Editorial layout: spans chosen so no photo is cropped through a face (all photos are 3:4 portraits).
-const layout: { slug: PhotoSlug; cls: string; pos: string; arch?: boolean }[] = [
-  { slug: 'proposal-moment', cls: 'md:col-span-5', pos: '50% 45%' },
-  { slug: 'proposal-laughing', cls: 'md:col-span-4 md:mt-28', pos: '50% 45%', arch: true },
-  { slug: 'proposal-kiss', cls: 'md:col-span-3 md:mt-10', pos: '50% 40%' },
-  { slug: 'proposal-hands', cls: 'md:col-span-5 md:col-start-2 md:-mt-6', pos: '50% 50%' },
+const layout: { slug: PhotoSlug; pos: string; n: string }[] = [
+  { slug: 'proposal-moment', pos: '50% 45%', n: 'I' },
+  { slug: 'proposal-laughing', pos: '50% 45%', n: 'II' },
+  { slug: 'proposal-hands', pos: '50% 50%', n: 'III' },
+  { slug: 'proposal-kiss', pos: '50% 40%', n: 'IV' },
 ];
 const full = (slug: PhotoSlug) => (manifest[slug].widths as number[]).map((w) => `${u('/img/' + slug + '-' + w + '.webp')} ${w}w`).join(', ');
 ---
-<div class="grid grid-cols-2 gap-3 md:grid-cols-9 md:gap-6" data-gallery>
+<div class="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-4 md:gap-x-5" data-gallery>
   {layout.map((p, i) => (
     <button type="button" data-index={i} data-srcset={full(p.slug)} data-alt={photos[p.slug].alt} data-caption={photos[p.slug].caption}
       aria-label={`Open photo ${i + 1} of ${layout.length}: ${photos[p.slug].caption}`}
-      class={`reveal group relative block cursor-zoom-in overflow-hidden ${p.cls}`}>
-      <div class={`aspect-[3/4] overflow-hidden ${p.arch ? 'rounded-t-full' : ''}`}>
-        <Picture slug={p.slug} alt={photos[p.slug].alt} sizes="(min-width:768px) 40vw, 50vw" position={p.pos} imgClass="transition-transform duration-[1400ms] ease-[var(--ease-soft)] group-hover:scale-[1.03]" />
-      </div>
-      <span class="mt-3 block text-left italic-display text-lg text-taupe">{photos[p.slug].caption}</span>
+      class="group flex flex-col justify-start cursor-zoom-in text-left">
+      <div class="aspect-[3/4] overflow-hidden bg-champagne"><Picture slug={p.slug} alt={photos[p.slug].alt} sizes="(min-width:768px) 36rem, 46vw" position={p.pos} imgClass="transition-transform duration-700 group-hover:scale-[1.02]" /></div>
+      <span class="mt-2 block text-sm text-taupe"><span class="numeral mr-2 text-clay">{p.n}</span><span class="italic-display">{photos[p.slug].caption}</span></span>
     </button>
   ))}
 </div>

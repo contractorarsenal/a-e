@@ -15,7 +15,7 @@ const hotelData = hotels.map((h) => ({
   lat: (geo.hotels as any)[h.id].lat, lon: (geo.hotels as any)[h.id].lon,
   toVenue: (geo.hotelToVenue as any)[h.id],
   fromAirport: Object.fromEntries(Object.keys(geo.airports).map((c) => [c, (geo.airportToHotel as any)[c][h.id]])),
-}));
+})).sort((a: any, b: any) => a.toVenue.minutes - b.toVenue.minutes);
 const notes: Record<string, string> = {
   SAN: 'Largest choice of flights, with a rental car center served by a free shuttle.',
   CRQ: 'Smaller and closer. Check airlines for current commercial service.',
@@ -40,114 +40,131 @@ const data: ConciergeData = {
   group: { state: gUrl ? (groupPublic ? 'public' : 'gated') : 'none', url: gUrl && groupPublic ? gUrl : null },
   base: import.meta.env.BASE_URL.replace(/\/$/, ''),
 };
+const sanFromHotel = (id: string) => (geo.airportToHotel as any).SAN[id];
 ---
-<Base dark title="Plan Your Trip" description={`Hotels, airports, rental cars and directions for ${couple.display}'s wedding at ${venue.name} in ${wedding.cityLine}.`}>
-  <!-- header -->
-  <header class="on-ink relative isolate overflow-hidden pb-16 pt-36 md:pb-24 md:pt-48">
-    <div class="absolute inset-0 -z-10 bg-gradient-to-b from-sea/70 to-ink" aria-hidden="true"></div>
-    <div class="wrap grid items-end gap-12 lg:grid-cols-12">
-      <div class="lg:col-span-8">
-        <p class="eyebrow hero-in" style="--i:0">Travel</p>
-        <h1 class="display hero-in mt-5 text-[clamp(3.4rem,12vw,9rem)] leading-[.9]" style="--i:1">Plan your <span class="italic-display text-sand">trip</span></h1>
-        <p class="hero-in mt-8 max-w-xl text-lg text-ivory/80" style="--i:2">{travelIntro}</p>
-      </div>
-      <nav aria-label="On this page" class="hero-in lg:col-span-3 lg:col-start-10" style="--i:3">
-        <ul class="divide-y divide-ivory/15 border-y border-ivory/15 text-[.72rem] uppercase tracking-[.24em]">
-          <li><a class="flex min-h-12 items-center justify-between text-ivory/85 hover:text-ivory" href="#concierge">Hotels &amp; planner <span aria-hidden="true">↓</span></a></li>
-          <li><a class="flex min-h-12 items-center justify-between text-ivory/85 hover:text-ivory" href="#airports">Airports <span aria-hidden="true">↓</span></a></li>
-          <li><a class="flex min-h-12 items-center justify-between text-ivory/85 hover:text-ivory" href="#cars">Cars &amp; rides <span aria-hidden="true">↓</span></a></li>
-          <li><a class="flex min-h-12 items-center justify-between text-ivory/85 hover:text-ivory" href={u('/details#directions')}>Venue directions <span aria-hidden="true">→</span></a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+<Base title="Travel & Stay" description={`Where to stay, airports and getting around for ${couple.display}'s wedding at ${venue.name} in ${wedding.cityLine}.`}>
+  <div class="wrap pb-6 pt-10 md:pt-16">
+    <h1 class="display text-[clamp(2.6rem,8vw,5rem)]">Travel &amp; Stay</h1>
+    <p class="prose-soft mt-5">{travelIntro}</p>
+  </div>
 
-  <section id="concierge" class="bg-paper py-16 md:py-28">
-    <div class="wrap">
-      <noscript><p class="mb-8 border border-charcoal/20 p-4">The interactive planner needs JavaScript. The hotel list and links below still work.</p></noscript>
-      <div class="mb-12 text-center md:mb-16"><p class="eyebrow">Where to stay</p><h2 class="display mt-4 text-[clamp(2.4rem,6vw,4.4rem)]">Find your <span class="italic-display">place</span></h2><p class="mx-auto mt-5 max-w-lg text-taupe">Choose a hotel on the map to see how far it is from {venue.name}, or let the planner build your weekend.</p></div>
-      <TripConcierge client:visible data={data} />
-      <noscript>
-        <ul class="space-y-6">{hotels.map((h) => <li><p class="display text-2xl">{h.name}</p><p>{h.address}</p><p><a class="link" href={h.bookingUrl}>Official site</a> · <a class="link" href={h.googleDirections}>Directions</a></p></li>)}</ul>
-      </noscript>
-    </div>
+  <!-- 1. Where to stay -->
+  <section id="stay" class="wrap mt-10 md:mt-14" aria-labelledby="stay-h">
+    <h2 id="stay-h" class="display text-[clamp(1.8rem,4vw,2.6rem)]">Where to stay</h2>
+    <p class="mt-3 max-w-xl text-taupe">Listed by approximate drive time to {venue.name}. We have not checked availability or prices, so please look at each hotel’s own site for your dates.</p>
+    <ol class="mt-8 border-t border-charcoal/20">
+      {hotelData.map((h: any) => (
+        <li class="border-b border-charcoal/20 py-7 md:py-9">
+          <div class="grid gap-5 md:grid-cols-[1fr_auto] md:gap-12">
+            <div>
+              <h3 class="display text-[clamp(1.45rem,3vw,1.9rem)] leading-tight">{h.name}</h3>
+              <p class="mt-1 text-taupe">{h.tier} · {h.area}</p>
+              <p class="mt-3 max-w-md">{h.why}</p>
+            </div>
+            <p class="md:text-right">
+              <span class="numeral block text-[2.2rem] md:text-[2.6rem]">{h.toVenue.miles} mi</span>
+              <span class="block text-lg">about {h.toVenue.minutes} min drive</span>
+              <span class="block text-sm text-taupe">to {venue.name} · approximate</span>
+            </p>
+          </div>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a class="btn btn-solid" href={h.bookingUrl} target="_blank" rel="noopener noreferrer">Book hotel ↗</a>
+            <a class="btn" href={h.googleDirections} target="_blank" rel="noopener noreferrer">Directions ↗</a>
+          </div>
+          <details class="disclose mt-4">
+            <summary class="tap inline-flex items-center gap-2 text-sm"><span class="plus text-lg leading-none text-clay" aria-hidden="true">+</span> More about this hotel</summary>
+            <div class="mt-3 grid gap-x-10 gap-y-4 text-sm md:grid-cols-2">
+              <p><span class="label">Address</span>{h.address}</p>
+              <p><span class="label">From San Diego airport (SAN)</span>{sanFromHotel(h.id).miles} mi · about {sanFromHotel(h.id).minutes} min, approximate</p>
+              <p><span class="label">Rooms</span>{h.roomTypes}</p>
+              <p><span class="label">Kitchen</span>{h.kitchen}</p>
+              <p><span class="label">Good for</span>{h.family}</p>
+              <p><span class="label">Parking</span>{h.parking}</p>
+              <p class="md:col-span-2"><span class="label">Amenities as reported</span>{h.amenities.join(' · ')}. Please confirm on the hotel’s own page.</p>
+              <p class="md:col-span-2"><a class="link tap" href={h.appleDirections} target="_blank" rel="noopener noreferrer">Directions in Apple Maps ↗</a></p>
+            </div>
+          </details>
+        </li>
+      ))}
+    </ol>
+    <p class="mt-5 max-w-2xl text-sm text-taupe">Drive times are approximate, from road data under typical conditions with no traffic ({geo.provider}, {geo.generatedAt}). Booking links open the hotel’s own website; nothing is reserved until you book there, and this site never takes payments. <button type="button" class="link tap" data-open-tools>See them on a map and compare →</button></p>
   </section>
 
-  <section id="stay-rentals" class="section">
-    <div class="wrap grid gap-12 lg:grid-cols-12">
-      <div class="reveal lg:col-span-4"><p class="eyebrow">Vacation rentals</p><h2 class="display mt-4 text-[clamp(2.4rem,5vw,4rem)]">Airbnb &amp; Vrbo</h2><p class="prose-soft mt-6">Searches centered on each area, set to the weekend of the wedding. Adjust dates and group size once the site opens.</p></div>
-      <ul class="lg:col-span-8 divide-y divide-charcoal/15 border-y border-charcoal/15">
-        {rentals.map((r) => (
-          <li class="reveal grid items-center gap-3 py-6 md:grid-cols-[1fr_auto]">
-            <div><p class="display text-3xl">{r.area}</p><p class="text-taupe">{r.note}</p></div>
-            <p class="flex flex-wrap gap-3"><a class="btn !min-h-11" href={r.airbnb} target="_blank" rel="noopener noreferrer">Airbnb ↗</a><a class="btn !min-h-11" href={r.vrbo} target="_blank" rel="noopener noreferrer">Vrbo ↗</a></p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <section id="airports" class="bg-paper py-20 md:py-28">
-    <div class="wrap">
-      <div class="reveal"><p class="eyebrow">Flying in</p><h2 class="display mt-4 text-[clamp(2.4rem,5vw,4rem)]">Airports</h2></div>
-      <div class="mt-14 grid gap-12 md:grid-cols-3">
-        {airports.map((a, i) => {
-          const code = a.code.split(' ')[0];
-          const g: any = (geo.airportToVenue as any)[code];
-          return (
-            <article class="reveal">
-              <p class="numeral text-[5rem] text-clay/80">{i + 1}</p>
-              <p class="eyebrow mt-4">{a.role}</p>
-              <h3 class="display mt-2 text-[2rem] leading-tight">{a.name}</h3>
-              <p class="label mt-1">{a.code}</p>
-              <p class="mt-4">{a.body}</p>
-              {g && a.code.length === 3 && <p class="mt-3 text-sm text-taupe">About {g.miles} mi and {g.minutes} min to the venue (approximate, typical conditions).</p>}
-              <p class="mt-3 flex flex-wrap gap-x-5 text-sm"><a class="tap link" href={a.href} target="_blank" rel="noopener noreferrer">{a.linkLabel} ↗</a>{a.extra?.map((e) => <a class="tap link" href={e.href} target="_blank" rel="noopener noreferrer">{e.label} ↗</a>)}</p>
-            </article>
-          );
-        })}
+  <!-- 2. Airports and getting around -->
+  <section id="airports" class="wrap mt-16 md:mt-24" aria-labelledby="air-h">
+    <h2 id="air-h" class="display text-[clamp(1.8rem,4vw,2.6rem)]">Airports &amp; getting around</h2>
+    <div class="mt-8 grid gap-10 border-t border-charcoal/20 pt-8 md:grid-cols-2 md:gap-16">
+      <div id="airport-info">
+        <h3 class="display text-2xl">Flying in</h3>
+        <p class="mt-3"><strong class="font-medium">San Diego International (SAN)</strong> has the most flights. It is about {(geo.airportToVenue as any).SAN.miles} road miles from the venue, roughly {(geo.airportToVenue as any).SAN.minutes} minutes (approximate).</p>
+        <p class="mt-3"><strong class="font-medium">McClellan-Palomar (CRQ)</strong> in Carlsbad is closer, about {(geo.airportToVenue as any).CRQ.miles} miles. Commercial service there is limited and has changed over time, so check with the airlines.</p>
+        <details class="disclose mt-3">
+          <summary class="tap inline-flex items-center gap-2 text-sm"><span class="plus text-lg leading-none text-clay" aria-hidden="true">+</span> Other airports</summary>
+          <p class="mt-2 text-sm text-taupe">Ontario (ONT), Orange County (SNA) and Los Angeles (LAX) can have more flight options but are a much longer drive. Approximate road distance to the venue: ONT {(geo.airportToVenue as any).ONT.miles} mi, SNA {(geo.airportToVenue as any).SNA.miles} mi, LAX {(geo.airportToVenue as any).LAX.miles} mi.</p>
+          <p class="mt-2 flex flex-wrap gap-x-5 text-sm"><a class="tap link" href="https://www.flyontario.com" target="_blank" rel="noopener noreferrer">Ontario ↗</a><a class="tap link" href="https://www.ocair.com" target="_blank" rel="noopener noreferrer">Orange County ↗</a><a class="tap link" href="https://www.flylax.com" target="_blank" rel="noopener noreferrer">LAX ↗</a><a class="tap link" href="https://www.sandiegocounty.gov/content/sdc/dpw/airports/palomar.html" target="_blank" rel="noopener noreferrer">Palomar airport info ↗</a></p>
+        </details>
       </div>
-    </div>
-  </section>
-
-  <section id="cars" class="on-ink py-20 md:py-32">
-    <div class="wrap grid gap-16 lg:grid-cols-2 lg:gap-24">
-      <div>
-        <div class="reveal"><p class="eyebrow">Getting around</p><h2 class="display mt-4 text-[clamp(2.4rem,5vw,4rem)]">Rental cars</h2></div>
-        <p class="reveal mt-6 max-w-lg text-lg text-ivory/80">For most guests a rental car is the simplest plan. Escondido is spread out, the venue is a drive from town, and a car puts you in control of when you leave.</p>
-        <ul class="reveal mt-6 space-y-3 text-ivory/80">{sanRentalFacts.map((f) => <li class="border-l border-sand/60 pl-4">{f}</li>)}</ul>
-        <p class="reveal mt-8 flex flex-wrap gap-3">{rentalCompanies.map((c) => <a class="btn btn-light !min-h-11 !px-4" href={c.href} target="_blank" rel="noopener noreferrer">{c.name} ↗</a>)}</p>
-        <p class="mt-3 text-xs text-ivory/60">Links go to each company’s own website. We haven’t checked prices or availability.</p>
-      </div>
-      <div>
-        <div class="reveal"><p class="eyebrow">Without a car</p><h2 class="display mt-4 text-[clamp(2.4rem,5vw,4rem)]">Rides &amp; transit</h2></div>
-        <div class="reveal mt-6 space-y-5 text-lg text-ivory/80">
-          <p><strong class="font-medium text-ivory">Uber and Lyft</strong> work well getting to and from the airport and around Escondido. We can’t promise availability or wait times from the venue late in the evening, so plan your ride home in advance.</p>
-          <p class="flex gap-6 text-sm"><a class="tap link" href={transit.rideshare.uber} target="_blank" rel="noopener noreferrer">Uber ↗</a><a class="tap link" href={transit.rideshare.lyft} target="_blank" rel="noopener noreferrer">Lyft ↗</a></p>
-          <p><strong class="font-medium text-ivory">Public transit.</strong> {transit.sprinter.body}</p>
-          <p><a class="tap link text-sm" href={transit.sprinter.href} target="_blank" rel="noopener noreferrer">NCTD SPRINTER ↗</a></p>
-        </div>
+      <div id="cars">
+        <h3 class="display text-2xl">Cars, rides &amp; transit</h3>
+        <p class="mt-3">{sanRentalFacts[0]} {sanRentalFacts[1]}</p>
+        <p class="mt-3">Rideshare (<a class="link" href={transit.rideshare.uber} target="_blank" rel="noopener noreferrer">Uber</a>, <a class="link" href={transit.rideshare.lyft} target="_blank" rel="noopener noreferrer">Lyft</a>) works for the airport and around town. We can’t promise availability from the venue late in the evening, so please plan your ride back.</p>
+        <details class="disclose mt-3">
+          <summary class="tap inline-flex items-center gap-2 text-sm"><span class="plus text-lg leading-none text-clay" aria-hidden="true">+</span> Rental car companies and public transit</summary>
+          <p class="mt-3 flex flex-wrap gap-x-5 text-sm">{rentalCompanies.map((c) => <a class="tap link" href={c.href} target="_blank" rel="noopener noreferrer">{c.name} ↗</a>)}</p>
+          <p class="mt-2 text-xs text-taupe">Links go to each company’s own website. We haven’t checked prices or availability.</p>
+          <p class="mt-4 text-sm">{transit.sprinter.body} <a class="link tap" href={transit.sprinter.href} target="_blank" rel="noopener noreferrer">NCTD SPRINTER ↗</a></p>
+        </details>
       </div>
     </div>
+    <ul class="mt-10 grid gap-x-12 gap-y-3 border-t border-charcoal/20 pt-6 text-taupe md:grid-cols-2">
+      {guidance.map((g) => <li><strong class="font-medium text-charcoal">{g.t}.</strong> {g.b}</li>)}
+    </ul>
   </section>
 
-  <section id="shuttle" class="section">
-    <div class="wrap grid gap-8 lg:grid-cols-12">
-      <div class="reveal lg:col-span-5"><p class="eyebrow">Shuttle</p><h2 class="display mt-4 text-[clamp(2.4rem,5vw,4rem)]">Wedding shuttle</h2></div>
-      <div class="reveal lg:col-span-6 lg:col-start-7 lg:self-end">
-        {shuttle.arranged && shuttle.details ? <p class="prose-soft">{shuttle.details}</p> : <><ComingSoon>No shuttle has been arranged yet</ComingSoon><p class="mt-3 text-taupe">If the couple organizes one, the details will be posted here. Until then, please plan on your own transportation.</p></>}
+  <!-- 3. Airbnb / Vrbo -->
+  <section id="stay-rentals" class="wrap mt-16 md:mt-24" aria-labelledby="rent-h">
+    <h2 id="rent-h" class="display text-[clamp(1.8rem,4vw,2.6rem)]">Airbnb &amp; Vrbo</h2>
+    <p class="mt-3 max-w-xl text-taupe">Searches for each area, set to the wedding weekend. Change the dates and group size on their sites.</p>
+    <ul class="mt-6 border-t border-charcoal/20">
+      {rentals.map((r) => (
+        <li class="flex flex-wrap items-center justify-between gap-x-8 gap-y-1 border-b border-charcoal/20 py-4">
+          <p><span class="display text-xl">{r.area}</span><span class="ml-3 text-sm text-taupe">{r.note}</span></p>
+          <p class="flex gap-5 text-sm"><a class="tap link" href={r.airbnb} target="_blank" rel="noopener noreferrer">Airbnb ↗</a><a class="tap link" href={r.vrbo} target="_blank" rel="noopener noreferrer">Vrbo ↗</a></p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- 4. Shuttle + travel together -->
+  <section id="together" class="wrap mt-16 md:mt-24">
+    <div class="grid gap-10 border-t border-charcoal/20 pt-8 md:grid-cols-2 md:gap-16">
+      <div id="shuttle">
+        <h2 class="display text-2xl">Shuttle</h2>
+        <div class="mt-3">{shuttle.arranged && shuttle.details ? <p>{shuttle.details}</p> : <ComingSoon>Shuttle information, if any, will be posted here</ComingSoon>}</div>
       </div>
+      <GuestConnect />
     </div>
   </section>
 
-  <section id="tips" class="bg-paper py-20 md:py-28">
-    <div class="wrap">
-      <div class="reveal"><p class="eyebrow">Good to know</p><h2 class="display mt-4 text-[clamp(2.4rem,5vw,4rem)]">Wedding weekend tips</h2></div>
-      <ol class="mt-12 grid gap-x-16 gap-y-10 md:grid-cols-2">
-        {guidance.map((g, i) => <li class="reveal flex gap-6 border-t border-charcoal/20 pt-6"><span class="numeral text-4xl text-clay">{i + 1}</span><div><h3 class="display text-2xl">{g.t}</h3><p class="mt-2 text-taupe">{g.b}</p></div></li>)}
-      </ol>
-    </div>
+  <!-- 5. Optional tools (collapsed) -->
+  <section id="trip-tools" class="wrap mt-16 md:mt-24" aria-labelledby="tools-h">
+    <details class="disclose border border-charcoal/25 bg-paper" data-tools>
+      <summary class="flex min-h-[4.5rem] items-center justify-between gap-6 px-5 py-4 md:px-8">
+        <span><span id="tools-h" class="display block text-[clamp(1.4rem,3vw,1.9rem)]">Map, compare &amp; trip planner</span><span class="mt-1 block text-sm text-taupe">Optional: see the hotels on a map, compare them, plan your weekend, estimate costs</span></span>
+        <span class="plus text-2xl text-clay" aria-hidden="true">+</span>
+      </summary>
+      <div class="border-t border-charcoal/15 px-5 py-8 md:px-8 md:py-12">
+        <noscript><p class="mb-4 border border-charcoal/20 p-4">The planner needs JavaScript. The hotel list above works without it.</p></noscript>
+        <TripConcierge client:visible data={data} />
+      </div>
+    </details>
   </section>
-
-  <GuestConnect />
 </Base>
+
+<script>
+  // Open the optional tools from links ("See them on a map") or a #trip-tools URL.
+  const tools = document.querySelector<HTMLDetailsElement>('[data-tools]');
+  const openTools = () => { if (tools) { tools.open = true; tools.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); } };
+  document.querySelectorAll('[data-open-tools]').forEach((b) => b.addEventListener('click', openTools));
+  if (location.hash === '#trip-tools' || location.hash === '#concierge') { if (tools) tools.open = true; }
+</script>

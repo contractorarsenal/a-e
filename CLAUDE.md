@@ -12,7 +12,7 @@ Astro 6 (static) + Tailwind 4 + TypeScript; one React island (`src/components/tr
 `vite` is pinned via `overrides` (7.3.8) so Astro 6 and `@tailwindcss/vite` share one Vite. Don't upgrade Astro/Vite without testing the build.
 
 ## Design rules
-Photo-derived palette: cream (`ivory`/`paper`), `ink`/`sea` (deep ocean night), sand, and terracotta `clay` (the dress) as a sparing accent. Cormorant Garamond (display) + Jost (text), self-hosted via fontsource. Dramatic photography first (full-bleed on phones, arch frame on desktop), oversized serif type, hairlines and whitespace over cards, ink sections for rhythm; restrained rectangular buttons; no gold gradients, clip-art or decorative animation. Mobile-first: test 320 → 1440, no horizontal overflow, tap targets ≥ 44px, respect `prefers-reduced-motion`. Faces/hands/rings must never be cropped (tune `position` on `<Picture>`).
+Paper-cream ground, near-black text, one terracotta `clay` accent (the dress). Bodoni Moda (display) + Jost (text). No dark bands, arches, gradient overlays or scroll animation; avoid decorative overlines above every heading. Self-hosted via fontsource. Photographs as uncropped framed prints with captions, hairlines and whitespace over cards, progressive disclosure (`<details>`) for secondary info, one primary action per view; restrained rectangular buttons; no gold gradients, clip-art or decorative animation. Mobile-first: test 320 → 1440, no horizontal overflow, tap targets ≥ 44px, respect `prefers-reduced-motion`. Faces/hands/rings must never be cropped (tune `position` on `<Picture>`).
 
 ## Where things live
 - Content: `src/content/site.ts`, `src/content/travel.ts`, `src/lib/photos.ts`.

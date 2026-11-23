@@ -6,8 +6,8 @@ import Footer from '../components/Footer.astro';
 import { couple, wedding, venue, fullAddress } from '../content/site';
 import { visibility, plausibleDomain } from '../lib/env';
 
-interface Props { title?: string; description?: string; image?: string; dark?: boolean }
-const { dark = false, title, description = `${couple.display} are getting married on ${wedding.dateLong} at ${venue.name} in ${wedding.cityLine}. Details, travel and RSVP.`, image = '/img/og.jpg' } = Astro.props;
+interface Props { title?: string; description?: string; image?: string }
+const { title, description = `${couple.display} are getting married on ${wedding.dateLong} at ${venue.name} in ${wedding.cityLine}. Details, travel and RSVP.`, image = '/img/og.jpg' } = Astro.props;
 const fullTitle = title ? `${title} · ${couple.display}` : `${couple.display} · ${wedding.dateShort} · ${wedding.cityLine}`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const og = new URL(u(image), Astro.site).href;
@@ -26,7 +26,7 @@ const ld = index && {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0e181e" />
+    <meta name="theme-color" content="#f5f0e6" />
     {!index && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={u("/favicon.svg")} type="image/svg+xml" />
@@ -41,10 +41,10 @@ const ld = index && {
     {plausible && <script is:inline defer data-domain={plausible} src="https://plausible.io/js/script.js"></script>}
     {ld && <script type="application/ld+json" set:html={JSON.stringify(ld)} />}
   </head>
-  <body data-dark-hero={dark ? '' : undefined}>
+  <body>
     <a href="#main" class="sr-only z-50 bg-charcoal px-4 py-3 text-ivory focus:not-sr-only focus:fixed focus:left-3 focus:top-3">Skip to content</a>
     <Nav />
-    <main id="main" class={dark ? '' : 'pt-[4.5rem]'}><slot /></main>
+    <main id="main" class="pt-16"><slot /></main>
     <Footer />
     <script>
       // Scroll reveals. Clipped "unveil" images are observed through their parent (a fully clipped element never reports as visible).

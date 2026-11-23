@@ -12,7 +12,6 @@ const { endpoint, groupUrl, deadlineISO, maxAdditional } = Astro.props as { endp
     <div class="mt-7 space-y-7">
       <label class="block"><span class="label">Email address</span><input class="field" type="email" name="email" required autocomplete="email" maxlength="200" inputmode="email" /></label>
       <label class="block"><span class="label">Phone <span class="normal-case tracking-normal">(optional)</span></span><input class="field" type="tel" name="phone" autocomplete="tel" maxlength="40" inputmode="tel" /></label>
-      <label class="block"><span class="label">Invitation code <span class="normal-case tracking-normal">(optional, if printed on your invitation)</span></span><input class="field uppercase" name="inviteCode" autocomplete="off" maxlength="20" /></label>
     </div>
 
     <fieldset class="mt-10">
@@ -26,7 +25,7 @@ const { endpoint, groupUrl, deadlineISO, maxAdditional } = Astro.props as { endp
     <div data-attending-only hidden class="mt-10 space-y-7">
       <fieldset class="min-w-0">
         <legend class="label">Additional guests named on your invitation <span class="normal-case tracking-normal">(optional)</span></legend>
-        <p class="mt-2 text-sm text-taupe">Please list only the people your invitation includes. Up to {maxAdditional}.</p>
+        <p class="mt-2 text-sm text-taupe">Please list only the people your invitation includes (up to {maxAdditional}). We can’t check this automatically, so please list only those invited.</p>
         <div class="mt-3 space-y-4" data-guests></div>
         <button type="button" class="btn mt-4 !min-h-11" data-add-guest>+ Add a guest</button>
       </fieldset>
@@ -103,7 +102,7 @@ const { endpoint, groupUrl, deadlineISO, maxAdditional } = Astro.props as { endp
     const payload: Record<string, string> = {
       _subject: `RSVP: ${val('firstName')} ${val('lastName')} — ${val('attending')}`,
       firstName: val('firstName'), lastName: val('lastName'), email: val('email'), phone: val('phone'),
-      inviteCode: val('inviteCode').toUpperCase(), attending: val('attending'),
+      attending: val('attending'),
       additionalGuests: guests.join('; '), partySize: String(1 + guests.length),
       dietary: attending ? val('dietary') : '', accessibility: attending ? val('accessibility') : '', note: val('note'),
       _gotcha: '', secondsOnForm: String(Math.round((Date.now() - startedAt) / 1000)),
@@ -130,7 +129,7 @@ const { endpoint, groupUrl, deadlineISO, maxAdditional } = Astro.props as { endp
     const g = root.dataset.group;
     done.innerHTML = `
       <h2 tabindex="-1" id="done-h" class="display text-4xl md:text-5xl">${attending ? 'We can’t wait to celebrate with you.' : 'We’ll miss you.'}</h2>
-      <p class="mx-auto mt-5 max-w-md text-taupe">Your reply has been sent. ${attending ? 'If anything changes, just submit the form again.' : 'Thank you for letting us know.'}</p>
+      <p class="mx-auto mt-5 max-w-md text-taupe">Your reply was sent to Adrian and Emma. ${attending ? 'If anything changes, just send the form again.' : 'Thank you for letting us know.'}</p>
       <p class="mx-auto mt-2 max-w-md text-sm text-taupe">We have your email as ${esc(email)}.</p>
       <div class="mt-9 flex flex-wrap justify-center gap-4">
         ${attending ? `<a class="btn btn-solid" href="${root.dataset.travel}">Plan your trip</a><a class="btn" href="${root.dataset.details}">Wedding details</a>` : `<a class="btn" href="${root.dataset.home}">Back to the site</a>`}

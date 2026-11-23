@@ -8,6 +8,7 @@ const reduced = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-
 export default function MapView({ data, selectedId, airport, showAirportRoute, onSelect }: Props) {
   const el = useRef<HTMLDivElement>(null);
   const state = useRef<any>({});
+  const drawRef = useRef<() => void>(() => {});
 
   // initialise once
   useEffect(() => {
@@ -39,7 +40,7 @@ export default function MapView({ data, selectedId, airport, showAirportRoute, o
       map.fitBounds(bounds, { padding: [40, 40], animate: false });
       state.current = { L, map, markers, venueMarker, bounds, layers: [] as any[] };
       setTimeout(() => map.invalidateSize(), 50);
-      draw();
+      drawRef.current(); // latest props (a saved hotel may have been restored while the map was loading)
     })();
     return () => { cancelled = true; state.current.map?.remove(); state.current = {}; };
   }, []);
@@ -68,6 +69,7 @@ export default function MapView({ data, selectedId, airport, showAirportRoute, o
     else map.flyToBounds(b, { ...opts, duration: 0.9 });
   }
 
+  drawRef.current = draw;
   useEffect(draw, [selectedId, airport, showAirportRoute]);
 
   // keep Leaflet sized correctly when its container is shown/hidden or resized

@@ -1,41 +1,27 @@
 ---
 import Base from '../layouts/Base.astro';
-import Picture from '../components/Picture.astro';
 import Gallery from '../components/Gallery.astro';
 import { story, couple } from '../content/site';
-import { photos } from '../lib/photos';
+import { u } from '../lib/url';
 ---
-<Base dark title="Our Story" description={`The story of ${couple.display}, told in the photographs from the day they got engaged.`}>
-  <!-- cinematic header: a wide slice of the moment, faces, ring and hands intact -->
-  <header class="on-ink relative isolate flex min-h-[88svh] items-end overflow-hidden md:min-h-[82vh] md:items-start">
-    <Picture slug="proposal-moment" alt={photos['proposal-moment'].alt} loading="eager" sizes="100vw" position="50% 46%" positionMd="50% 30%" class="absolute inset-0 -z-10 block h-full w-full" imgClass="hero-settle" />
-    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/30 to-ink/40" aria-hidden="true"></div>
-    <div class="wrap w-full pb-12 pt-40 md:pb-0 md:pt-40">
-      <p class="eyebrow hero-in" style="--i:0">{story.eyebrow}</p>
-      <h1 class="display hero-in mt-4 text-[clamp(3.4rem,13vw,4.5rem)] leading-[.92] md:whitespace-nowrap md:text-[clamp(3.4rem,7.2vw,7rem)]" style="--i:1">{story.headline.replace(/\.$/, '')}<span class="italic-display text-sand">.</span></h1>
-    </div>
-  </header>
-
-  <section class="section">
-    <div class="wrap grid gap-10 lg:grid-cols-12">
-      <p class="reveal eyebrow lg:col-span-3">The day we got engaged</p>
-      <p class="reveal display text-[clamp(1.7rem,3.6vw,2.7rem)] leading-snug lg:col-span-8 lg:col-start-5">{story.intro}</p>
-    </div>
-  </section>
-
-  {story.chapters.length > 0 && (
-    <section class="pb-24"><div class="wrap max-w-3xl space-y-16">
-      {story.chapters.map((c) => <div class="reveal"><h2 class="display text-4xl">{c.title}</h2><p class="prose-soft mt-5">{c.body}</p></div>)}
-    </div></section>
-  )}
-
-  <section class="bg-paper pb-28 pt-4 md:pb-40" aria-labelledby="gal">
-    <div class="wrap">
-      <div class="mb-12 flex flex-wrap items-end justify-between gap-4 md:mb-20">
-        <h2 id="gal" class="reveal display text-[clamp(2.2rem,5vw,3.6rem)]">Gallery</h2>
-        <p class="text-sm text-taupe">Tap a photo to view it full screen. Arrow keys or a swipe move between them.</p>
+<Base title="Our Story" description={`The story of ${couple.display}, told in the photographs from the day they got engaged.`}>
+  <div class="wrap pb-4 pt-10 md:pt-16">
+    <h1 class="display text-[clamp(2.6rem,8vw,5rem)]">Our Story</h1>
+    <p class="display mt-8 max-w-3xl text-[clamp(1.5rem,3.2vw,2.2rem)] leading-snug">{story.intro}</p>
+    {story.chapters.length > 0 && (
+      <div class="mt-12 max-w-2xl space-y-10">
+        {story.chapters.map((c) => <div><h2 class="display text-2xl">{c.title}</h2><p class="prose-soft mt-3">{c.body}</p></div>)}
       </div>
-      <Gallery />
+    )}
+  </div>
+
+  <section class="wrap mt-14 md:mt-20" aria-labelledby="gal">
+    <div class="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1 border-t border-charcoal/20 pt-4">
+      <h2 id="gal" class="text-taupe">The day we got engaged</h2>
+      <p class="text-sm text-taupe">Tap a photo to view it larger.</p>
     </div>
+    <div class="mt-8"><Gallery /></div>
   </section>
+
+  <p class="wrap mt-16 flex flex-wrap gap-x-8 text-sm"><a class="link tap" href={u('/details')}>The Wedding</a><a class="link tap" href={u('/rsvp')}>RSVP</a></p>
 </Base>
